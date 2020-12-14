@@ -16,10 +16,10 @@ class Proposal < ApplicationRecord
   has_one :register_deletion_approved, class_name: "Register", foreign_key: :proposal_deletion_approved_id, inverse_of: :proposal_deletion_approved
 
   has_many :proposal_networks, dependent: :destroy
+  has_many :proposal_services, dependent: :destroy
   has_many :proposal_areas, dependent: :destroy
 
   has_one :proposal_t_trait
-
 
   has_one_attached :bank_pdf
   has_one_attached :face_image
@@ -56,6 +56,12 @@ class Proposal < ApplicationRecord
                                 if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_NETWORK.include?(proposal_type_id) }
 
 
+  validate :proposal_services_service_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE.include?(proposal_type_id) }
+  validate_nested_uniqueness_of :proposal_services, uniq_key: :service_type_id, scope: [:proposal], 
+                                  case_sensitive: false, error_key: :proposal_services_service_type_nested_taken,
+                                if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE.include?(proposal_type_id) }
+
+
   validate :proposal_proposal_areas_presence, if: -> { activity_area_whole_poland == false }
   validate_nested_uniqueness_of :proposal_areas, uniq_key: :proposal_id, scope: [:province_code, :district_code, :commune_code], 
                                   case_sensitive: false, error_key: :proposal_areas_proposal_codes_nested_taken, 
@@ -78,6 +84,7 @@ class Proposal < ApplicationRecord
 
   # nested
   accepts_nested_attributes_for :proposal_networks, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :proposal_services, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :proposal_areas, reject_if: :all_blank, allow_destroy: true
 
 
@@ -276,6 +283,13 @@ class Proposal < ApplicationRecord
       if proposal_networks.reject(&:marked_for_destruction?).reject { |x| not FeatureType.only_network_type.ids.include?(x.network_type_id) }.empty?
         empty_key_names = FeatureType.only_network_type.pluck(:name).flatten
         errors.add(:base, :proposal_networks_network_type_blank, data: empty_key_names)
+      end
+    end
+
+    def proposal_services_service_type_presence
+      if proposal_services.reject(&:marked_for_destruction?).reject { |x| not FeatureType.only_service_type.ids.include?(x.service_type_id) }.empty?
+        empty_key_names = FeatureType.only_service_type.pluck(:name).flatten
+        errors.add(:base, :proposal_services_service_type_blank, data: empty_key_names)
       end
     end
 

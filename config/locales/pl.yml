@@ -402,13 +402,10 @@ pl:
             base:
               proposal_networks_network_type_nested_taken: "[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych] - ten sam rodzaj sieci nie może być wielokrotnie wprowadzany"
               proposal_networks_network_type_blank: "[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych] - musisz określić przynajmniej jeden spośród: %{data}"
+              proposal_services_service_type_nested_taken: "[Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych] - ten sam rodzaj usługi nie może być wielokrotnie wprowadzany"
+              proposal_services_service_type_blank: "[Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych] - musisz określić przynajmniej jeden spośród: %{data}"
               proposal_areas_proposal_codes_nested_taken: "[Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji] - ten sam obszar nie może być wielokrotnie wprowadzany"
               proposal_proposal_areas_blank: "[Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji (D)][Inne obszary] - musisz określić przynajmniej jeden obszar"
-        proposal_network:
-          attributes:
-            base:
-              proposal_services_service_type_nested_taken: "[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych][Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych] - ten sam rodzaj usługi nie może być wielokrotnie wprowadzany"
-              proposal_services_service_type_blank: "[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych][Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych] - musisz określić przynajmniej jeden spośród: %{data}"
         representative:
           attributes:
             base:

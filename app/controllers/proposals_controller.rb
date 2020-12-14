@@ -144,9 +144,8 @@ class ProposalsController < ApplicationController
       defaults = { author_id: "#{current_user.id}" }
       params.require(:proposal).permit(:service_type, :proposal_type_id, :proposal_status_id, :organization_id, :insertion_date, 
         :activity_area_whole_poland, :scheduled_start_date, :scheduled_end_date, :esod_category, :note, :author_id, 
-          proposal_networks_attributes: [:id, :network_type_id, :description, :_destroy,
-            proposal_services_attributes: [:id, :service_type_id, :description, :only_wholesale, :only_resale, :_destroy],
-          ],
+          proposal_networks_attributes: [:id, :network_type_id, :description, :_destroy],
+          proposal_services_attributes: [:id, :service_type_id, :description, :only_wholesale, :only_resale, :_destroy],
           proposal_areas_attributes: [:id, :province_code, :province_name, :district_code, :district_name, :commune_code, :commune_name, :_destroy]
         ).reverse_merge(defaults)
     end

@@ -13,6 +13,9 @@ class ProposalType < ActiveRecord::Base
   PROPOSAL_TYPES_VALID_PROPOSAL_NETWORK = [ PROPOSAL_TYPE_REGISTRATION,
                                             PROPOSAL_TYPE_CHANGE ]
 
+  PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE = [ PROPOSAL_TYPE_REGISTRATION,
+                                            PROPOSAL_TYPE_CHANGE ]
+
   PROPOSAL_TYPES_ENABLED_REGISTER_ID = [ PROPOSAL_TYPE_CHANGE,
                                                  PROPOSAL_TYPE_DELETION,
                                                  PROPOSAL_TYPE_CERTIFICATE ]

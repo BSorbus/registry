@@ -200,15 +200,15 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
   end
 
   create_table "proposal_services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "proposal_network_id"
+    t.uuid "proposal_id"
     t.uuid "service_type_id"
     t.text "description", default: ""
     t.boolean "only_wholesale", default: false
     t.boolean "only_resale", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["proposal_network_id", "service_type_id"], name: "idx_proposal_services_proposal_network_service_type_uniqueness", unique: true
-    t.index ["proposal_network_id"], name: "index_proposal_services_on_proposal_network_id"
+    t.index ["proposal_id", "service_type_id"], name: "idx_proposal_services_proposal_service_type_uniqueness", unique: true
+    t.index ["proposal_id"], name: "index_proposal_services_on_proposal_id"
     t.index ["service_type_id"], name: "index_proposal_services_on_service_type_id"
   end
 
@@ -392,7 +392,7 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
   add_foreign_key "proposal_networks", "feature_types", column: "network_type_id"
   add_foreign_key "proposal_networks", "proposals"
   add_foreign_key "proposal_services", "feature_types", column: "service_type_id"
-  add_foreign_key "proposal_services", "proposal_networks"
+  add_foreign_key "proposal_services", "proposals"
   add_foreign_key "proposal_t_traits", "proposals"
   add_foreign_key "proposals", "organizations"
   add_foreign_key "proposals", "proposal_statuses"

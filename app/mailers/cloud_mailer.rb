@@ -1,7 +1,7 @@
 class CloudMailer < ApplicationMailer
   include AbstractController::Callbacks
-  include ArchivesHelper
-  include ComponentsHelper
+  # include ArchivesHelper
+  # include ComponentsHelper
 
   attr_accessor :attr_archive, :attr_component, :attr_sending_user
 
@@ -11,56 +11,56 @@ class CloudMailer < ApplicationMailer
 
   after_action :attach_metadata
 
-  def link_archive_show(archive, recipient, sending_user)
-    @attr_archive = archive
-    @attr_component = nil
-    @attr_sending_user = sending_user
+  # def link_archive_show(archive, recipient, sending_user)
+  #   @attr_archive = archive
+  #   @attr_component = nil
+  #   @attr_sending_user = sending_user
 
-    @archive = archive
-    @recipient = recipient
-    @archive_fullname = "#{@archive.fullname}" # "#{archive_info_legend(@archive)}"
-    @archive_note = "#{Loofah.fragment(@archive.note).text}"
-    @archive_url_uuid = Rails.application.routes.url_helpers.url_for(only_path: false, controller: 'archives', action: 'show', id: @archive.id, locale: locale)
+  #   @archive = archive
+  #   @recipient = recipient
+  #   @archive_fullname = "#{@archive.fullname}" # "#{archive_info_legend(@archive)}"
+  #   @archive_note = "#{Loofah.fragment(@archive.note).text}"
+  #   @archive_url_uuid = Rails.application.routes.url_helpers.url_for(only_path: false, controller: 'archives', action: 'show', id: @archive.id, locale: locale)
 
-    attachments.inline['logo_mailer'] = File.read("app/assets/images/logo_mailer.png")
-    attachments.inline['logo_uke'] = File.read("app/assets/images/logo_uke_pl_do_lewej_small.png")
+  #   attachments.inline['logo_mailer'] = File.read("app/assets/images/logo_mailer.png")
+  #   attachments.inline['logo_uke'] = File.read("app/assets/images/logo_uke_pl_do_lewej_small.png")
 
-    mail(to: @recipient.email, cc: sending_user.email, subject: "#{t('title')} - #{@archive_fullname}" )
-  end
+  #   mail(to: @recipient.email, cc: sending_user.email, subject: "#{t('title')} - #{@archive_fullname}" )
+  # end
 
-  def link_component_download(component, recipient, sending_user)
-    @attr_archive = component.componentable
-    @attr_component = component
-    @attr_sending_user = sending_user
+  # def link_component_download(component, recipient, sending_user)
+  #   @attr_archive = component.componentable
+  #   @attr_component = component
+  #   @attr_sending_user = sending_user
 
-    @component = component
-    @recipient = recipient
-    @component_fullname = "#{@component.fullname}"
-    @component_note = "#{Loofah.fragment(@component.note).text}"
-    @component_url_uuid = Rails.application.routes.url_helpers.url_for(only_path: false, controller: 'components', action: 'download', id: @component.id, locale: locale)
+  #   @component = component
+  #   @recipient = recipient
+  #   @component_fullname = "#{@component.fullname}"
+  #   @component_note = "#{Loofah.fragment(@component.note).text}"
+  #   @component_url_uuid = Rails.application.routes.url_helpers.url_for(only_path: false, controller: 'components', action: 'download', id: @component.id, locale: locale)
 
-    attachments.inline['logo_mailer'] = File.read("app/assets/images/logo_mailer.png")
-    attachments.inline['logo_uke'] = File.read("app/assets/images/logo_uke_pl_do_lewej_small.png")
+  #   attachments.inline['logo_mailer'] = File.read("app/assets/images/logo_mailer.png")
+  #   attachments.inline['logo_uke'] = File.read("app/assets/images/logo_uke_pl_do_lewej_small.png")
 
-    mail(to: @recipient.email, cc: sending_user.email, subject: "#{t('title')} - #{@component_fullname}" )
-  end
+  #   mail(to: @recipient.email, cc: sending_user.email, subject: "#{t('title')} - #{@component_fullname}" )
+  # end
 
-  def link_component_download_simple(component, recipient, sending_user)
-    @attr_archive = component.componentable
-    @attr_component = component
-    @attr_sending_user = sending_user
+  # def link_component_download_simple(component, recipient, sending_user)
+  #   @attr_archive = component.componentable
+  #   @attr_component = component
+  #   @attr_sending_user = sending_user
 
-    @component = component
-    @recipient = recipient
-    @component_fullname = "#{@component.fullname}"
-    @component_note = "#{Loofah.fragment(@component.note).text}"
-    @component_url_uuid = Rails.application.routes.url_helpers.url_for(only_path: false, controller: 'components', action: 'download_simple', id: @component.for_simple_download, locale: locale)
+  #   @component = component
+  #   @recipient = recipient
+  #   @component_fullname = "#{@component.fullname}"
+  #   @component_note = "#{Loofah.fragment(@component.note).text}"
+  #   @component_url_uuid = Rails.application.routes.url_helpers.url_for(only_path: false, controller: 'components', action: 'download_simple', id: @component.for_simple_download, locale: locale)
 
-    attachments.inline['logo_mailer'] = File.read("app/assets/images/logo_mailer.png")
-    attachments.inline['logo_uke'] = File.read("app/assets/images/logo_uke_pl_do_lewej_small.png")
+  #   attachments.inline['logo_mailer'] = File.read("app/assets/images/logo_mailer.png")
+  #   attachments.inline['logo_uke'] = File.read("app/assets/images/logo_uke_pl_do_lewej_small.png")
 
-    mail(to: @recipient.email, cc: sending_user.email, subject: "#{t('title')} - #{@component_fullname}" )
-  end
+  #   mail(to: @recipient.email, cc: sending_user.email, subject: "#{t('title')} - #{@component_fullname}" )
+  # end
 
   private
 

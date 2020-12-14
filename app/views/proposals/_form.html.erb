@@ -59,14 +59,61 @@
 
             <div class='proposal_networks_title clearfix'>
 
+              <!-- header for partial -->
+              <div class="row" >
+                <div class="form-group required col-sm-5">
+                  <strong><%= ProposalNetwork.human_attribute_name(:network_type) %></strong>
+                </div>
+                <div class="form-group required col-sm-6">
+                  <strong><%= ProposalNetwork.human_attribute_name(:description) %></strong>
+                </div>
+              </div>
+
               <div class='proposal_proposal_networks-sub-form'>
                 <%= f.fields_for :proposal_networks do |proposal_proposal_network_form|  %>
-                  <%= render 'proposal_networks/proposal_network_fields', f: proposal_proposal_network_form if (FeatureType.only_network_type.ids.include?(proposal_proposal_network_form.object.network_type_id) ) %> 
+                  <%= render 'proposal_networks/proposal_network_fields', f: proposal_proposal_network_form %> 
                 <% end %>
               </div>
               <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_networks, 'proposal_networks/proposal_network_fields') %>
 
             </div>
+
+
+            <hr>
+
+
+            <div class='proposal_services clearfix'>
+
+              <!-- header for partial -->
+              <div class="row" >
+                <div class="form-group required col-sm-3">
+                  <strong><%= ProposalService.human_attribute_name(:service_type) %></strong>
+                </div>
+                <div class="form-group required col-sm-4">
+                  <strong><%= ProposalService.human_attribute_name(:description) %></strong>
+                </div>
+                <div class="form-group required col-sm-2">
+                  <strong><%= ProposalService.human_attribute_name(:only_wholesale) %></strong>
+                </div>
+                <div class="form-group required col-sm-2">
+                  <strong><%= ProposalService.human_attribute_name(:only_resale) %></strong>
+                </div>
+              </div>
+
+              <div class='proposal_services-sub-form'>
+                <%= f.fields_for :proposal_services do |proposal_services_form|  %>
+                  <%= render 'proposal_services/proposal_service_fields', f: proposal_services_form %> 
+                <% end %>
+              </div>
+              <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_services, 'proposal_services/proposal_service_fields') %>
+
+            </div>
+
+
+
+
+
+
 
           </fieldset>
         </div> <!--/col-sm-12 -->
