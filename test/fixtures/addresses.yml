@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  addressable: one
+  addressable_type: Addressable
+  address_type: one
+  country_code: MyString
+
+two:
+  addressable: two
+  addressable_type: Addressable
+  address_type: two
+  country_code: MyString

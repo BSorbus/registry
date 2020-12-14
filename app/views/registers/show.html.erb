@@ -1,0 +1,69 @@
+<div class="grid-container">
+
+  <div class="sidebar">
+    <%= render 'sidebar_show' %>
+  </div>
+
+  <div class="main-content">
+    <br>
+    <div class="container-fluid"> 
+      <div class="row">
+
+        <div class="col-sm-12">
+          <div class="tab-content clearfix">
+
+            <div role="tabpanel" class="tab-pane active" id="register_show">
+              <%= render 'data', input_disabled: true, subtitle: register_info_legend(@register) %>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="proposals">
+              <%= render 'proposals', subtitle: register_info_legend(@register) %>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="works">
+              <%= render 'works/works_tab', trackable_type: "Register", trackable_id: @register.id, subtitle: register_info_legend(@register) %>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div> <!--/container-fluid--> 
+  </div> <!--/main-content--> 
+
+</div> <!--/grid-containe--> 
+
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  // jezeli nastepuje wyswietlenie tab, to zaladuj dane
+  $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    var target = $(e.target).attr("href") // activated tab
+    if (target == '#proposals') {
+      // alert('registers: #proposals show');
+      // alert('<%= params[:locale] %>');
+
+      $.ajax({
+        url: "/<%= params[:locale] %>/<%= @register.service_type %>/registers/<%= @register.id %>/ajax_load_proposals.js",
+        type: "GET",
+        error: function (jqXHR, exception) {
+          console.log(jqXHR);
+          if (jqXHR.status == 401) {
+            window.location.reload();
+          } else {
+            getErrorMessage(jqXHR, exception);
+          }
+        }
+      });
+
+    }
+  });
+    
+</script>

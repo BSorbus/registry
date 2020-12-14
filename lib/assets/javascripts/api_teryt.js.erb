@@ -1,0 +1,264 @@
+//document.addEventListener('turbolinks:load', function() {
+$(document).ready(function() {
+
+  // Provinces
+  function provinceFormatResult(item, container, query, escapeMarkup) {
+    if (isEmpty(item.id)) {
+      return "";
+    } else {
+      return  markMatch(item.data_obj.name, query.term) + '&nbsp&nbsp<span class="pull-right">[&nbsp' + item.data_obj.id + '&nbsp]</span>';
+    }
+  };
+  function provinceFormatSelection(item) {
+    if (isEmpty(item.id)) {
+      return '';
+    } else {
+      return  item.data_obj.name + '&nbsp&nbsp<span class="pull-right">[&nbsp' + item.data_obj.id + '&nbsp]</span>';
+    }
+  };
+
+  $('.select2teryt_provinces').select2({
+    minimumInputLength: 0,
+    allowClear: false,
+    ajax: {
+      url: "/api_teryt/provinces.json",
+      dataType: 'json',
+      type: 'GET',
+      data: function(term, page) {
+        return {
+          q: term,
+          page_limit: 100,
+          page: page
+        }
+      },
+      // results: function(data, page) {
+      //   return { results: data, more: false };
+      // }
+      results: function(data, page) {
+        //var more = (page * 16) < data.total_count;
+        var more = (page * 100) < data.total;
+        var provinces = $.map(data.items, function(province, i) {
+          return { data_obj: province, id: province.id, text: province.name };
+        });
+        return { results: provinces, more: more };
+      }
+    },
+    formatAjaxError: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      if (jqXHR.status == 401) {
+        window.location.reload();
+      } else {
+        getErrorMessage(jqXHR, jqXHR.status);
+      }
+      return errorThrown + " " + jqXHR.responseText;
+    },
+    initSelection: function(element, callback) {
+      var id = element.val();
+      if (id !== "") {
+        $.get("/api_teryt/provinces/"+id+".json", function(data_from_json) {
+          // callback( { data_obj: data_from_json, id: data_from_json.id } );
+          //callback({ id: data_from_json.id, text: data_from_json.name });
+          callback({ data_obj: data_from_json, id: data_from_json.id });
+        })
+      }
+    },
+    formatResult: provinceFormatResult, // omitted for brevity, see the source of this page
+    formatSelection: provinceFormatSelection, // omitted for brevity, see the source of this page
+    dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+  })
+  .on("select2-selecting", function(e) {
+    var thisId = this.id; //proposal_proposal_areas_attributes_1_province_code
+    var thisPreviousSiblingId = this.previousSibling.id; // s2id_proposal_proposal_areas_attributes_1_province_code
+
+    var twinProvinceNameId = thisId.replace("province_code", "province_name");
+    var twinDistrictNameId = thisId.replace("province_code", "district_name");
+    var twinCommuneNameId  = thisId.replace("province_code", "commune_name");
+
+    var twinSel2DistrictId = thisPreviousSiblingId.replace("province_code", "district_code");
+    var twinSel2CommuneId  = thisPreviousSiblingId.replace("province_code", "commune_code");
+
+    // set value for hidden province_name and clear value for hidden disctrict_name and commune_name
+    document.getElementById(twinProvinceNameId).value = e.choice.data_obj.name;
+    document.getElementById(twinDistrictNameId).value = "";
+    document.getElementById(twinCommuneNameId).value = "";
+
+    // clear select2 districts and communes
+    $("#"+twinSel2DistrictId).select2("val", "");
+    $("#"+twinSel2CommuneId).select2("val", "");
+
+    // set readonly
+    $("#"+twinSel2DistrictId).select2("readonly", false);
+    $("#"+twinSel2CommuneId).select2("readonly", true);
+  });
+
+
+  // ProvinceDistricts
+  function districtFormatResult(item, container, query, escapeMarkup) {
+    if (isEmpty(item.id)) {
+      return "";
+    } else {
+      return  markMatch(item.data_obj.name, query.term) + '&nbsp&nbsp<span class="pull-right">[&nbsp' + item.data_obj.id + '&nbsp]</span>';
+    }
+  };
+  function districtFormatSelection(item) {
+    if (isEmpty(item.id)) {
+      return "";
+    } else {
+      return  item.data_obj.name + '&nbsp&nbsp<span class="pull-right">[&nbsp' + item.data_obj.id + '&nbsp]</span>';
+    }
+  };
+
+
+  $('.select2teryt_province_districts').select2({
+    minimumInputLength: 0,
+    allowClear: false,
+    ajax: {
+      url: "/api_teryt/province_districts.json",
+      dataType: 'json',
+      type: 'GET',
+      data: function(term, page) {
+        var thisObjId = this.context.id;
+        // proposal_proposal_areas_attributes_1_district_code
+        var twinProvinceNameId = thisObjId.replace("district_code", "province_code");
+        var province_code = document.getElementById(twinProvinceNameId).value;
+        return {
+          q: term,
+          page_limit: 100,
+          page: page,
+          province_id: province_code
+          // province_id: $("#province_id_select").select2("val")
+        }
+      },
+      results: function(data, page) {
+        var more = (page * 100) < data.total;
+        var districts = $.map(data.items, function(district, i) {
+          return { data_obj: district, id: district.id, text: district.name };
+        });
+        return { results: districts, more: more };
+      }
+    },
+    formatAjaxError: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      if (jqXHR.status == 401) {
+        window.location.reload();
+      } else {
+        getErrorMessage(jqXHR, jqXHR.status);
+      }
+      return errorThrown + " " + jqXHR.responseText;
+    },
+    initSelection: function(element, callback) {
+      var id = element.val();
+      if (id !== "") {
+        $.get("/api_teryt/districts/"+id+".json", function(data_from_json) {
+          // callback( { data_obj: data_from_json, id: data_from_json.id } );
+          //callback({ id: data_from_json.id, text: data_from_json.name });
+          callback({ data_obj: data_from_json, id: data_from_json.id });
+        })
+      }
+    },
+    formatResult: districtFormatResult, // omitted for brevity, see the source of this page
+    formatSelection: districtFormatSelection, // omitted for brevity, see the source of this page
+    dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+  })
+  .on("select2-selecting", function(e) {
+    var thisId = this.id; //proposal_proposal_areas_attributes_1_district_code
+    var thisPreviousSiblingId = this.previousSibling.id; // s2id_proposal_proposal_areas_attributes_1_district_code
+
+    var twinDistrictNameId = thisId.replace("district_code", "district_name");
+    var twinCommuneNameId  = thisId.replace("district_code", "commune_name");
+
+    var twinSel2CommuneId  = thisPreviousSiblingId.replace("district_code", "commune_code");
+
+    // set value for hidden district_name and clear value for hidden commune_name
+    document.getElementById(twinDistrictNameId).value = e.choice.data_obj.name;
+    document.getElementById(twinCommuneNameId).value = "";
+
+    // clear select2 communes
+    $("#"+twinSel2CommuneId).select2("val", "");
+
+    // set readonly
+    $("#"+twinSel2CommuneId).select2("readonly", false);
+  });
+
+
+
+  // DistrictCommunes
+  function communeFormatResult(item, container, query, escapeMarkup) {
+    if (isEmpty(item.id)) {
+      return "";
+    } else {
+      return  markMatch(item.data_obj.name, query.term) + '&nbsp&nbsp<span class="pull-right">[&nbsp' + item.data_obj.typeName + '&nbsp][&nbsp' + item.data_obj.id + '&nbsp]</span>';
+    }
+  };
+  function communeFormatSelection(item) {
+    if (isEmpty(item.id)) {
+      return "";
+    } else {
+      return  item.data_obj.name + '&nbsp&nbsp<span class="pull-right">[&nbsp' + item.data_obj.typeName + '&nbsp][&nbsp' + item.data_obj.id + '&nbsp]</span>';
+    }
+  };
+
+
+  $('.select2teryt_district_communes').select2({ 
+    minimumInputLength: 0,
+    allowClear: false,
+    ajax: {
+      url: "/api_teryt/district_communes.json",
+      dataType: 'json',
+      type: 'GET',
+      data: function(term, page) {
+        var thisObjId = this.context.id;
+        // proposal_proposal_areas_attributes_1_commune_code
+        var twinDistrictNameId = thisObjId.replace("commune_code", "district_code");
+        var district_code = document.getElementById(twinDistrictNameId).value;
+        return {
+          q: term,
+          page_limit: 100,
+          page: page,
+          district_id: district_code
+        };
+      },
+      results: function(data, page) {
+        var more = (page * 100) < data.total;
+        var communes = $.map(data.items, function(commune, i) {
+          return { data_obj: commune, id: commune.id, text: commune.name };
+        });
+        return { results: communes, more: more };
+      }
+    },
+    formatAjaxError: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      if (jqXHR.status == 401) {
+        window.location.reload();
+      } else {
+        getErrorMessage(jqXHR, jqXHR.status);
+      }
+      return errorThrown + " " + jqXHR.responseText;
+    },
+    initSelection: function(element, callback) {
+      var id = element.val();
+      if (id !== "") {
+        $.get("/api_teryt/communes/"+id+".json", function(data_from_json) {
+          // callback( { data_obj: data_from_json, id: data_from_json.id } );
+          //callback({ id: data_from_json.id, text: data_from_json.name });
+          callback({ data_obj: data_from_json, id: data_from_json.id });
+        })
+      }
+    },
+    formatResult: communeFormatResult, // omitted for brevity, see the source of this page
+    formatSelection: communeFormatSelection, // omitted for brevity, see the source of this page
+    dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+  })
+  .on("select2-selecting", function(e) {
+    var thisObjId = this.id;
+    // np. proposal_proposal_areas_attributes_1607601480012_commune_code
+    //console.log(thisObjId);
+    var twinCommuneNameId = thisObjId.replace("commune_code", "commune_name");
+    document.getElementById(twinCommuneNameId).value = e.choice.data_obj.name;
+  })
+
+});
+

@@ -1,0 +1,67 @@
+<div class="fields collored-subfields">
+  <div class="row" >
+    <div class="form-group required col-sm-9">
+      <strong>[<%= address.address_type.name %>]</strong>
+    </div>
+  </div>
+
+  <div class="row" >
+
+    <div class="form-group required col-sm-12">
+      <strong><%= Address.human_attribute_name(:country_code) %></strong><br>
+      <%= address.country_fullname("#{locale}") %>
+    </div>
+   
+    <% if address.province_name.present? || address.district_name.present? || address.commune_name.present? %> 
+      <div class="form-group required col-sm-4">
+        <strong><%= Address.human_attribute_name(:province_name) %></strong><br>
+        <%= address.province_name %>
+      </div>
+
+      <div class="form-group required col-sm-4">
+        <strong><%= Address.human_attribute_name(:district_name) %></strong><br>
+        <%= address.district_name %>
+      </div>
+
+      <div class="form-group required col-sm-4">
+        <strong><%= Address.human_attribute_name(:commune_name) %></strong><br>
+        <%= address.commune_name %>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div class="row" >
+
+    <div class="form-group required col-sm-5">
+      <strong><%= Address.human_attribute_name(:city_name) %></strong><br>
+      <%= address.city_name %>
+    </div>
+
+    <div class="form-group col-sm-7">
+      <strong><%= Address.human_attribute_name(:street_name) %></strong><br>
+      <%= address.try(:street_attribute) + ' ' + address.try(:street_name) %>
+    </div>
+
+  </div>
+
+  <div class="row" >
+
+    <div class="form-group required col-sm-4">
+      <strong><%= Address.human_attribute_name(:address_house) %></strong><br>
+      <%= address.address_house %>
+    </div>
+
+    <div class="form-group col-sm-4">
+      <strong><%= Address.human_attribute_name(:address_number) %></strong><br>
+      <%= address.address_number %>
+    </div>
+
+    <div class="form-group required col-sm-4">
+      <strong><%= Address.human_attribute_name(:address_postal_code) %></strong><br>
+      <%= address.address_postal_code %>
+    </div>
+
+  </div>
+  
+</div>

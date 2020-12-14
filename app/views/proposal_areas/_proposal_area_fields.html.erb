@@ -1,0 +1,60 @@
+<%= javascript_include_tag "api_teryt" %>
+
+<div class="fields slide-in-fwd-right">
+
+  <%= f.hidden_field :province_name %>
+  <%= f.hidden_field :district_name %>
+  <%= f.hidden_field :commune_name %>
+
+  <div class="row">
+    <div class="form-group required col-sm-3">
+      <%#= f.label :province_code, class: "control-label" %>
+      <%= f.hidden_field :province_code, 
+                        class: "form-control input-sm select2teryt_provinces", 
+                        placeholder: "Wybierz województwo",
+                        style: "width:100%",
+                        autofocus: false %>
+    </div>
+
+    <div class="form-group col-sm-3">
+      <%#= f.label :district_code, class: 'control-label' %>
+      <%= f.hidden_field :district_code,
+                        class: "form-control input-sm select2teryt_province_districts", 
+                        placeholder: "Wybierz powiat",
+                        style: "width:100%",
+                        autofocus: false,
+                        readonly: f.object.province_code == '' %>
+    </div>
+
+    <div class="form-group col-sm-4">
+      <%#= f.label :commune_code, class: 'control-label' %>
+      <%= f.hidden_field :commune_code,
+                        class: "form-control input-sm select2teryt_district_communes", 
+                        placeholder: "Wybierz gminę",
+                        style: "width:100%",
+                        autofocus: false,
+                        readonly: f.object.district_code == '' %>
+    </div>
+
+
+    <div class="form-group col-sm-1">
+      <% if f.object.marked_for_destruction? %>
+
+        <label class="btn btn-sm btn-danger control-label" role="button", title="<%=t('tooltip.confirm_remove_fields_nested')%>", rel='tooltip'>
+          <%= f.check_box :_destroy %>
+          <span></span>
+          &nbsp;&nbsp;<%= f.object.class.human_attribute_name(:_destroy) %>
+        </label>
+
+      <% else %>
+        <%= f.hidden_field :_destroy %>
+        <%= link_to t("helpers.links.link_to_remove_fields_nested_small"), '#',
+          onClick: "removeNestedFields(this); return false;", class: 'remove-link-button btn btn-sm btn-danger proposal_area_if_disabled_click', title: t('tooltip.remove_fields_nested'), rel: 'tooltip' %>
+        <% end %>
+    </div>
+
+  </div>
+
+
+</div>
+

@@ -1,0 +1,89 @@
+<div class="fields collored-subfields scale-in-br">
+
+  <div class="row">
+    <div class="form-group required col-sm-9">
+      <%= f.select :representative_type_id, 
+            FeatureType.only_representative_type.order(:name).collect {|v| [ "#{v[:name]}", v[:id] ] },
+            { include_blank: false }, 
+            { autofocus: false, class: 'form-control input-sm' } %>
+    </div>
+    <div class="form-group col-sm-3">
+      <% if f.object.marked_for_destruction? %>
+
+        <label class="btn btn-sm btn-danger control-label pull-right" role="button", title="<%=t('tooltip.confirm_remove_fields_nested')%>", rel='tooltip'>
+          <%= f.check_box :_destroy %>
+          <span></span>
+          &nbsp;&nbsp;<%= f.object.class.human_attribute_name(:_destroy) %>
+        </label>
+
+      <% else %>
+        <%= f.hidden_field :_destroy %>
+        <%= link_to t("helpers.links.link_to_remove_fields_nested"), '#',
+          onClick: "removeNestedFields(this); return false;", class: 'remove-link-button btn btn-sm btn-danger pull-right', title: t('tooltip.remove_fields_nested'), rel: 'tooltip' %>
+        <% end %>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="form-group required col-sm-6">
+      <%= f.label :first_name, class: 'control-label' %>
+      <%= f.text_field :first_name, class: 'form-control input-sm' %>
+    </div>
+
+    <div class="form-group required col-sm-6">
+      <%= f.label :last_name, class: 'control-label' %>
+      <%= f.text_field :last_name, class: 'form-control input-sm' %>
+    </div>
+  </div>
+
+
+  <!-- nested: -->
+  <div class="row">
+    <div class="col-sm-12">
+      <fieldset class="my-fieldset">
+        <legend class="my-fieldset"><%= t('representatives.fieldset.address_ext_title') %></legend>
+
+        <div class='organization_features_02 clearfix'>
+
+          <div class='organization_features_02-sub-form'>
+            <%= f.fields_for :features do |representative_address_ext_form|  %>
+              <%= render 'features/feature_address_ext_fields', f: representative_address_ext_form if (FeatureType.only_address_ext_type.ids.include?(representative_address_ext_form.object.feature_type_id) )%> 
+            <% end %>
+          </div>
+          <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :features, 'features/feature_address_ext_fields') %>
+
+        </div>
+
+      </fieldset>
+    </div> 
+
+    <div class="col-sm-12">
+      <fieldset class="my-fieldset">
+        <legend class="my-fieldset"><%= t('representatives.fieldset.addresses_title') %></legend>
+
+        <div class='representative_address clearfix'>
+
+          <div class='representative_address-sub-form'>
+            <%= f.fields_for :addresses do |representative_address_form|  %>
+              <%= render 'addresses/address_fields', f: representative_address_form %> 
+            <% end %>
+          </div>
+          <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :addresses, 'addresses/address_fields') %>
+
+        </div>
+
+      </fieldset>
+    </div> 
+  </div>  <!-- /row -->
+
+  <div class="row">
+    <div class="form-group col-sm-12">
+      <%= f.label :note, class: 'control-label' %>
+      <%= f.trix_editor :note %>
+      <%#= f.text_area :note, :rows => 4, class: 'form-control input-sm' %>
+    </div>
+  </div>  <!-- /row -->          
+
+</div>
+

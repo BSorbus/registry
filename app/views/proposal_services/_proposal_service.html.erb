@@ -1,0 +1,23 @@
+<div class="fields">
+
+  <div class="row" >
+
+    <div class="form-group required col-sm-3">
+      <%= proposal_service.service_type.name %>
+    </div>
+
+    <div class="form-group col-sm-4">
+      <%= proposal_service.description.html_safe %>
+    </div>
+
+    <div class="form-group col-sm-2">
+      <%= t(proposal_service.only_wholesale) %>
+    </div>
+
+    <div class="form-group col-sm-2">
+      <%= t(proposal_service.only_resale) %>
+    </div>
+
+  </div>
+  
+</div>

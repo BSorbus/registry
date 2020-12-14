@@ -1,0 +1,58 @@
+<div class="col-sm-6">
+
+  <div class="row">
+    <div class="form-group col-sm-4">
+      <p><strong><%= Register.human_attribute_name(:register_no) %></strong></p>
+      <%= link_to(register.register_no, register_path(register.service_type, register)) %>
+    </div>
+
+    <div class="form-group col-sm-8">
+      <p><strong><%= Register.human_attribute_name(:register_status) %></strong></p>
+      <%= register.register_status.name %>
+    </div>
+  </div>
+
+  <div class="row">
+    <%if register.proposal_registration_approved.present?  %>
+      <div class="form-group col-sm-4">
+        <p><strong><%= Register.human_attribute_name(:proposal_registration_approved) %></strong></p>
+        <%= link_to(register.proposal_registration_approved.fullname, proposal_path(register.service_type, register.proposal_registration_approved)) %>
+      </div>
+    <% end %>
+
+    <%if register.proposal_current_approved.present?  %>
+      <div class="form-group col-sm-4">
+        <p><strong><%= Register.human_attribute_name(:proposal_current_approved) %></strong></p>
+        <%= link_to(register.proposal_current_approved.fullname, proposal_path(register.service_type, register.proposal_current_approved)) %>
+      </div>
+    <% end %>
+
+    <%if register.proposal_deletion_approved.present?  %>
+      <div class="form-group col-sm-4">
+        <p><strong><%= Register.human_attribute_name(:proposal_deletion_approved) %></strong></p>
+        <%= link_to(register.proposal_deletion_approved.fullname, proposal_path(register.service_type, register.proposal_deletion_approved)) %>
+      </div>
+    <% end %>
+  </div>
+  
+</div>  <!-- /col-sm-6 -->
+
+
+<div class="col-sm-6">
+
+  <div class="row">
+    <div class="form-group col-sm-12">
+      <% if register.note.html_safe.size > 0 %>
+        <blockquote>
+          <%= register.note.html_safe %>
+        </blockquote>
+      <% end %>
+    </div>
+  </div>  <!-- /row -->
+  
+</div>  <!-- /col-sm-6 -->
+
+<div class="col-sm-12">
+  <hr class="hr-without-top-margin">
+  <h6 class="pull-right"><%= last_updated_legend(register) %></h6>
+</div>

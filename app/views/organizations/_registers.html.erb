@@ -1,0 +1,39 @@
+<div id="tab_registers">
+
+  <% if policy(:register).index_j?  %>
+    <fieldset class="my-fieldset">
+      <legend class="my-fieldset colored-title"><%= subtitle %>&nbsp;&nbsp;-&nbsp;&nbsp;<%= register_index_legend( "j" ) %></legend>
+
+       <div class="row">
+        <div id="div_registers_j"></div>
+      </div>
+   
+    </fieldset>
+  <% end %>
+
+
+  <% if policy(:register).index_p?  %>
+    <fieldset class="my-fieldset">
+      <legend class="my-fieldset colored-title"><%= subtitle %>&nbsp;&nbsp;-&nbsp;&nbsp;<%= register_index_legend( "p" ) %></legend>
+
+      <div class="row">
+        <div id="div_registers_p"></div>
+      </div>
+
+    </fieldset>
+  <% end %>
+
+
+
+  <% if policy(:register).index_t?  %>
+    <fieldset class="my-fieldset">
+      <legend class="my-fieldset colored-title"><%= subtitle %>&nbsp;&nbsp;-&nbsp;&nbsp;<%= register_index_legend( "t" ) %></legend>
+
+      <div class="row">
+        <div id="div_registers_t"></div>
+      </div>
+
+    </fieldset>
+  <% end %>
+
+</div>

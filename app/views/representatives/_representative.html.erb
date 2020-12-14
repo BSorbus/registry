@@ -1,0 +1,67 @@
+<div class="fields collored-subfields">
+
+  <div class="row">
+    <div class="col-sm-6">
+
+      <div class="row">
+        <div class="form-group required col-sm-12">
+          <strong><%= Representative.human_attribute_name(:first_name) %></strong><br>
+          <%= representative.first_name %>
+        </div>
+
+        <div class="form-group required col-sm-12">
+          <strong><%= Representative.human_attribute_name(:last_name) %></strong><br>
+          <%= representative.last_name %>
+        </div>
+      </div> <!--/row -->
+
+    </div>
+
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="form-group col-sm-12">
+          <fieldset class="my-fieldset-short">
+            <legend class="my-fieldset"><%= t('representatives.fieldset.address_ext_title') %></legend>
+
+            <%= render partial: "features/feature", collection: representative.features.feature_only_address_ext_type.order(:feature_value), as: :feature %>
+
+          </fieldset>
+        </div>
+      </div> <!--/row -->
+    </div>
+
+  </div> <!--/row -->
+
+
+  <!-- nested: -->
+  <div class="row">
+
+    <div class="form-group col-sm-12">
+      <fieldset class="my-fieldset-short">
+        <legend class="my-fieldset"><%= t('representatives.fieldset.addresses_title') %></legend>
+
+        <div class="row">
+          <div class="form-group col-sm-12">
+
+            <%= render partial: "addresses/address", collection: representative.addresses, as: :address %>
+
+          </div>
+        </div> <!--/row -->
+      </fieldset>
+    </div>
+
+  </div>  <!-- /row -->
+
+
+  <div class="row">
+    <div class="form-group col-sm-12">
+      <% if representative.note.html_safe.size > 0 %>
+        <blockquote>
+          <%= representative.note.html_safe %>
+        </blockquote>
+      <% end %>
+    </div>
+  </div>  <!-- /row -->
+
+</div>
+

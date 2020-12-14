@@ -1,0 +1,51 @@
+<div class="fields collored-subfields">
+  <div class="row" >
+    <div class="form-group required col-sm-4">
+     <strong><%= ProposalNetwork.human_attribute_name(:network_type) %></strong><br>
+     <%= proposal_network.network_type.name %>
+    </div>
+
+    <div class="form-group required col-sm-6">
+      <strong><%= ProposalNetwork.human_attribute_name(:description) %></strong><br>
+      <%= proposal_network.description.html_safe %>
+    </div>
+
+  </div>
+
+  <!-- nested: -->
+  <div class="row">
+
+    <div class="form-group col-sm-12">
+      <fieldset class="my-fieldset-short">
+        <legend class="my-fieldset"><%= t('proposal_networks.fieldset.proposal_services_title') %></legend>
+
+        <div class="row">
+          <div class="form-group col-sm-12">
+
+            <!-- header for partial -->
+            <div class="row" >
+              <div class="form-group required col-sm-3">
+                <strong><%= ProposalService.human_attribute_name(:service_type) %></strong>
+              </div>
+              <div class="form-group required col-sm-4">
+                <strong><%= ProposalService.human_attribute_name(:description) %></strong>
+              </div>
+              <div class="form-group required col-sm-2">
+                <strong><%= ProposalService.human_attribute_name(:only_wholesale) %></strong>
+              </div>
+              <div class="form-group required col-sm-2">
+                <strong><%= ProposalService.human_attribute_name(:only_resale) %></strong>
+              </div>
+            </div>
+
+            <%= render partial: "proposal_services/proposal_service", collection: proposal_network.proposal_services, as: :proposal_service %>
+
+          </div>
+        </div> <!--/row -->
+      </fieldset>
+    </div>
+
+  </div>  <!-- /row -->
+
+
+</div>

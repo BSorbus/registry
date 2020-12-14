@@ -1,0 +1,170 @@
+function setForPL(twinAddressCombineId, 
+                  twinProvinceCodeId, 
+                  twinProvinceNameId,
+                  twinDistrictCodeId,
+                  twinDistrictNameId,
+                  twinCommuneCodeId,
+                  twinCommuneNameId,
+                  twinCityCodeId,
+                  twinCityNameId,
+                  twinStreetCodeId,
+                  twinStreetNameId,
+                  twinStreetAttributeId,
+                  twinAddressPostalCodeId) {
+
+    document.getElementById(twinAddressCombineId).readOnly = false;
+    document.getElementById(twinProvinceNameId).readOnly = true;
+    document.getElementById(twinDistrictNameId).readOnly = true;
+    document.getElementById(twinCommuneNameId).readOnly = true;
+    document.getElementById(twinCityNameId).readOnly = true;
+    document.getElementById(twinStreetNameId).readOnly = true;
+    document.getElementById(twinStreetAttributeId).readOnly = true;
+    document.getElementById(twinAddressPostalCodeId).readOnly = true;
+
+    document.getElementById(twinAddressCombineId).parentNode.hidden = false;
+    document.getElementById(twinStreetAttributeId).parentNode.hidden = false;
+    document.getElementById(twinProvinceNameId).parentNode.hidden = false;
+    document.getElementById(twinDistrictNameId).parentNode.hidden = false;
+    document.getElementById(twinCommuneNameId).parentNode.hidden = false;
+};
+
+function setForNotPL( twinAddressCombineId, 
+                      twinProvinceCodeId, 
+                      twinProvinceNameId,
+                      twinDistrictCodeId,
+                      twinDistrictNameId,
+                      twinCommuneCodeId,
+                      twinCommuneNameId,
+                      twinCityCodeId,
+                      twinCityNameId,
+                      twinStreetCodeId,
+                      twinStreetNameId,
+                      twinStreetAttributeId,
+                      twinAddressPostalCodeId) {
+
+    document.getElementById(twinAddressCombineId).readOnly = true;
+    document.getElementById(twinProvinceNameId).readOnly = true;
+    document.getElementById(twinDistrictNameId).readOnly = true;
+    document.getElementById(twinCommuneNameId).readOnly = true;
+    document.getElementById(twinCityNameId).readOnly = false;
+    document.getElementById(twinStreetAttributeId).readOnly = true;
+    document.getElementById(twinStreetNameId).readOnly = false;
+    document.getElementById(twinAddressPostalCodeId).readOnly = false;
+
+    document.getElementById(twinAddressCombineId).parentNode.hidden = true;
+    document.getElementById(twinStreetAttributeId).parentNode.hidden = true;
+    document.getElementById(twinProvinceNameId).parentNode.hidden = true;
+    document.getElementById(twinDistrictNameId).parentNode.hidden = true;
+    document.getElementById(twinCommuneNameId).parentNode.hidden = true;
+};
+
+
+
+
+function terytIsRequired(country_code, obj) {
+
+  var twinAddressCombineId = obj.id.replace("country_code", "address_combine_id");
+  var twinProvinceCodeId = obj.id.replace("country_code", "province_code");
+  var twinProvinceNameId = obj.id.replace("country_code", "province_name");
+  var twinDistrictCodeId = obj.id.replace("country_code", "district_code");
+  var twinDistrictNameId = obj.id.replace("country_code", "district_name");
+  var twinCommuneCodeId = obj.id.replace("country_code", "commune_code");
+  var twinCommuneNameId = obj.id.replace("country_code", "commune_name");
+  var twinCityCodeId = obj.id.replace("country_code", "city_code");
+  var twinCityNameId = obj.id.replace("country_code", "city_name");
+  var twinParentCityCodeId = obj.id.replace("country_code", "parent_city_code");
+  var twinParentCityNameId = obj.id.replace("country_code", "parent_city_name");
+  var twinStreetCodeId = obj.id.replace("country_code", "street_code");
+  var twinStreetNameId = obj.id.replace("country_code", "street_name");
+  var twinStreetAttributeId = obj.id.replace("country_code", "street_attribute");
+  var twinAddressPostalCodeId = obj.id.replace("country_code", "address_postal_code");
+
+  if (country_code == 'PL') {
+
+    var selected2Value = document.getElementById(twinAddressCombineId).value;
+    // same as: var selected2Value = $("#"+twinAddressCombineId).val();
+
+    if (selected2Value == "") {
+
+      document.getElementById(twinProvinceCodeId).value = "";
+      document.getElementById(twinProvinceNameId).value = "";
+     
+      document.getElementById(twinDistrictCodeId).value = "";
+      document.getElementById(twinDistrictNameId).value = "";
+     
+      document.getElementById(twinCommuneCodeId).value = "";
+      document.getElementById(twinCommuneNameId).value = "";
+     
+      document.getElementById(twinCityCodeId).value = "";
+      document.getElementById(twinCityNameId).value = "";
+
+      document.getElementById(twinParentCityCodeId).value = "";
+      document.getElementById(twinParentCityNameId).value = "";
+     
+      document.getElementById(twinStreetAttributeId).value = "";
+      document.getElementById(twinStreetCodeId).value = "";
+      document.getElementById(twinStreetNameId).value = "";
+
+      document.getElementById(twinAddressPostalCodeId).value = "";
+
+    };
+
+    setForPL( twinAddressCombineId, 
+              twinProvinceCodeId, 
+              twinProvinceNameId,
+              twinDistrictCodeId,
+              twinDistrictNameId,
+              twinCommuneCodeId,
+              twinCommuneNameId,
+              twinCityCodeId,
+              twinCityNameId,
+              twinStreetCodeId,
+              twinStreetNameId,
+              twinStreetAttributeId,
+              twinAddressPostalCodeId);
+
+  } else {
+
+    $("#"+twinAddressCombineId).select2("val", "");
+
+    document.getElementById(twinProvinceCodeId).value = "";
+    document.getElementById(twinProvinceNameId).value = "";
+   
+    document.getElementById(twinDistrictCodeId).value = "";
+    document.getElementById(twinDistrictNameId).value = "";
+   
+    document.getElementById(twinCommuneCodeId).value = "";
+    document.getElementById(twinCommuneNameId).value = "";
+   
+    document.getElementById(twinCityCodeId).value = "";
+    // document.getElementById(twinCityNameId).value = "";
+
+    document.getElementById(twinParentCityCodeId).value = "";
+    document.getElementById(twinParentCityNameId).value = "";
+   
+    document.getElementById(twinStreetAttributeId).value = "";
+    document.getElementById(twinStreetCodeId).value = "";
+    // document.getElementById(twinStreetNameId).value = "";
+
+    // document.getElementById(twinAddressPostalCodeId).value = "";
+
+    setForNotPL(twinAddressCombineId, 
+                twinProvinceCodeId, 
+                twinProvinceNameId,
+                twinDistrictCodeId,
+                twinDistrictNameId,
+                twinCommuneCodeId,
+                twinCommuneNameId,
+                twinCityCodeId,
+                twinCityNameId,
+                twinStreetCodeId,
+                twinStreetNameId,
+                twinStreetAttributeId,
+                twinAddressPostalCodeId);
+
+  };
+
+  return false;
+ 
+};
+

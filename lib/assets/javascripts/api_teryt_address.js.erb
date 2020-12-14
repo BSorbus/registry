@@ -1,0 +1,164 @@
+//document.addEventListener('turbolinks:load', function() {
+$(document).ready(function() {
+
+        // formatResult: function(result, container, query, escapeMarkup) {
+        //     var markup=[];
+        //     markMatch(this.text(result), query.term, markup, escapeMarkup);
+        //     return markup.join("");
+        // },
+
+  function addressFormatResult(item, container, query, escapeMarkup) {
+    if (item.id) {
+      var cityName = markMatch(item.data_obj.cityName, query.term);
+      if (item.data_obj.cityName !== item.data_obj.parentCityName) {
+        var cityName = cityName + "&nbsp(" + markMatch(item.data_obj.parentCityName, query.term) + ")";
+      };
+
+      if (item.data_obj.postCodeNumbers) {
+        var postNumbers = "&nbsp&nbsp<small>numery:&nbsp" + item.data_obj.postCodeNumbers + "</small>";
+      } else {
+        var postNumbers = "";
+      };
+
+      var provinceName = markMatch(item.data_obj.provinceName, query.term);
+      var districtName = markMatch(item.data_obj.districtName, query.term);
+      var communeName = markMatch(item.data_obj.communeName, query.term);
+      var postCode = markMatch(item.data_obj.postCode, query.term);
+
+      if (item.data_obj.streetName) {
+        var streetName =  ", <small>" + item.data_obj.streetAttribute + "</small> " + markMatch(item.data_obj.streetName, query.term);
+      } else {
+        var streetName = "";
+      };
+
+      return                  cityName + streetName  +         "<div class='pull-right'>&nbsp" + provinceName + "</div><br>" + 
+                              postCode + postNumbers +         "<div class='pull-right'>&nbsp" + districtName + "</div><br>" +
+                  "<small>" + item.data_obj.cityTypeName + "</small><div class='pull-right'>&nbsp" + communeName + "</div>";
+
+    } else {
+      return "";
+    }
+  };
+
+  function addressFormatSelection(item) {
+    if (item.id) {
+      var cityName = item.data_obj.cityName;
+      if (item.data_obj.cityName !== item.data_obj.parentCityName) {
+        var cityName = cityName + " (" + item.data_obj.parentCityName + ")";
+      };
+
+      if (item.data_obj.postCode) {
+        var postCode = ", " + item.data_obj.postCode; 
+      } else {
+        var postCode = "";
+      };
+
+      if (item.data_obj.streetName) {
+        var streetName =  ", " + item.data_obj.streetAttribute + " " + item.data_obj.streetName;
+      } else {
+        var streetName = "";
+      };
+
+      return  cityName + streetName + postCode + 
+              ' [' + item.data_obj.provinceName + 
+              ', ' + item.data_obj.districtName + 
+              ', ' + item.data_obj.communeName + 
+              '] ' + item.data_obj.cityTypeName;
+    } else {
+      return "";
+    }
+  };
+
+  $('.select2teryt_address').select2({ 
+    minimumInputLength: 5,
+    allowClear: false,
+    ajax: {
+      url: "/api_teryt/items.json",
+      dataType: 'json',
+      quietMillis: 250,
+      type: 'GET',
+      data: function(term, page) {
+        return {
+          q: term,
+          page_limit: 30,
+          page: page
+        };
+      },
+      results: function(data, page) {
+        var more = (page * 30) < data.total;
+        var items = $.map(data.items, function(item, i) {
+          //return { data_obj: item, id: item.id, text: item.cityName };
+          return { data_obj: item, id: item.combineId };
+        });
+        return { results: items, more: more };
+      }
+    },
+    formatAjaxError: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      if (jqXHR.status == 401) {
+        window.location.reload();
+      } else {
+        getErrorMessage(jqXHR, jqXHR.status);
+      }
+      return errorThrown + " " + jqXHR.responseText;
+    },
+    initSelection: function(element, callback) {
+      var id=$(element).val();
+      if (id!=="") {
+        $.get("/api_teryt/items/"+id+".json", function(data_from_json) {
+          if(data_from_json)
+            //callback({ data_obj: data_from_json, id: data_from_json.id, text: 'data_from_json.cityName' });
+            callback({ data_obj: data_from_json, id: data_from_json.combineId });
+        });
+      }
+    },
+    formatResult: addressFormatResult, // omitted for brevity, see the source of this page
+    formatSelection: addressFormatSelection, // omitted for brevity, see the source of this page
+    dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+  })
+  .on("select2-selecting", function(e) {
+    var thisObjId = this.id;
+    //organization_addresses_attributes_0_address_combine_id
+    //organization_addresses_attributes_1_address_combine_id
+
+    var twinProvinceCodeId = thisObjId.replace("address_combine_id", "province_code");
+    var twinProvinceNameId = thisObjId.replace("address_combine_id", "province_name");
+    var twinDistrictCodeId = thisObjId.replace("address_combine_id", "district_code");
+    var twinDistrictNameId = thisObjId.replace("address_combine_id", "district_name");
+    var twinCommuneCodeId = thisObjId.replace("address_combine_id", "commune_code");
+    var twinCommuneNameId = thisObjId.replace("address_combine_id", "commune_name");
+    var twinCityCodeId = thisObjId.replace("address_combine_id", "city_code");
+    var twinCityNameId = thisObjId.replace("address_combine_id", "city_name");
+    var twinParentCityCodeId = thisObjId.replace("address_combine_id", "parent_city_code");
+    var twinParentCityNameId = thisObjId.replace("address_combine_id", "parent_city_name");
+    var twinStreetCodeId = thisObjId.replace("address_combine_id", "street_code");
+    var twinStreetNameId = thisObjId.replace("address_combine_id", "street_name");
+    var twinStreetAttributeId = thisObjId.replace("address_combine_id", "street_attribute");
+    var twinAddressPostalCodeId = thisObjId.replace("address_combine_id", "address_postal_code");
+
+    document.getElementById(twinProvinceCodeId).value = e.choice.data_obj.provinceCode;
+    document.getElementById(twinProvinceNameId).value = e.choice.data_obj.provinceName;
+
+    document.getElementById(twinDistrictCodeId).value = e.choice.data_obj.districtCode;
+    document.getElementById(twinDistrictNameId).value = e.choice.data_obj.districtName;
+
+    document.getElementById(twinCommuneCodeId).value = e.choice.data_obj.communeCode;
+    document.getElementById(twinCommuneNameId).value = e.choice.data_obj.communeName;
+
+    document.getElementById(twinCityCodeId).value = e.choice.data_obj.cityCode;
+    document.getElementById(twinCityNameId).value = e.choice.data_obj.cityName;
+
+    document.getElementById(twinParentCityCodeId).value = e.choice.data_obj.parentCityCode;
+    document.getElementById(twinParentCityNameId).value = e.choice.data_obj.parentCityName;
+
+    document.getElementById(twinStreetCodeId).value = e.choice.data_obj.streetCode;
+    document.getElementById(twinStreetNameId).value = e.choice.data_obj.streetName;
+    document.getElementById(twinStreetAttributeId).value = e.choice.data_obj.streetAttribute;
+
+    document.getElementById(twinAddressPostalCodeId).value = e.choice.data_obj.postCode;
+  });
+
+
+});
+

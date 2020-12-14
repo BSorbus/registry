@@ -1,0 +1,149 @@
+<div id="tab_data">
+  <fieldset class="my-fieldset">
+    <legend class="my-fieldset colored-title"><%= subtitle %></legend>
+    <div class="row">
+
+      <div class="col-sm-12">
+
+        <%= form_errors_for @organization %>
+
+        <div class="row">
+          <!-- left  -->
+          <div class="col-sm-6">
+
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <p><strong><%= Organization.human_attribute_name(:name) %></strong></p>
+                <%= @organization.name %>
+              </div>
+
+              <div class="form-group col-sm-12">
+                <p><strong><%= Organization.human_attribute_name(:legal_form_type) %></strong></p>
+                <%= @organization.legal_form_type.name %>
+              </div>
+
+              <div class="form-group col-sm-12" data-toggle="popover_info" title="<%= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top">
+                <p><strong><%= Organization.human_attribute_name(:jst_legal_form_type) %></strong></p>
+                <%= @organization.jst_legal_form_type.name %>
+              </div>
+            </div>
+
+            <!-- nested: -->
+            <div class="row">
+              <div class="form-group col-sm-6">
+                <fieldset class="my-fieldset-short">
+                  <legend class="my-fieldset"><%= t('organizations.fieldset.identifiers_title') %></legend>
+
+                  <div class="row">
+                    <div class="form-group col-sm-12">
+
+                      <%= render partial: "features/feature", collection: @organization.features.feature_only_identifier_type.order(:feature_value), as: :feature %>
+
+                    </div>
+                  </div> <!--/row -->
+                </fieldset>
+              </div>
+
+              <div class="form-group col-sm-6">
+                <fieldset class="my-fieldset-short">
+                  <legend class="my-fieldset"><%= t('organizations.fieldset.address_ext_title') %></legend>
+
+                  <div class="row">
+                    <div class="form-group col-sm-12">
+
+                      <%= render partial: "features/feature", collection: @organization.features.feature_only_address_ext_type.order(:feature_value), as: :feature %>
+
+                    </div>
+                  </div> <!--/row -->
+                </fieldset>
+              </div>
+            </div>
+
+            <!-- nested: -->
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <fieldset class="my-fieldset-short">
+                  <legend class="my-fieldset"><%= t('organizations.fieldset.addresses_title') %></legend>
+
+                  <div class="row">
+                    <div class="form-group col-sm-12">
+
+                      <%= render partial: "addresses/address", collection: @organization.addresses %>
+                      <%#= render @organization.addresses %>
+
+                    </div>
+                  </div> <!--/row -->
+                </fieldset>
+              </div>
+            </div>  <!-- /row -->
+            
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <% if @organization.note.html_safe.size > 0 %>
+                  <blockquote>
+                    <%= @organization.note.html_safe %>
+                  </blockquote>
+                <% end %>
+              </div>
+            </div>  <!-- /row -->
+
+          </div>  <!-- /col-sm-6 -->
+
+
+          <!-- rights  -->
+          <div class="col-sm-6">
+
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <fieldset class="my-fieldset-short">
+                  <legend class="my-fieldset"><%= t('organizations.fieldset.representatives_title') %></legend>
+
+                  <div class="row">
+                    <div class="form-group col-sm-12">
+
+                      <%= render partial: "representatives/representative", collection: @organization.representatives %>
+                      <%#= render @organization.representatives %>
+
+                    </div>
+                  </div> <!--/row -->
+                </fieldset>
+              </div>
+            </div>  <!-- /row -->
+            
+          </div>  <!-- /col-sm-6 -->
+        </div>  <!-- /row -->
+
+
+        <hr class="hr-without-top-margin">
+
+        <div class="row">
+          <div class="col-sm-12">
+
+            <% if policy(@organization).destroy? %>
+              <%= link_to organization_path(@organization),
+                                  method: :delete,
+                                  data: { confirm: t('helpers.links.confirm_destroy', data: @organization.name) }, 
+                                  class: "btn btn-danger" do %>
+                <span class="fa fa-trash"></span>
+                <%= t("helpers.links.destroy") %>
+              <% end %>
+            <% end %>
+
+            <% if policy(@organization).edit? %>
+              <%= link_to edit_organization_path(@organization), class: "btn btn-primary" do %>
+                <span class="fa fa-edit"></span>
+                <%= t("helpers.links.edit") %>
+              <% end %>
+            <% end %>
+
+            <h6 class="pull-right"><%= last_updated_legend(@organization) %></h6>
+
+          </div> <!--/col-sm-12 -->
+        </div> <!-- /row -->
+
+      </div> <!--/col-sm-12-->  
+
+    </div>
+  </fieldset>
+
+</div>

@@ -1,0 +1,157 @@
+<% if user_signed_in? %>
+
+  <% proposal_index_j_access = policy(:proposal).index_j? %>
+  <% proposal_index_p_access = policy(:proposal).index_p? %>
+  <% proposal_index_t_access = policy(:proposal).index_t? %>
+  <% proposal_any_index_access = (proposal_index_j_access || proposal_index_p_access || proposal_index_t_access) %>
+
+  <% register_index_j_access = policy(:register).index_j? %>
+  <% register_index_p_access = policy(:register).index_p? %>
+  <% register_index_t_access = policy(:register).index_t? %>
+  <% register_any_index_access = (register_index_j_access || register_index_p_access || register_index_t_access) %>
+
+  <% organization_index_access = policy(:organization).index? %>
+  <% user_index_access = policy(:user).index? %>
+  <% role_index_access = policy(:role).index? %>
+  <% work_index_access = policy(:work).index? %>
+  <% menagment_any_index_access = organization_index_access || user_index_access || role_index_access || work_index_access %>
+
+  <% divider_before_section_2_enabled = proposal_any_index_access && register_any_index_access %>
+  <% divider_before_section_3_enabled = (proposal_any_index_access || register_any_index_access) && menagment_any_index_access %>
+
+
+  <% if proposal_any_index_access || register_any_index_access || menagment_any_index_access %>
+
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-database"></span>&nbsp;<%= t("data") %> <span class="caret"></span></a>
+
+      <ul class="dropdown-menu">
+
+        <% if proposal_index_j_access %>
+          <li>
+            <%= link_to proposals_path(service_type: 'j') do %>
+              <span><%= proposal_index_legend('j') %></span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if proposal_index_p_access %>
+          <li>
+            <%= link_to proposals_path(service_type: 'p') do %>
+              <span><%= proposal_index_legend('p') %></span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if proposal_index_t_access %>
+          <li>
+            <%= link_to proposals_path(service_type: 't') do %>
+              <span><%= proposal_index_legend('t') %></span>
+            <% end %>
+          </li>
+        <% end %>
+
+
+        <% if divider_before_section_2_enabled %>
+          <li class="divider"></li>
+        <% end %>
+        <% if register_index_j_access %>
+          <li>
+            <%= link_to registers_path(service_type: 'j') do %>
+              <span><%= register_index_legend('j') %></span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if register_index_p_access %>
+          <li>
+            <%= link_to registers_path(service_type: 'p') do %>
+              <span><%= register_index_legend('p') %></span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if register_index_t_access %>
+          <li>
+            <%= link_to registers_path(service_type: 't') do %>
+              <span><%= register_index_legend('t') %></span>
+            <% end %>
+          </li>
+        <% end %>
+
+
+        <% if divider_before_section_3_enabled %>
+          <li class="divider"></li>
+        <% end %>
+        <% if organization_index_access %>
+          <li>
+            <%= link_to organizations_path do %>
+              <span><%= organization_index_legend %></span>
+            <% end %>
+          </li>
+        <% end %>
+
+        <% if user_index_access %>
+          <li>
+            <%= link_to users_path do %>
+              <span><%= user_index_legend %></span>
+            <% end %>
+          </li>
+        <% end %>
+
+        <% if role_index_access %>
+          <li>
+            <%= link_to roles_path do %>
+              <span><%= role_index_legend %></span>
+            <% end %>
+          </li>
+        <% end %>
+
+        <% if work_index_access %>
+          <li>
+            <%= link_to works_path do %>
+              <span><%= work_index_legend %></span>
+            <% end %>
+          </li>
+          <li>
+            <%= link_to versions_path do %>
+              <span><%= version_index_legend %></span>
+            <% end %>
+          </li>
+        <% end %>
+
+      </ul>
+    </li>
+  <% end %>
+
+
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-user"></span>&nbsp;<%= current_user.name %> <span class="caret"></span></a>
+
+    <ul class="dropdown-menu">
+      <li>
+        <%= link_to destroy_user_session_path, :method=>'delete' do %>
+          <span class="glyphicon glyphicon-log-out"></span>&nbsp;<%=t "devise.link_to.sign_out" %>
+        <% end %>
+      </li>
+
+    </ul>
+  </li>
+
+<% else %>
+  <li>
+    <%= link_to new_user_session_path do %>
+      <span class="glyphicon glyphicon-log-in"></span>&nbsp;<%=t "devise.link_to.sign_in" %>
+    <% end %>
+  </li>
+<% end %>
+
+
+<% unless "#{locale}" == "en" %>
+  <li>
+    <%= link_to image_tag('en.png', alt: 'EN', class: "img img-thumbnail", width: 28), { locale: :en } %>
+  </li>
+<% end %>
+<% unless "#{locale}" == "pl" %>
+  <li>
+    <%= link_to image_tag('pl.png', alt: 'PL', class: "img img-thumbnail", width: 28), { locale: :pl } %>
+  </li>
+<% end %>
+
+

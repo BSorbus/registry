@@ -1,0 +1,57 @@
+<div class="fields slide-in-fwd-right">
+
+  <div class="row">
+    <div class="form-group required col-sm-3">
+      <%= f.label :service_type_id, class: 'control-label' %>
+      <%= f.select :service_type_id, 
+            FeatureType.only_service_type.order(:name).collect {|v| [ "#{v[:name]}", v[:id] ] },
+            { include_blank: false }, 
+            { autofocus: false, class: 'form-control input-sm' } %>
+    </div>
+
+    <div class="form-group col-sm-4">
+      <%= f.label :description, class: 'control-label' %>
+      <%#= f.trix_editor :description %>
+      <%= f.text_area :description, :rows => 2, class: 'form-control input-sm' %>
+    </div>
+
+
+    <div class="form-group col-sm-2">
+      <%= f.label :only_wholesale, class: 'control-label' %><br>
+      <%= f.radio_button(:only_wholesale, false, disabled: false) %>
+      <%= f.label(:only_wholesale_false, t("false") ) %>
+      <%= f.radio_button(:only_wholesale, true, disabled: false) %>
+      <%= f.label(:only_wholesale_true, t("true") ) %>
+    </div>
+
+    <div class="form-group col-sm-2">
+      <%= f.label :only_resale, class: 'control-label' %><br>
+      <%= f.radio_button(:only_resale, false, disabled: false) %>
+      <%= f.label(:only_resale_false, t("false") ) %>
+      <%= f.radio_button(:only_resale, true, disabled: false) %>
+      <%= f.label(:only_resale_true, t("true") ) %>
+    </div>
+
+    <div class="form-group col-sm-1">
+      <% if f.object.marked_for_destruction? %>
+
+        <label class="btn btn-sm btn-danger control-label" role="button", title="<%=t('tooltip.confirm_remove_fields_nested')%>", rel='tooltip'>
+          <%= f.check_box :_destroy %>
+          <span></span>
+          &nbsp;&nbsp;<%= f.object.class.human_attribute_name(:_destroy) %>
+        </label>
+
+      <% else %>
+        <%= f.hidden_field :_destroy %>
+        <%= link_to t("helpers.links.link_to_remove_fields_nested_small"), '#',
+          onClick: "removeNestedFields(this); return false;", class: 'remove-link-button btn btn-sm btn-danger', title: t('tooltip.remove_fields_nested'), rel: 'tooltip' %>
+        <% end %>
+    </div>
+
+  </div>
+
+
+  <!-- nested: -->
+
+</div>
+

@@ -1,0 +1,33 @@
+function proposalAreIsRequired(area_enabled, obj) {
+  // console.log("area_enabled:", area_enabled);
+  // console.log("obj:", obj);
+
+  if (area_enabled == 'true') {
+
+    // alert('Usuń obszary poniżej jeżeli są zdefiniowane');
+    var listButtons = document.getElementsByClassName("proposal_area_if_disabled_click");
+    for (var i = 0; i < listButtons.length; i++) {
+      $(listButtons[i]).click();
+    };
+    // ukryj przycisk
+    var list = document.getElementsByClassName("proposal_area_enabled_disabled");
+    for (var i = 0; i < list.length; i++) {
+      //$(list[i]).hide();
+      $(list[i]).slideUp('normal');
+    };
+
+  } else {
+
+    //alert('NIE');
+    var list = document.getElementsByClassName("proposal_area_enabled_disabled");
+    for (var i = 0; i < list.length; i++) {
+      //$(list[i]).show();
+      $(list[i]).slideDown('normal');
+    };
+
+  }
+
+  return false;
+ 
+};
+

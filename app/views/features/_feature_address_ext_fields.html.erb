@@ -1,0 +1,36 @@
+<div class="fields slide-in-fwd-right">
+  <div class="row" >
+    <div class="form-group required col-sm-4">
+      <%= f.select :feature_type_id, 
+            FeatureType.only_address_ext_type.order(:name).collect {|v| [ "#{v[:name]}", v[:id] ] },
+            { include_blank: false }, 
+            { autofocus: false, class: 'form-control input-sm' } %>
+    </div>
+
+    <div class="form-group col-sm-5">
+      <%= f.text_field :feature_value, class: 'form-control input-sm' %>
+    </div>
+
+    <div class="form-group col-sm-3">
+      <% if f.object.marked_for_destruction? %>
+<!-- 
+        <%#= f.check_box :_destroy %>
+        <%#= f.label :_destroy, class: 'control-label', title: t('tooltip.confirm_remove_fields_nested'), rel: 'tooltip' %>
+ -->
+        <label class="btn btn-sm btn-danger control-label" role="button", title="<%=t('tooltip.confirm_remove_fields_nested')%>", rel='tooltip'>
+          <%= f.check_box :_destroy %>
+          <span></span>
+          &nbsp;&nbsp;<%= f.object.class.human_attribute_name(:_destroy) %>
+        </label>
+
+      <% else %>
+        <%= f.hidden_field :_destroy %>
+        <%= link_to t("helpers.links.link_to_remove_fields_nested_small"), '#',
+          onClick: "removeNestedFields(this); return false;", class: 'remove-link-button btn btn-sm btn-danger', title: t('tooltip.remove_fields_nested'), rel: 'tooltip' %>
+        <% end %>
+    </div>
+
+  </div>
+</div>
+
+

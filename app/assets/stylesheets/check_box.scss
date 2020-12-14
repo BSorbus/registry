@@ -1,0 +1,20 @@
+$brand-danger:      #d9534f;
+
+
+label input {
+  display: none;/* <-- hide the default checkbox */
+}
+label span {/* <-- style the artificial checkbox */
+  height: 12px;
+  width: 12px;
+  border: 1px solid #ccc;
+  display: inline-block;
+    
+}
+[type=checkbox]:checked + span {/* <-- style its checked state */
+  background: $brand-danger;
+}
+[type="checkbox"]:not(:checked) + span {
+  background: white;
+}
+
