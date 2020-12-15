@@ -1,9 +1,9 @@
-    //@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300,700,600);
+@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300,700,600);
 
-    //$font-family-base: 'Titillium Web', sans-serif;
+$font-family-base: 'Titillium Web', sans-serif;
 //$font-family-base: Arial, "Helvetica", sans-serif;
 //$font-size-base: 0.85rem;
-    //$font-size-base: 14px;
+$font-size-base: 14px;
 //$font-size-base: 12px;
 
 
@@ -215,6 +215,7 @@ trix-toolbar .trix-button-group--file-tools {
   margin-left: -7px;
 }
 
+/*
 .form-group.required .control-label:hover:after{
   background: rgba(0,0,0,.75);
   border-radius: 5px;
@@ -226,6 +227,7 @@ trix-toolbar .trix-button-group--file-tools {
   position: absolute;
   z-index: 98;
 }
+*/
 
 @import 'font_awesome5_webfont';
 

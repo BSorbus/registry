@@ -19,8 +19,6 @@ class Proposal < ApplicationRecord
   has_many :proposal_services, dependent: :destroy
   has_many :proposal_areas, dependent: :destroy
 
-  has_one :proposal_t_trait
-
   has_one_attached :bank_pdf
   has_one_attached :face_image
   has_one_attached :consent_pdf
@@ -42,6 +40,11 @@ class Proposal < ApplicationRecord
   validates :esod_category, presence: true
   validates :register, presence: true, if: -> { ProposalType::PROPOSAL_TYPES_ENABLED_REGISTER_ID.include?(proposal_type_id) }
 
+
+  validate :end_after_start
+  validates :scheduled_start_date, presence: true
+  validates :scheduled_end_date, presence: true,  if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION) }
+
   # # if create/update proposal only one rec can have the status ProposalStatus::PROPOSAL_STATUS_CREATED
   # validates :proposal_status_id, 
   #   uniqueness: { scope: [:service_type, :organization_id],
@@ -50,13 +53,13 @@ class Proposal < ApplicationRecord
   #                 end }, if: -> { proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED }
                   
 
-  validate :proposal_networks_network_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_NETWORK.include?(proposal_type_id) }
+#  validate :proposal_networks_network_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_NETWORK.include?(proposal_type_id) }
   validate_nested_uniqueness_of :proposal_networks, uniq_key: :network_type_id, scope: [:proposal], 
                                   case_sensitive: false, error_key: :proposal_networks_network_type_nested_taken, 
                                 if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_NETWORK.include?(proposal_type_id) }
 
 
-  validate :proposal_services_service_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE.include?(proposal_type_id) }
+#  validate :proposal_services_service_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE.include?(proposal_type_id) }
   validate_nested_uniqueness_of :proposal_services, uniq_key: :service_type_id, scope: [:proposal], 
                                   case_sensitive: false, error_key: :proposal_services_service_type_nested_taken,
                                 if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE.include?(proposal_type_id) }
@@ -278,6 +281,16 @@ class Proposal < ApplicationRecord
   end
 
   private
+
+    def end_after_start
+      return if scheduled_end_date.blank? || scheduled_start_date.blank?
+     
+      if scheduled_end_date < scheduled_start_date
+        errors.add(:scheduled_end_date, I18n.t('errors.messages.greater_than_or_equal_to', count: scheduled_start_date.strftime('%Y-%m-%d')  ) ) 
+        # errors.add(:scheduled_end_date, 'nie może być wcześniejsza "Początek"') 
+        # throw :abort 
+      end 
+    end
 
     def proposal_networks_network_type_presence
       if proposal_networks.reject(&:marked_for_destruction?).reject { |x| not FeatureType.only_network_type.ids.include?(x.network_type_id) }.empty?

@@ -220,14 +220,6 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
     t.index ["name"], name: "index_proposal_statuses_on_name", unique: true
   end
 
-  create_table "proposal_t_traits", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "proposal_id"
-    t.date "scheduled_start_date"
-    t.date "scheduled_end_date"
-    t.index ["proposal_id"], name: "idx_proposal_t_traits_proposal_id_uniqueness", unique: true
-    t.index ["proposal_id"], name: "index_proposal_t_traits_on_proposal_id"
-  end
-
   create_table "proposal_types", force: :cascade do |t|
     t.string "name"
     t.date "state_on"
@@ -393,7 +385,6 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
   add_foreign_key "proposal_networks", "proposals"
   add_foreign_key "proposal_services", "feature_types", column: "service_type_id"
   add_foreign_key "proposal_services", "proposals"
-  add_foreign_key "proposal_t_traits", "proposals"
   add_foreign_key "proposals", "organizations"
   add_foreign_key "proposals", "proposal_statuses"
   add_foreign_key "proposals", "proposal_types"

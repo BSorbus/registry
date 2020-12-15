@@ -32,6 +32,9 @@ module Api
           @ips = [
                   '::1',              # localhost
                   '127.0.0.1',        # localhost
+                  '10.61.0.133',      # F5
+                  '10.40.1.0/16',     # WSO2EI PROD
+                  '10.40.2.0/16',     # WSO2EI TEST
                   '10.2.0.0/16',      # Białystok 
                   '10.3.0.0/16',      # Bydgoszcz
                   '10.4.0.0/16',      # Gdynia
