@@ -4,6 +4,7 @@ class CreateFeatureTypes < ActiveRecord::Migration[5.2]
       t.string :name
       t.string :destiny
       t.string :regexp_format_required
+      t.string :format_example
       t.date :state_on
 
       t.timestamps

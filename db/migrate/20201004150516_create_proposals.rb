@@ -23,7 +23,7 @@ class CreateProposals < ActiveRecord::Migration[5.2]
 
       t.text :bank_pdf_blob_path
       t.text :face_image_blob_path
-      t.text :consent_pdf_blob_path
+      t.text :attached_pdf_file_blob_path
 
       t.text :note, default: ""
 

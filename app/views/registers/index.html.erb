@@ -16,59 +16,64 @@
       <div class="row">
         <div class="col-sm-12">
           <table id="registers-table" class="hover cell-border" cellspacing="0" width="100%" 
-            data-source="<%= datatables_index_registers_path(format: :json) %>",
+            data-source="<%= datatables_index_registers_path(format: :json) %>"
             data-locale_url="<%= datatables_lang_path(format: :json) %>">
             <thead>
               <tr>
                 <th>ID</th>
                 <th><%= Register.human_attribute_name(:register_no) %></th>
-                <th><%= Register.human_attribute_name(:insertion_date) %></th>
+                <th><%= Register.human_attribute_name(:proposal_registration_approved) %></th>
+                <th><%= Register.human_attribute_name(:proposal_current_approved) %></th>
+                <th><%= Register.human_attribute_name(:proposal_deletion_approved) %></th>
                 <th><%= Register.human_attribute_name(:register_status) %></th>
                 <th><%= Register.human_attribute_name(:organization) %></th>
+                <th><%= Register.human_attribute_name(:organization_nip) %></th>
                 <th><%= Register.human_attribute_name(:organization_jointly_identifiers) %></th>
                 <th><%= Register.human_attribute_name(:organization_jointly_addresses) %></th>
-                <th><%= Register.human_attribute_name(:note) %></th>
-<!--                 <th class='col-sm-4'><%#= Register.human_attribute_name(:flat) %></th> -->
               </tr>
             </thead>
 
         <tfoot style='display: none'>
           <tr>
             <th></th> <!-- id 0 -->
-            <th> <!-- insertion_date 1 -->
+            <th> <!-- register_no 1 -->
               <%= text_field_tag :col1filter, params[:col1filter], id: 'col1filter', 'data-column' => "1", 
                     class: 'column_filter form-control input-sm', style: "width: 85%;" %>
             </th>
-            <th> <!-- register_no 2 -->
+            <th> <!-- proposal_registration_approved 2 -->
               <%= text_field_tag :col2filter, params[:col2filter], id: 'col2filter', 'data-column' => "2", 
                     class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
             </th>
-            <th>  <!-- register_status -->
-              <%= select( nil, "col3filter",
+            <th> <!-- proposal_current_approved 3 -->
+              <%= text_field_tag :col3filter, params[:col3filter], id: 'col3filter', 'data-column' => "3", 
+                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
+            </th>
+            <th> <!-- proposal_deletion_approved 4 -->
+              <%= text_field_tag :col4filter, params[:col4filter], id: 'col4filter', 'data-column' => "4", 
+                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
+            </th>
+            <th>  <!-- register_status 5 -->
+              <%= select( nil, "col5filter",
                     RegisterStatus.all.order(:name).collect {|v| [ "#{v[:name]}", "#{v[:name]}" ] },
                     { include_blank: true }, 
-                    { autofocus: false, class: 'column_filter form-control input-sm', 'data-column' => "3", style: "width: 85%;" }) %>            
+                    { autofocus: false, class: 'column_filter form-control input-sm', 'data-column' => "5", style: "width: 85%;" }) %>            
             </th>
-            <th> <!-- organization 4 -->
-              <%= text_field_tag :col4filter, params[:col4filter], id: 'col4filter', 'data-column' => "4", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>
-            </th>
-            <th> <!-- organization_jointly_identifiers 5 -->
-              <%= text_field_tag :col5filter, params[:col5filter], id: 'col5filter', 'data-column' => "5", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>
-            </th>
-            <th> <!-- organization_jointly_addresses 6 -->
+            <th> <!-- organization 6 -->
               <%= text_field_tag :col6filter, params[:col6filter], id: 'col6filter', 'data-column' => "6", 
                     class: 'column_filter form-control input-sm', style: "width: 85%;" %>
             </th>
-            <th> <!-- note 7 -->
+            <th> <!-- organization_nip 7 -->
               <%= text_field_tag :col7filter, params[:col7filter], id: 'col7filter', 'data-column' => "7", 
                     class: 'column_filter form-control input-sm', style: "width: 85%;" %>
             </th>
-<!--        <th> 
-              <%#= text_field_tag :col8filter, params[:col8filter], id: 'col8filter', 'data-column' => "8", 
+            <th> <!-- organization_jointly_identifiers 8 -->
+              <%= text_field_tag :col8filter, params[:col8filter], id: 'col8filter', 'data-column' => "8", 
                     class: 'column_filter form-control input-sm', style: "width: 85%;" %>
-            </th> -->
+            </th>
+            <th> <!-- organization_jointly_addresses 9 -->
+              <%= text_field_tag :col9filter, params[:col9filter], id: 'col9filter', 'data-column' => "9", 
+                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>
+            </th>
           </tr>
         </tfoot>
             <tbody>

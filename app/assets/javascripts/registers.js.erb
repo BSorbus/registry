@@ -115,12 +115,33 @@ $(document).ready(function() {
     columns: [
       { "data": "id", "visible": false },
       { "data": "register_no", "type": "num" },
-      { "data": "insertion_date" }, 
-      { "data": "register_status" },
+      { "data": "registration_approved" }, 
+      { "data": "current_approved" }, 
+      { "data": "deletion_approved" }, 
+      { "data": "register_status",
+        fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+          // sData - wartosc celi, oData - wiersza
+          if ( sData == 'aktualny' ) {
+            $(nTd).addClass('datatable-cell-register-status-current');
+          }
+          else if ( sData == 'jest wniosek o zmianę' ) {
+            $(nTd).addClass('datatable-cell-register-status-pending_changes');
+          }
+          else if ( sData == 'jest wniosek o wykreślenie' ) {
+            $(nTd).addClass('datatable-cell-register-status-pending_deletion');
+          }
+          else if ( sData == 'stary wpis' ) {
+            $(nTd).addClass('datatable-cell-register-status-old_entry');
+          }
+          else if ( sData == 'anulowany' ) {
+            $(nTd).addClass('datatable-cell-register-status-annuled');
+          }
+        }
+      },
       { "data": "organization" },
+      { "data": "nip" },
       { "data": "jointly_identifiers" }, 
-      { "data": "jointly_addresses" }, 
-      { "data": "note" }
+      { "data": "jointly_addresses" }
       // { "data": "flat", "sortable": false }
     ],
     order: [[ 1, "desc" ]],

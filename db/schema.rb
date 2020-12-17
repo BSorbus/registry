@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_04_150522) do
+ActiveRecord::Schema.define(version: 2020_10_04_150526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
     t.string "name"
     t.string "destiny"
     t.string "regexp_format_required"
+    t.string "format_example"
     t.date "state_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -154,13 +155,16 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
 
   create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "author_id"
+    t.string "short_name", default: ""
     t.string "name", default: ""
-    t.string "tax_no", default: ""
+    t.string "nip", default: ""
+    t.string "regon", default: ""
     t.uuid "legal_form_type_id"
-    t.uuid "jst_legal_form_type_id"
     t.string "jointly_identifiers", default: ""
     t.text "jointly_addresses", default: ""
     t.string "jointly_addresses_ext", default: ""
+    t.uuid "jst_legal_form_type_id"
+    t.string "jst_teryt", default: ""
     t.text "note", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -168,7 +172,9 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
     t.index ["jst_legal_form_type_id"], name: "index_organizations_on_jst_legal_form_type_id"
     t.index ["legal_form_type_id"], name: "index_organizations_on_legal_form_type_id"
     t.index ["name"], name: "index_organizations_on_name"
-    t.index ["tax_no"], name: "index_organizations_on_tax_no"
+    t.index ["nip"], name: "index_organizations_on_nip"
+    t.index ["regon"], name: "index_organizations_on_regon"
+    t.index ["short_name"], name: "index_organizations_on_short_name"
   end
 
   create_table "proposal_areas", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -186,6 +192,15 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
     t.index ["proposal_id", "province_code", "district_code", "commune_code"], name: "idx_proposal_areas_xxx_code_uniqueness", unique: true
     t.index ["proposal_id"], name: "index_proposal_areas_on_proposal_id"
     t.index ["province_name"], name: "index_proposal_areas_on_province_name"
+  end
+
+  create_table "proposal_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "proposal_id"
+    t.uuid "attachment_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachment_type_id"], name: "index_proposal_attachments_on_attachment_type_id"
+    t.index ["proposal_id"], name: "index_proposal_attachments_on_proposal_id"
   end
 
   create_table "proposal_networks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -245,7 +260,7 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
     t.text "status_comment", default: ""
     t.text "bank_pdf_blob_path"
     t.text "face_image_blob_path"
-    t.text "consent_pdf_blob_path"
+    t.text "attached_pdf_file_blob_path"
     t.text "note", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -381,6 +396,8 @@ ActiveRecord::Schema.define(version: 2020_10_04_150522) do
   add_foreign_key "organizations", "feature_types", column: "legal_form_type_id"
   add_foreign_key "organizations", "users", column: "author_id"
   add_foreign_key "proposal_areas", "proposals"
+  add_foreign_key "proposal_attachments", "feature_types", column: "attachment_type_id"
+  add_foreign_key "proposal_attachments", "proposals"
   add_foreign_key "proposal_networks", "feature_types", column: "network_type_id"
   add_foreign_key "proposal_networks", "proposals"
   add_foreign_key "proposal_services", "feature_types", column: "service_type_id"

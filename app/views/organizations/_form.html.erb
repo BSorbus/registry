@@ -15,7 +15,9 @@
               <%= f.label :name, class: 'control-label' %>
               <%= f.text_field :name, autofocus: true, class: 'form-control input-sm', disabled: input_disabled %>
             </div>
+          </div>  <!-- /row -->
 
+          <div class="row">
             <div class="form-group required col-sm-12">
               <%= f.label :legal_form_type_id, class: 'control-label' %>
               <%= f.select :legal_form_type_id, 
@@ -23,16 +25,30 @@
                     { include_blank: false }, 
                     { autofocus: false, class: 'form-control input-sm', disabled: input_disabled } %>
             </div>
+          </div>  <!-- /row -->
 
-            <div class="form-group required col-sm-12"  data-toggle="popover_info" title="<%= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top">
+          <div class="row">
+            <div class="form-group required col-sm-8"  data-toggle="popover_info" title="<%= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top">
               <%= f.label :jst_legal_form_type_id, class: 'control-label' %>
               <%= f.select :jst_legal_form_type_id, 
                     FeatureType.only_jst_legal_form_type.order(:name).collect {|v| [ "#{v[:name]}", v[:id] ] },
-                    { include_blank: false }, 
+                    { include_blank: true }, 
                     { autofocus: false, class: 'form-control input-sm', disabled: input_disabled } %>
+            </div>
+            <div class="form-group col-sm-4">
+              <%= f.label :jst_teryt, class: 'control-label' %>
+              <%= f.text_field :jst_teryt, autofocus: false, class: 'form-control input-sm', disabled: input_disabled %>
             </div>
           </div>  <!-- /row -->
 
+          <div class="row">
+            <div class="form-group required col-sm-4">
+              <%= f.label :nip, class: 'control-label' %>
+              <%= f.text_field :nip, autofocus: false, class: 'form-control input-sm', disabled: input_disabled %>
+            </div>
+          </div>  <!-- /row -->
+
+          <!-- nested: -->
           <div class="row">
             <div class="col-sm-12">
               <fieldset class="my-fieldset">

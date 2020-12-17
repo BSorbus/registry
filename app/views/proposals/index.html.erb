@@ -16,7 +16,7 @@
       <div class="row">
         <div class="col-sm-12">
           <table id="proposals-table" class="hover cell-border" cellspacing="0" width="100%" 
-            data-source="<%= datatables_index_proposals_path(format: :json) %>",
+            data-source="<%= datatables_index_proposals_path(format: :json) %>"
             data-locale_url="<%= datatables_lang_path(format: :json) %>">
             <thead>
               <tr>
@@ -26,6 +26,7 @@
                 <th><%= Proposal.human_attribute_name(:proposal_status) %></th>
                 <th><%= Proposal.human_attribute_name(:register) %></th>
                 <th><%= Proposal.human_attribute_name(:organization) %></th>
+                <th><%= Register.human_attribute_name(:organization_nip) %></th>
                 <th><%= Proposal.human_attribute_name(:organization_jointly_identifiers) %></th>
                 <th><%= Proposal.human_attribute_name(:organization_jointly_addresses) %></th>
                 <th><%= Proposal.human_attribute_name(:note) %></th>
@@ -33,49 +34,54 @@
               </tr>
             </thead>
 
-        <tfoot style='display: none'>
-          <tr>
-            <th></th> <!-- id -->
-            <th> <!-- insertion_date -->
-              <%= text_field_tag :col1filter, params[:col1filter], id: 'col1filter', 'data-column' => "1", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>
-            </th>
-            <th> <!-- proposal_type -->
-              <%= select( nil, "col2filter",
-                    ProposalType.all.order(:name).collect {|v| [ "#{v[:name]}", "#{v[:name]}" ] },
-                    { include_blank: true }, 
-                    { autofocus: false, class: 'column_filter form-control input-sm', 'data-column' => "2", style: "width: 85%;" }) %>
-            </th>
-            <th>  <!-- proposal_status -->
-              <%= select( nil, "col3filter",
-                    ProposalStatus.all.order(:name).collect {|v| [ "#{v[:name]}", "#{v[:name]}" ] },
-                    { include_blank: true }, 
-                    { autofocus: false, class: 'column_filter form-control input-sm', 'data-column' => "3", style: "width: 85%;" }) %>
-              
-            </th>
-            <th> <!-- name -->
-              <%= text_field_tag :col4filter, params[:col4filter], id: 'col4filter', 'data-column' => "4", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
-            </th>
-            <th> <!-- organization -->
-              <%= text_field_tag :col5filter, params[:col5filter], id: 'col5filter', 'data-column' => "5", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>
-            </th>
-            <th> <!-- jointly_identifiers -->
-              <%= text_field_tag :col6filter, params[:col6filter], id: 'col6filter', 'data-column' => "6", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>
-            </th>
-            <th> <!-- jointly_addresses -->
-              <%= text_field_tag :col7filter, params[:col7filter], id: 'col7filter', 'data-column' => "7", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>
-            </th>
-            <th> <!-- note -->
-              <%= text_field_tag :col8filter, params[:col8filter], id: 'col8filter', 'data-column' => "8", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>
-            </th>
+            <tfoot style='display: none'>
+              <tr>
+                <th></th> <!-- id 0 -->
+                <th> <!-- insertion_date 1 -->
+                  <%= text_field_tag :col1filter, params[:col1filter], id: 'col1filter', 'data-column' => "1", 
+                        class: 'column_filter form-control input-sm', style: "width: 85%;" %>
+                </th>
+                <th> <!-- proposal_type 2 -->
+                  <%= select( nil, "col2filter",
+                        ProposalType.all.order(:name).collect {|v| [ "#{v[:name]}", "#{v[:name]}" ] },
+                        { include_blank: true }, 
+                        { autofocus: false, class: 'column_filter form-control input-sm', 'data-column' => "2", style: "width: 85%;" }) %>
+                </th>
+                <th>  <!-- proposal_status 3 -->
+                  <%= select( nil, "col3filter",
+                        ProposalStatus.all.order(:name).collect {|v| [ "#{v[:name]}", "#{v[:name]}" ] },
+                        { include_blank: true }, 
+                        { autofocus: false, class: 'column_filter form-control input-sm', 'data-column' => "3", style: "width: 85%;" }) %>
+                  
+                </th>
+                <th> <!-- register 4 -->
+                  <%= text_field_tag :col4filter, params[:col4filter], id: 'col4filter', 'data-column' => "4", 
+                        class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
+                </th>
+                <th> <!-- organization 5 -->
+                  <%= text_field_tag :col5filter, params[:col5filter], id: 'col5filter', 'data-column' => "5", 
+                        class: 'column_filter form-control input-sm', style: "width: 85%;" %>
+                </th>
+                <th> <!-- nip 6 -->
+                  <%= text_field_tag :col6filter, params[:col6filter], id: 'col6filter', 'data-column' => "6", 
+                        class: 'column_filter form-control input-sm', style: "width: 85%;" %>
+                </th>
+                <th> <!-- jointly_identifiers 7 -->
+                  <%= text_field_tag :col7filter, params[:col7filter], id: 'col7filter', 'data-column' => "7", 
+                        class: 'column_filter form-control input-sm', style: "width: 85%;" %>
+                </th>
+                <th> <!-- jointly_addresses 8 -->
+                  <%= text_field_tag :col8filter, params[:col8filter], id: 'col8filter', 'data-column' => "8", 
+                        class: 'column_filter form-control input-sm', style: "width: 85%;" %>
+                </th>
+                <th> <!-- note 9 -->
+                  <%= text_field_tag :col9filter, params[:col9filter], id: 'col9filter', 'data-column' => "9", 
+                        class: 'column_filter form-control input-sm', style: "width: 85%;" %>
+                </th>
 
-          </tr>
-        </tfoot>
+              </tr>
+            </tfoot>
+
             <tbody>
                <!--data from JSON -->
             </tbody>

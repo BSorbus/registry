@@ -18,10 +18,7 @@ class Proposal < ApplicationRecord
   has_many :proposal_networks, dependent: :destroy
   has_many :proposal_services, dependent: :destroy
   has_many :proposal_areas, dependent: :destroy
-
-  has_one_attached :bank_pdf
-  has_one_attached :face_image
-  has_one_attached :consent_pdf
+  has_many :proposal_attachments, dependent: :destroy
 
 
   has_paper_trail versions: {
@@ -89,6 +86,7 @@ class Proposal < ApplicationRecord
   accepts_nested_attributes_for :proposal_networks, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :proposal_services, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :proposal_areas, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :proposal_attachments, reject_if: :all_blank, allow_destroy: true
 
 
   def type_registration_status_created

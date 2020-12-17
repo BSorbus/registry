@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  after_action :verify_authorized, except: [:datatables_index_for_role, :datatables_index_for_organization, :datatables_index]
+  after_action :verify_authorized, except: [:datatables_index_for_role, :datatables_index]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
 
@@ -8,13 +8,6 @@ class UsersController < ApplicationController
     checked_filter = (params[:checked_only_filter].blank? || params[:checked_only_filter] == 'false' ) ? nil : true
     respond_to do |format|
       format.json { render json: RoleUsersDatatable.new(params, view_context: view_context, only_for_current_role_id: params[:role_id], checked_only_filter: checked_filter) }
-    end
-  end
-
-  def datatables_index_for_organization
-    checked_filter = (params[:checked_only_filter].blank? || params[:checked_only_filter] == 'false' ) ? nil : true
-    respond_to do |format|
-      format.json { render json: OrganizationUsersDatatable.new(params, view_context: view_context, only_for_current_organization_id: params[:organization_id], checked_only_filter: checked_filter) }
     end
   end
 

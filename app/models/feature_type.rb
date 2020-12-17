@@ -12,6 +12,7 @@ class FeatureType < ApplicationRecord
   has_many :representative_type_representatives, class_name: "Representative", foreign_key: "representative_type_id", inverse_of: :representative_type
   has_many :proposal_network_type_network, class_name: "ProposalNetwork", foreign_key: "network_type_id", inverse_of: :network_type
   has_many :proposal_service_type_service, class_name: "ProposalService", foreign_key: "service_type_id", inverse_of: :service_type
+  has_many :proposal_attachment_type_attachment, class_name: "ProposalAttachment", foreign_key: "attachment_type_id", inverse_of: :attachment_type
 
 
 
@@ -25,12 +26,16 @@ class FeatureType < ApplicationRecord
 
   validate :valid_regex, unless: -> { regexp_format_required.blank? }
 
+  validates :format_example, format: { with: Proc.new { |a| Regexp.new(a.regexp_format_required) },
+                                      message: ->(object, data) do
+                                        I18n.t("errors.messages.invalid_regex_format", data: "#{object.regexp_format_required}", example: "#{object.format_example}" ) 
+                                      end }, if: -> { regexp_format_required.present? && format_example.present? } 
+
 
   # scopes
   scope :only_legal_form_type,              -> { where(destiny: "legal_form_type") }
   scope :only_jst_legal_form_type,          -> { where(destiny: "jst_legal_form_type") }
   scope :only_identifier_type,              -> { where(destiny: "identifier_type") }
-  scope :only_identifier_type_tax,          -> { where(destiny: "identifier_type", name: ["PL-NIP"]) }
   scope :only_address_type,                 -> { where(destiny: "address_type") }
   scope :only_address_type_office,          -> { where(destiny: "address_type", name: "adres siedziby") }
   scope :only_address_type_correspondence,  -> { where(destiny: "address_type", name: "adres korespondencyjny") }
@@ -39,6 +44,7 @@ class FeatureType < ApplicationRecord
   scope :only_representative_type,          -> { where(destiny: "representative_type") }
   scope :only_network_type,                 -> { where(destiny: "network_type") }
   scope :only_service_type,                 -> { where(destiny: "service_type") }
+  scope :only_attachment_type,              -> { where(destiny: "attachment_type") }
 
   private
 

@@ -17,10 +17,18 @@ class Feature < ApplicationRecord
                     # uniqueness: { scope: [:feature_type], case_sensitive: false }
                     # uniqueness: { scope: [:featurable, :feature_type], case_sensitive: false }
 
-  validates :feature_value, format: { with: Proc.new { |a| Regexp.new(a.feature_type.regexp_format_required) }, if: -> { feature_type.regexp_format_required.present? } }
+  validates :feature_value, format: { with: Proc.new { |a| Regexp.new(a.feature_type.regexp_format_required) },
+                                      message: ->(object, data) do
+                                        I18n.t("errors.messages.invalid_regex_format", data: "#{object.feature_type.regexp_format_required}", example: "#{object.feature_type.format_example}" ) 
+                                      end }, if: -> { feature_type.regexp_format_required.present? } 
   # same as:
   # validates_format_of :feature_value, with: EMAIL_REGEXP, if: -> { feature_type.name == "e-mail" }
 
+
+
+  #                 message: ->(object, data) do
+  #                   I18n.t("activerecord.errors.messages.proposal_status_taken", proposal_status_name: "#{object.proposal_status.name}", proposal_type_name: "#{object.proposal_type.name}" )
+  #                 end }, if: -> { proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED }
 
 
   # validates :feature_value, presence: { message: ->(object, data) do

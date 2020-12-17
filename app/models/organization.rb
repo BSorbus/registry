@@ -1,12 +1,14 @@
 class Organization < ApplicationRecord
   include ActionView::Helpers::TextHelper
 
+  PL_NIP_REGEXP = /\d{10}/
+
   delegate :url_helpers, to: 'Rails.application.routes'
 
   # relations
   belongs_to :author, class_name: "User"
   belongs_to :legal_form_type, class_name: "FeatureType", inverse_of: :legal_form_type_organizations
-  belongs_to :jst_legal_form_type, class_name: "FeatureType", inverse_of: :jst_legal_form_type_organizations
+  belongs_to :jst_legal_form_type, class_name: "FeatureType", inverse_of: :jst_legal_form_type_organizations, optional: true
 
   has_many :addresses, as: :addressable, dependent: :destroy
   has_many :features, as: :featurable, dependent: :destroy
@@ -47,10 +49,13 @@ class Organization < ApplicationRecord
   #                    uniqueness: { case_sensitive: false }
 
   validates :legal_form_type, presence: true
-  validates :jst_legal_form_type, presence: true
+  #validates :jst_legal_form_type, presence: true
+  validates :jst_teryt, presence: true, length: { in: 1..20 }, if: -> { jst_legal_form_type.present? }
 
-  validate :addresses_address_type_office_presence
+  validates :nip, format: { with: PL_NIP_REGEXP }, if: -> { nip.present? } 
+
   validate :features_identifier_type_presence
+  validate :addresses_address_type_office_presence
   validate :features_address_ext_type_email_presence
   validate :representatives_representative_type_presence
 
@@ -138,7 +143,11 @@ class Organization < ApplicationRecord
 
 
   def fullname
-    "#{name}"
+    truncate(Loofah.fragment(self.name).text, length: 100)
+  end
+
+  def fullname_with_nip
+    fullname + "  [ NIP: #{nip}]"
   end
 
   def short_name_truncate
@@ -197,7 +206,7 @@ class Organization < ApplicationRecord
   def self.one_param_sql(one_query_word)
     #escaped_query_str = sanitize("%#{query_str}%")
     escaped_query_str = Loofah.fragment("'%#{one_query_word}%'").text
-    "(" + %w(organizations.name organizations.province_name organizations.district_name organizations.commune_name organizations.city_name organizations.street_name organizations.address_postal_code).map { |column| "#{column} ilike #{escaped_query_str}" }.join(" OR ") + ")"
+    "(" + %w(organizations.name organizations.nip organizations.jointly_identifiers organizations.jointly_addresses organizations.jointly_addresses_ext).map { |column| "#{column} ilike #{escaped_query_str}" }.join(" OR ") + ")"
   end
 
   private
@@ -206,7 +215,6 @@ class Organization < ApplicationRecord
       set_jointly_identifiers
       set_jointly_addresses_ext      
       set_jointly_addresses
-      set_tax_no      
     end
 
     def set_jointly_identifiers
@@ -239,19 +247,16 @@ class Organization < ApplicationRecord
       self.jointly_addresses = self.jointly_addresses[0...-4]
     end
 
-    def set_tax_no
-      self.tax_no = ''
-      features.reject(&:marked_for_destruction?).reject { |x| not FeatureType.only_identifier_type_tax.ids.include?(x.feature_type_id) }.each do |rec|
-        self.tax_no = "#{rec.feature_value}" if self.tax_no.blank? 
-      end
-    end
-
     def features_identifier_type_presence
-      if features.reject(&:marked_for_destruction?).reject { |x| not FeatureType.only_identifier_type.ids.include?(x.feature_type_id) }.empty?
-        empty_key_names = FeatureType.only_identifier_type.pluck(:name).flatten
-        # errors.add(:base, :features_identifier_type_blank)
-        errors.add(:base, :features_identifier_type_blank, data: empty_key_names)
-        # throw :abort 
+      if nip.present?
+        return
+      else
+        if features.reject(&:marked_for_destruction?).reject { |x| not FeatureType.only_identifier_type.ids.include?(x.feature_type_id) }.empty?
+          empty_key_names = FeatureType.only_identifier_type.pluck(:name).flatten
+          # errors.add(:base, :features_identifier_type_blank)
+          errors.add(:base, :features_identifier_type_blank, data: empty_key_names)
+          # throw :abort 
+        end
       end
     end
 

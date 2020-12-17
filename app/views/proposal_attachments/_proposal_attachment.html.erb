@@ -1,0 +1,26 @@
+<div class="fields">
+  <div class="row" >
+    <div class="form-group required col-sm-5">
+<!--      <strong><%#= ProposalAttachment.human_attribute_name(:attachment_type) %></strong><br> -->
+     <%= proposal_attachment.attachment_type.name %>
+    </div>
+
+    <div class="form-group col-sm-6">
+      <% if proposal_attachment.attached_pdf_file.attached? %>
+<!--         <p><strong><%#= Proposal.human_attribute_name(:attached_pdf_file) %></strong><br> -->
+        <%= proposal_attachment.attached_pdf_file.blob.filename %>, <%= number_to_human_size(proposal_attachment.attached_pdf_file.blob.byte_size) %></p>
+        <%= link_to(  image_tag(
+                        proposal_attachment.attached_pdf_file.preview(resize: '256x256'), 
+                        style: 'border: 1px solid #CCC;'),  
+                      url_for(proposal_attachment.attached_pdf_file),
+                      target: "_blank"  
+                    ) %>
+      <% end %>
+    </div>
+
+
+
+
+  </div>
+
+</div>

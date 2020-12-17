@@ -1,0 +1,38 @@
+<div class="fields slide-in-fwd-right">
+
+  <div class="row">
+    <div class="form-group required col-sm-5">
+<!--       <%#= f.label :attachment_type_id, class: 'control-label' %> -->
+      <%= f.select :attachment_type_id, 
+            FeatureType.only_attachment_type.order(:name).collect {|v| [ "#{v[:name]}", v[:id] ] },
+            { include_blank: false }, 
+            { autofocus: false, class: 'form-control input-sm' } %>
+    </div>
+
+    <div class="form-group col-sm-6">
+<!--       <%#= f.label :attached_pdf_file, class: 'control-label' %> -->
+      <%= f.file_field :attached_pdf_file, accept: 'application/pdf', autofocus: false, class: 'form-control input-sm', disabled: false %>
+      <%= f.object.attached_pdf_file.filename.to_s if f.object.attached_pdf_file.attached? %>
+    </div>
+
+    <div class="form-group col-sm-1">
+      <% if f.object.marked_for_destruction? %>
+
+        <label class="btn btn-sm btn-danger control-label  pull-right" role="button", title="<%=t('tooltip.confirm_remove_fields_nested')%>", rel='tooltip'>
+          <%= f.check_box :_destroy %>
+          <span></span>
+          &nbsp;&nbsp;<%= f.object.class.human_attribute_name(:_destroy) %>
+        </label>
+
+      <% else %>
+        <%= f.hidden_field :_destroy %>
+        <%= link_to t("helpers.links.link_to_remove_fields_nested_small"), '#',
+          onClick: "removeNestedFields(this); return false;", class: 'remove-link-button btn btn-sm btn-danger  pull-right', title: t('tooltip.remove_fields_nested'), rel: 'tooltip' %>
+        <% end %>
+    </div>
+
+  </div>
+
+
+</div>
+

@@ -40,7 +40,6 @@ Rails.application.routes.draw do
       get 'select2_index', on: :collection
       post 'datatables_index', on: :collection
       get 'datatables_index_for_role', on: :collection # Displays users for showed role
-      get 'datatables_index_for_organization', on: :collection # Displays users for showed organization
     end
 
     resources :roles do
@@ -52,7 +51,6 @@ Rails.application.routes.draw do
     resources :organizations do
       get 'select2_index', on: :collection
       post 'datatables_index', on: :collection
-      get 'datatables_index_for_user', on: :collection # Displays organizations for showed user
       get 'ajax_load_proposals', on: :member
       get 'ajax_load_registers', on: :member
     end    

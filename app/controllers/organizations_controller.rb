@@ -1,6 +1,6 @@
 class OrganizationsController < ApplicationController
   before_action :authenticate_user!
-  after_action :verify_authorized, except: [:index, :datatables_index, :datatables_index_for_user, :ajax_load_proposals, :ajax_load_registers]
+  after_action :verify_authorized, except: [:index, :datatables_index, :ajax_load_proposals, :ajax_load_registers]
   before_action :set_organization, only: [:show, :edit, :update, :destroy, :ajax_load_proposals, :ajax_load_registers]
 
   def ajax_load_proposals
@@ -20,23 +20,9 @@ class OrganizationsController < ApplicationController
     end 
   end
 
-  def datatables_index_for_user
-    checked_filter = (params[:checked_only_filter].blank? || params[:checked_only_filter] == 'false' ) ? nil : true
-    respond_to do |format|
-      format.json { render json: UserOrganizationsDatatable.new(params, view_context: view_context, only_for_current_user_id: params[:user_id], checked_only_filter: checked_filter) }
-    end
-  end
-
   def datatables_index
-    # always set user_filter if current_user not have role organization:index
-    if policy(:organization).index_in_role? 
-      user_filter = (params[:eager_filter_for_current_user].blank? || params[:eager_filter_for_current_user] == 'false' ) ? nil : current_user.id
-    else
-      user_filter = current_user.id
-    end
-
     respond_to do |format|
-      format.json { render json: OrganizationDatatable.new(params, view_context: view_context, eager_filter: user_filter ) }
+      format.json { render json: OrganizationDatatable.new(params, view_context: view_context ) }
     end
   end
 
@@ -44,7 +30,8 @@ class OrganizationsController < ApplicationController
     authorize :organization, :index?
     respond_to do |format|
       # disable button all/my if current_user not have role organization:index
-      format.html { render :index, locals: {index_in_role: policy(:organization).index_in_role?} }
+      # format.html { render :index, locals: {index_in_role: policy(:organization).index_in_role?} }
+      format.html { render :index }
     end
   end
 
@@ -55,7 +42,7 @@ class OrganizationsController < ApplicationController
     @organizations_on_page = @organizations.page(params[:page]).per(params[:page_limit])
     
     render json: { 
-      organizations: @organizations_on_page.as_json(methods: :fullname, only: [:id, :fullname]),
+      organizations: @organizations_on_page.as_json(methods: :fullname, only: [:id, :fullname, :name, :nip, :jointly_identifiers]),
       meta: { total_count: @organizations.count }  
     } 
   end
@@ -147,7 +134,7 @@ class OrganizationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def organization_params
       defaults = { author_id: "#{current_user.id}" }
-      params.require(:organization).permit(:name, :legal_form_type_id, :jst_legal_form_type_id, :note, :author_id,
+      params.require(:organization).permit(:name, :legal_form_type_id, :jst_legal_form_type_id, :jst_teryt, :nip, :note, :author_id,
         features_attributes: [:id, :feature_type_id, :feature_value, :_destroy],
         addresses_attributes: [ :id, :address_type_id, :country_code, :address_combine_id, 
           :province_code, :province_name, :district_code, :district_name, :commune_code, :commune_name,

@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+  function filterOrganizationColumnParams ( i ) {
+    $('#organizations-table').DataTable().column( i ).search(
+      $('#col'+i+'filter').val(), false, true, true
+    );
+    $('#organizations-table').DataTable().draw();
+  };
+
   $.fn.dataTable.ext.buttons.organization_reset_col_vis_and_reorder = {
     text: '<span class="text-primary fa fa-retweet"></span>',
     //titleAttr: 'Przywróć domyślne ustawienia kolumn',
@@ -16,34 +23,42 @@ $(document).ready(function() {
     }  
   };
 
-  $.fn.dataTable.ext.buttons.organization_button_only_my_data = {
-    //text: 'Wszystko',
-    text: '<span class="text-primary fa fa-user-friends"></span>',
-    // titleAttr: 'Wszystkie/tylko moje',
+  $.fn.dataTable.ext.buttons.organization_button_filter_by_columns = {
+    //text: 'Filtr',
+    text: '<span class="fa fa-filter"></span>',
+    //titleAttr: 'Filtrowanie po kolumnach',
     className: 'btn btn-sm btn-default',
     init: function ( dt, node, config ) {
-      // button 4 na starcie wlaczony
-      // dt.button( 4 ).text('<span class="text-primary fa fa-user"></span> Tylko moje');
-      dt.button( 4 ).text('<span class="text-primary fa fa-user"></span>');
-      dt.button( 4 ).active( true );
-      if ( $('#organizations-table').data('index_in_role') != true ) {
-        this.disable();
-      };
+      // button 4 na starcie wylaczony
+      dt.button( 4 ).active( false );
+      $('#organizations-table tfoot input').val('').keyup();
+      $('#organizations-table tfoot select').val('').keyup();
+      $(".dataTables_filter").show();
     },
     action: function ( e, dt, node, config ) {
-      if (dt.button( 4 ).active() == false) {
-        // dt.button( 4 ).text('<span class="text-primary fa fa-user"></span> Tylko moje');
-        dt.button( 4 ).text('<span class="text-primary fa fa-user"></span>');
+      if ($('#organizations-table').DataTable().tables().footer().to$().css('display') === 'none') {
+        $('#organizations-table').DataTable().tables().footer().to$().css('display', 'table-row-group');
+        // dt.button( 4 ).text('<span class="fa fa-filter"></span> Filtr...');
+        //dt.button( 4 ).text('<span class="fa fa-filter"></span>');
         dt.button( 4 ).active( true );
+        $($.fn.dataTable.tables(true)).DataTable().search("").draw();
+        $(".dataTables_filter").hide();
       } else {
-        dt.button( 4 ).text('<span class="text-primary fa fa-user-friends"></span>');
+        $('#organizations-table').DataTable().tables().footer().to$().css('display', 'none');
+        //dt.button( 4 ).text('<span class="fa fa-filter"></span>');
         dt.button( 4 ).active( false );
-      };
-      // jest ok ale ponizej bardzie uniwersalne
-      //$('#organizations-table').DataTable().draw();
-      dt.draw();
+        // Reset Column filtering
+        $('#organizations-table tfoot input').val('').keyup();
+        $('#organizations-table tfoot select').val('').keyup();
+        $(".dataTables_filter").show();
+      }
+
+      $($.fn.dataTable.tables(true)).DataTable()
+        .columns.adjust()
+        .responsive.recalc();
     }
   };
+
 
 
   var oOrganizationtable = $('#organizations-table').DataTable({
@@ -69,7 +84,7 @@ $(document).ready(function() {
         // titleAttr: 'Kopiuj do CSV',
         className: 'btn btn-sm btn-default'
       },
-      'organization_button_only_my_data'
+      'organization_button_filter_by_columns'
     ],
     responsive: true,
     processing: true,
@@ -86,7 +101,6 @@ $(document).ready(function() {
       type: "POST",
       dataType: 'json',
       data: function(d){
-        d.eager_filter_for_current_user = $('#organizations-table').DataTable().button(4).active();
       },
       error: function (jqXHR, exception) {
         console.log(jqXHR);
@@ -102,6 +116,7 @@ $(document).ready(function() {
     columns: [
       { "data": "id", "visible": false },
       { "data": "name" }, 
+      { "data": "nip" }, 
       { "data": "jointly_identifiers" }, 
       { "data": "jointly_addresses" }, 
       { "data": "jointly_addresses_ext" }, 
@@ -119,7 +134,7 @@ $(document).ready(function() {
       oOrganizationtable.button(1).node().attr( 'title', oOrganizationtable.i18n( 'buttons.colvis' ) );
       oOrganizationtable.button(2).node().attr( 'title', oOrganizationtable.i18n( 'buttons.copy' ) );
       oOrganizationtable.button(3).node().attr( 'title', oOrganizationtable.i18n( 'buttons.csv' ) );
-      oOrganizationtable.button(4).node().attr( 'title', oOrganizationtable.i18n( 'buttons.onlyMyData' ) );
+      oOrganizationtable.button(4).node().attr( 'title', oOrganizationtable.i18n( 'buttons.myFilterByColumns' ) );
     },
     stateSaveCallback: function(settings,data) {
       localStorage.setItem( 'registry_dt_organizations-table_/en-pl/organizations', JSON.stringify(data) )
@@ -127,6 +142,14 @@ $(document).ready(function() {
     stateLoadCallback: function(settings) {
       return JSON.parse( localStorage.getItem( 'registry_dt_organizations-table_/en-pl/organizations' ) )
     }
+  });
+
+  $('input.column_filter').on( 'keyup click', function () {
+    filterOrganizationColumnParams( $(this).attr('data-column') );
+  });
+
+  $('select.column_filter').on( 'keyup click', function () {
+    filterOrganizationColumnParams( $(this).attr('data-column') );
   });
 
 

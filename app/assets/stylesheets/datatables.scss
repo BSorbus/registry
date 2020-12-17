@@ -160,6 +160,27 @@ table.dataTable tfoot th {
 }
 
 
+.datatable-cell-register-status-current {
+  background-color: #DFF0D8 !important;
+}
+
+.datatable-cell-register-status-pending_changes {
+  background-color: #FFFACD !important; /*#FFFFE0*/
+}
+
+.datatable-cell-register-status-pending_deletion {
+  background-color: #FFFACD !important; /*#FFFFE0*/
+}
+
+.datatable-cell-register-status-old_entry {
+  background-color: #EEE !important;
+}
+
+.datatable-cell-register-status-annuled {
+  background-color: #FFC04D !important; /*#FFFFE0*/
+}
+
+
 
 .dataTables_processing {
     position: absolute;

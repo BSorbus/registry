@@ -10,10 +10,9 @@
       <%= form_errors_for proposal %>
 
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-7">
 
           <div class="row">
-
             <div class="form-group required col-sm-4">
               <%= f.label :insertion_date, class: 'control-label' %>
               <%= f.text_field :insertion_date, class: 'form-control input-sm datepicker', 
@@ -37,9 +36,20 @@
             </div>
           </div>  <!-- /row -->
 
-        </div>  <!-- /col-sm-6 -->
+          <div class="row">
+            <div class="form-group required col-sm-12">
+              <%= f.label :organization_id, class: 'control-label' %>
+              <%= f.hidden_field :organization_id, 
+                                class: "form-control input-sm select2organization", 
+                                placeholder: t('placeholder.select2organization'),
+                                style: "width:100%",
+                                "data-locale": "#{params[:locale]}" %>
+            </div>
+          </div>
 
-        <div class="col-sm-6">
+        </div>  <!-- /col-sm-7 -->
+
+        <div class="col-sm-5">
 
           <div class="row">
             <div class="form-group col-sm-12">
@@ -49,7 +59,7 @@
             </div>
           </div>  <!-- /row -->
           
-        </div>  <!-- /col-sm-6 -->
+        </div>  <!-- /col-sm-5 -->
       </div>  <!-- /row -->
 
       <div class="row">
@@ -108,12 +118,6 @@
               <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_services, 'proposal_services/proposal_service_fields') %>
 
             </div>
-
-
-
-
-
-
 
           </fieldset>
         </div> <!--/col-sm-12 -->
@@ -206,6 +210,35 @@
           </fieldset>
         </div>
 
+        <div class="col-sm-8">
+          <fieldset class="my-fieldset">
+            <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_attachments_title') %></legend>
+
+            <div class='proposal_attachments_title clearfix'>
+
+              <!-- header for partial -->
+              <div class="row" >
+                <div class="form-group required col-sm-5">
+                  <strong><%= ProposalAttachment.human_attribute_name(:attachment_type) %></strong>
+                </div>
+                <div class="form-group required col-sm-6">
+                  <strong><%= ProposalAttachment.human_attribute_name(:attached_pdf_file) %></strong>
+                </div>
+              </div>
+
+              <div class='proposal_proposal_attachments-sub-form'>
+                <%= f.fields_for :proposal_attachments do |proposal_proposal_attachment_form|  %>
+                  <%= render 'proposal_attachments/proposal_attachment_fields', f: proposal_proposal_attachment_form %> 
+                <% end %>
+              </div>
+              <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_attachments, 'proposal_attachments/proposal_attachment_fields') %>
+
+            </div>
+
+          </fieldset>
+        </div> <!--/col-sm-12 -->
+
+
       </div>  <!-- /row -->
 
 
@@ -239,13 +272,7 @@
 
 <script type="text/javascript">
 
-  console.log('Aaaaaaaaaaaaaaaaaa');
-
   var areaState = "<%= proposal.activity_area_whole_poland %>";
-
-  console.log(areaState);
-  
   proposalAreIsRequired(areaState, null);
-
 
 </script>

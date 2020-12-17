@@ -11,7 +11,7 @@
       <%#= f.label :province_code, class: "control-label" %>
       <%= f.hidden_field :province_code, 
                         class: "form-control input-sm select2teryt_provinces", 
-                        placeholder: "Wybierz województwo",
+                        placeholder: t('placeholder.select2province'),
                         style: "width:100%",
                         autofocus: false %>
     </div>
@@ -20,7 +20,7 @@
       <%#= f.label :district_code, class: 'control-label' %>
       <%= f.hidden_field :district_code,
                         class: "form-control input-sm select2teryt_province_districts", 
-                        placeholder: "Wybierz powiat",
+                        placeholder: t('placeholder.select2district'),
                         style: "width:100%",
                         autofocus: false,
                         readonly: f.object.province_code == '' %>
@@ -30,7 +30,7 @@
       <%#= f.label :commune_code, class: 'control-label' %>
       <%= f.hidden_field :commune_code,
                         class: "form-control input-sm select2teryt_district_communes", 
-                        placeholder: "Wybierz gminę",
+                        placeholder: t('placeholder.select2commune'),
                         style: "width:100%",
                         autofocus: false,
                         readonly: f.object.district_code == '' %>

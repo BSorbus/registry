@@ -16,15 +16,30 @@
                 <p><strong><%= Organization.human_attribute_name(:name) %></strong></p>
                 <%= @organization.name %>
               </div>
+            </div>
 
+            <div class="row">
               <div class="form-group col-sm-12">
                 <p><strong><%= Organization.human_attribute_name(:legal_form_type) %></strong></p>
                 <%= @organization.legal_form_type.name %>
               </div>
+            </div>
 
-              <div class="form-group col-sm-12" data-toggle="popover_info" title="<%= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top">
+            <div class="row">
+              <div class="form-group col-sm-8" data-toggle="popover_info" title="<%= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top">
                 <p><strong><%= Organization.human_attribute_name(:jst_legal_form_type) %></strong></p>
-                <%= @organization.jst_legal_form_type.name %>
+                <%= @organization.jst_legal_form_type.name if @organization.jst_legal_form_type.present? %>
+              </div>
+              <div class="form-group col-sm-4">
+                <p><strong><%= Organization.human_attribute_name(:jst_teryt) %></strong></p>
+                <%= @organization.jst_teryt %>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="form-group col-sm-4">
+                <p><strong><%= Organization.human_attribute_name(:nip) %></strong></p>
+                <%= @organization.nip %>
               </div>
             </div>
 

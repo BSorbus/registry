@@ -52,7 +52,7 @@ pl:
     edit:
       title: 'Edycja -> Organizacja'
     fieldset:
-      identifiers_title: 'Identyfikatory'
+      identifiers_title: 'Inne identyfikatory'
       addresses_title: 'Adresy'
       address_ext_title: 'Inne atrybuty'
       representatives_title: 'Przedstawiciele'
@@ -78,6 +78,7 @@ pl:
       proposal_area_title: 'Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji (D)'
       proposal_another_areas_title: 'Inne obszary'
       proposal_scheduled_title: 'Planowane daty (E, F)'
+      proposal_attachments_title: 'Załączniki'
   proposals_j:
     index:
       title: 'Wnioski JST'
@@ -105,9 +106,6 @@ pl:
       title: 'Nowy Wniosek PT'
     edit:
       title: 'Edycja -> Wniosek PT'
-  proposal_networks:
-    fieldset:
-      proposal_services_title: 'Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych (C.22)'
   registers:
     sidebar_show:
       index: 'Rejestr'
@@ -132,7 +130,7 @@ pl:
       title: 'Rejestr PT'
   representatives:
     fieldset:
-      identifiers_title: 'Identyfikatory'
+      identifiers_title: 'Inne identyfikatory'
       addresses_title: 'Adresy'
       address_ext_title: 'Inne atrybuty'
   roles:
@@ -178,6 +176,7 @@ pl:
       feature: 'Atrybuty'
       organization: 'Organizacja'
       proposal: 'Wniosek'
+      proposal_areas: 'Obszary'
       proposal_network: 'Sieć'
       proposal_service: 'Usługa'
       role: 'Rola'
@@ -215,8 +214,11 @@ pl:
       organization:
         author: 'Autor'
         author_id: 'Autor'
+        short_name: 'Skrót'
         name: 'Nazwa'
-        jointly_identifiers: 'Identyfikatory'
+        nip: 'PL Nip'
+        regon: 'Regon'
+        jointly_identifiers: 'Inne identyfikatory'
         jointly_addresses: 'Adresy'
         jointly_addresses_ext: 'Inne atrybuty'
         jointly_representatives: 'Przedstawiciele'
@@ -226,6 +228,7 @@ pl:
         jst_legal_form_type: 'Forma prawna JST prowadzenia działalności w zakresie telekomunikacji'
         jst_legal_form_type_id: 'Forma prawna JST prowadzenia działalności w zakresie telekomunikacji'
         jst_legal_form_type_popover_info: 'Określa formę prawną jednostki samorządu terytorialnego w zakresie prowadzenia działalności teleomunikacyjnej. Jeżeli forma prawna organizacji jest inna niż JST wybierz "---"'
+        jst_teryt: 'Teryt'
         note: 'Adnotacje i uwagi'
       organization/members:
         user_id: 'Użytkownik'
@@ -277,11 +280,12 @@ pl:
         proposal_type: 'Typ'
         proposal_status_id: 'Status'
         proposal_status: 'Status'
-        register_id: 'Rejestr No'
-        register: 'Rejestr No'
+        register_id: 'Dotyczy Nr Rej'
+        register: 'Dotyczy Nr Rej'
         organization_id: 'Organizacja'
         organization: 'Organizacja'
-        organization_jointly_identifiers: 'Identyfikatory'
+        organization_nip: 'Nip'
+        organization_jointly_identifiers: 'Inne identyfikatory'
         organization_jointly_addresses: 'Adresy'
         organization_jointly_addresses_ext: 'Inne atrybuty'
         insertion_date: 'Data zgłoszenia'
@@ -300,6 +304,11 @@ pl:
         commune_code: 'Gmina (Id)'
         commune_name: 'Gmina'
         _destroy: 'Usuń [x]'
+      proposal_attachment:
+        attachment_type_id: 'Rodzaj załącznika'
+        attachment_type: 'Rodzaj załącznika'
+        attached_pdf_file: 'Plik'
+        _destroy: 'Usuń [x]'
       proposal_network:
         network_type_id: 'Rodzaj sieci'
         network_type: 'Rodzaj sieci'
@@ -313,6 +322,12 @@ pl:
         only_wholesale: 'Wyłącznie hurtowa'
         only_resale: 'Wyłącznie odsprzedaż'
         note: 'Adnotacje i uwagi'
+        _destroy: 'Usuń [x]'
+      proposal/proposal_attachments:
+        base: '[Wniosek]'
+        attachment_type_id: '[Załączniki]: Rodzaj załącznika'
+        attachment_type: '[Załączniki]: Rodzaj załącznika'
+        attached_pdf_file: '[Załączniki]: Plik'
         _destroy: 'Usuń [x]'
       proposal/proposal_areas:
         base: '[Wniosek]'
@@ -340,8 +355,10 @@ pl:
         register_no: 'Nr'
         register_status_id: 'Status'
         register_status: 'Status'
+        organization_id: 'Organizacja'
         organization: 'Organizacja'
-        organization_jointly_identifiers: 'Identyfikatory'
+        organization_nip: 'Nip'
+        organization_jointly_identifiers: 'Inne identyfikatory'
         organization_jointly_addresses: 'Adresy'
         organization_jointly_addresses_ext: 'Inne atrybuty'
         proposal_registration_approved: 'Data wpisu'
@@ -391,9 +408,9 @@ pl:
         organization:
           attributes:
             base:
-              nested_taken: "[Identyfikatory/Inne atrybuty] - unikalny rodzaj nie może być wielokrotnie wprowadzany"
+              nested_taken: "[Inne identyfikatory/Inne atrybuty] - unikalny rodzaj nie może być wielokrotnie wprowadzany"
               addresses_address_type_nested_taken: "[Adresy] - ten sam rodzaj adresu nie może być wielokrotnie wprowadzany"
-              features_identifier_type_blank: "[Identyfikatory] - musisz określić przynajmniej jeden spośród: %{data}"
+              features_identifier_type_blank: "[Inne identyfikatory] - musisz określić przynajmniej jeden spośród: %{data}"
               features_address_ext_type_email_blank: "[Inne atrybuty] - muisz określić %{data}"
               addresses_address_type_office_blank: "[Adresy] - musisz określić %{data}"
               representatives_representative_type_blank: "[Przedstawiciele] - muisz określić %{data}"
@@ -409,7 +426,7 @@ pl:
         representative:
           attributes:
             base:
-              nested_taken: "[Przedstawiciele]:[Identyfikatory/Dodatkowe adresy] - unikalny rodzaj nie może być wielokrotnie wprowadzany"
+              nested_taken: "[Przedstawiciele]:[Inne identyfikatory/Inne atrybuty] - unikalny rodzaj nie może być wielokrotnie wprowadzany"
               addresses_address_type_nested_taken: "[Przedstawiciele]:[Adresy] - ten sam rodzaj adresu nie może być wielokrotnie wprowadzany"
               features_address_ext_type_email_blank: "[Przedstawiciele]:[Inne atrybuty] - muisz określić %{data}"
               addresses_address_type_correspondence_blank: "[Przedstawiciele]:[Adresy] - muisz określić %{data}"
@@ -609,6 +626,7 @@ pl:
       greater_than_or_equal_to: musi być większe lub równe %{count}
       inclusion: nie znajduje się na liście dopuszczalnych wartości
       invalid: jest nieprawidłowe
+      invalid_regex_format: 'format jest niezgodny z REGEX: %{data} Przykład prawidłowego wpisu: %{example}'
       less_than: musi być mniejsze od %{count}
       less_than_or_equal_to: musi być mniejsze lub równe %{count}
       not_a_number: nie jest liczbą
@@ -700,6 +718,10 @@ pl:
     fileuploaddragdrop: 'Wybierz plik(-i) lub przeciągnij i upuść'
     select2_no_results: Brak wyników
   placeholder:
+    select2address: 'Wybierz Adres'
+    select2province: 'Wybierz Województwo'
+    select2district: 'Wybierz Powiat'
+    select2commune: 'Wybierz Gminę'
     select2user: 'Wybierz Użytkownika'
     select2organization: 'Wybierz Organizację'
   number:
