@@ -20,6 +20,10 @@
               <%= render 'proposals', subtitle: register_info_legend(@register) %>
             </div>
 
+            <div role="tabpanel" class="tab-pane" id="reports">
+              <%= render 'reports', subtitle: register_info_legend(@register) %>
+            </div>
+
             <div role="tabpanel" class="tab-pane" id="works">
               <%= render 'works/works_tab', trackable_type: "Register", trackable_id: @register.id, subtitle: register_info_legend(@register) %>
             </div>

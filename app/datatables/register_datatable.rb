@@ -12,11 +12,10 @@ class RegisterDatatable < AjaxDatatablesRails::ActiveRecord
     @view_columns ||= {
       id:                     { source: "Register.id", cond: :eq, searchable: false, orderable: false },
       register_no:            { source: "Register.register_no", cond: :like, searchable: true, orderable: true },
-      # registration_approved:  { source: "Proposal.insertion_date", cond: :like, searchable: true, orderable: true },
-      registration_approved:  { source: "Proposal.insertion_date", cond: :like, searchable: true, orderable: true },
-      current_approved:       { source: "Proposal.insertion_date", cond: :like, searchable: true, orderable: true },
-      deletion_approved:      { source: "Proposal.insertion_date", cond: :like, searchable: true, orderable: true },
       register_status:        { source: "RegisterStatus.name", cond: :like, searchable: true, orderable: true },
+      registration_approved:  { source: "Proposal.insertion_date", cond: :like, searchable: true, orderable: true },
+      current_approved:       { source: "t4_r3", cond: filter_current_approved_insertion_date, searchable: true, orderable: true },
+      deletion_approved:      { source: "t5_r3", cond: filter_deletion_approved_insertion_date, searchable: true, orderable: true },
       organization:           { source: "Organization.name", cond: :like, searchable: true, orderable: true },
       nip:                    { source: "Organization.nip", cond: :like, searchable: true, orderable: true },
       jointly_identifiers:    { source: "Organization.jointly_identifiers", cond: :like, searchable: true, orderable: true },
@@ -30,10 +29,10 @@ class RegisterDatatable < AjaxDatatablesRails::ActiveRecord
       {
         id:                     record.id,
         register_no:            link_to( record.fullname, register_path(record.service_type, record) ),
+        register_status:        record.register_status.name,
         registration_approved:  link_registration_approved(record),
         current_approved:       link_current_approved(record),
         deletion_approved:      link_deletion_approved(record),
-        register_status:        record.register_status.name,
         organization:           link_to( record.organization.fullname, organization_path(record.organization) ),
         nip:                    record.organization.nip, 
         jointly_identifiers:    record.organization.jointly_identifiers.html_safe, 
@@ -64,6 +63,22 @@ class RegisterDatatable < AjaxDatatablesRails::ActiveRecord
     def link_deletion_approved(rec)
       rec.proposal_deletion_approved.present? ? link_to( rec.proposal_deletion_approved.fullname, proposal_path( rec.proposal_deletion_approved.service_type, rec.proposal_deletion_approved) ) : ""
     end
+
+    def filter_current_approved_insertion_date
+      ->(column, value) { 
+        # ::Arel::Nodes::SqlLiteral.new("CAST('#{column.field}' AS VARCHAR)").matches("#{ column.search.value }%") 
+        ::Arel::Nodes::SqlLiteral.new('CAST("proposal_current_approveds_registers"."insertion_date" AS VARCHAR)').matches("%#{ column.search.value }%") 
+      }
+    end
+
+    def filter_deletion_approved_insertion_date
+      ->(column, value) { 
+        # ::Arel::Nodes::SqlLiteral.new("CAST('#{column.field}' AS VARCHAR)").matches("#{ column.search.value }%") 
+        ::Arel::Nodes::SqlLiteral.new('CAST("proposal_deletion_approveds_registers"."insertion_date" AS VARCHAR)').matches("%#{ column.search.value }%") 
+      }
+    end
+
+
 
     def filter_custom_column_condition
       #->(column) { ::Arel::Nodes::SqlLiteral.new(column.field.to_s).matches("#{ column.search.value }%") }

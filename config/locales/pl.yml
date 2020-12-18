@@ -128,6 +128,26 @@ pl:
       title: 'Rejestr PT'
     show:
       title: 'Rejestr PT'
+  reports:
+    index:
+      title: 'Sprawozdania'
+    show:
+      title: 'Sprawozdanie'
+  reports_j:
+    index:
+      title: 'Sprawozdania JST'
+    show:
+      title: 'Sprawozdanie JST'
+  reports_p:
+    index:
+      title: 'Sprawozdania PP'
+    show:
+      title: 'Sprawozdanie PP'
+  reports_t:
+    index:
+      title: 'Sprawozdania PT'
+    show:
+      title: 'Sprawozdanie PT'
   representatives:
     fieldset:
       identifiers_title: 'Inne identyfikatory'
@@ -289,6 +309,10 @@ pl:
         organization_jointly_addresses: 'Adresy'
         organization_jointly_addresses_ext: 'Inne atrybuty'
         insertion_date: 'Data zgłoszenia'
+        jst_providing_networks: 'Dostarczanie publicznie dostępnych sieci telekomunikacyjnej'
+        jst_provision_telecom_services: 'Świadczenie publicznie dostępnych usług telekomunikacyjnych'
+        jst_provision_related_services: 'Świadczenie usług powiązanych'
+        jst_other_telecom_activities: 'Pozostała działalność w zakresie telekomunikacji'
         scheduled_start_date: 'Data rozpoczęcia'
         scheduled_end_date: 'Data zakończenia'
         activity_area_whole_poland: 'Rzeczpospolita Polska - obszar całego kraju'

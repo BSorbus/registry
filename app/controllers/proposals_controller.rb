@@ -30,11 +30,12 @@ class ProposalsController < ApplicationController
   # GET /proposals/new
   def new
     @proposal = Proposal.new
-    @proposal.name = params[:proposal][:name].strip if params.dig(:proposal, :name).present? 
+    # @proposal.name = params[:proposal][:name].strip if params.dig(:proposal, :name).present? 
     @proposal.service_type = params[:service_type]
     @proposal.proposal_status_id = ProposalStatus::PROPOSAL_STATUS_CREATED
     @proposal.author = current_user
-    authorize @proposal, :new?
+    # authorize @proposal, :new?
+    proposal_authorize(@proposal, "new", params[:service_type])
   end
 
   # GET /proposals/1/edit
@@ -143,7 +144,8 @@ class ProposalsController < ApplicationController
     def proposal_params
       defaults = { author_id: "#{current_user.id}" }
       params.require(:proposal).permit(:service_type, :proposal_type_id, :proposal_status_id, :organization_id, :insertion_date, 
-        :activity_area_whole_poland, :scheduled_start_date, :scheduled_end_date, :esod_category, :note, :author_id, 
+        :jst_providing_networks, :jst_provision_telecom_services, :jst_provision_related_services, :jst_other_telecom_activities, 
+        :activity_area_whole_poland, :scheduled_start_date, :scheduled_end_date, :note, :author_id, 
           proposal_networks_attributes: [:id, :network_type_id, :description, :_destroy],
           proposal_services_attributes: [:id, :service_type_id, :description, :only_wholesale, :only_resale, :_destroy],
           proposal_areas_attributes: [:id, :province_code, :province_name, :district_code, :district_name, :commune_code, :commune_name, :_destroy],

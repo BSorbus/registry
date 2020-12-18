@@ -9,7 +9,8 @@
 
       <ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
 
-        <% if policy(:proposal).new? %>
+        <% if proposal_policy_check(:proposal, 'new', params[:service_type]) %>
+        <%# if policy(:proposal).new? %>
           <li role="presentation" class="brand-nav"><%= link_to new_proposal_path(params[:service_type]), title: t('.new'), rel: 'tooltip' do %>
               <span class="fa fa-plus"></span>
             <% end %>
@@ -30,18 +31,18 @@
   <div class="row">
     <div class="col-sm-12">
 
-      <% if policy(:proposal).new? %>
-        <ul  class="nav nav-pills brand-pills nav-stacked">
+      <ul class="nav nav-pills brand-pills nav-stacked">
    
+        <% if proposal_policy_check(:proposal, 'new', params[:service_type]) %>
+        <%# if policy(:proposal).new? %>
           <li role="presentation" class="brand-nav"><%= link_to new_proposal_path(params[:service_type]), title: t('.new'), rel: 'tooltip' do %>
             <span class="fa fa-plus"></span>
             <%= t('helpers.links.new') %>
             <% end %>
           </li>
+        <% end %>
 
-        </ul>
-
-      <% end %>
+      </ul>
 
     </div>
   </div>

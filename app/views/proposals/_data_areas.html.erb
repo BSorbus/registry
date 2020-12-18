@@ -1,0 +1,43 @@
+<div class="row">
+
+  <div class="form-group col-sm-12">
+    <fieldset class="my-fieldset-short">
+      <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_area_title') %></legend>
+
+      <div class="row">
+        <div class="form-group col-sm-12">
+          <p><strong><%= Proposal.human_attribute_name(:activity_area_whole_poland) %></strong></p>
+          <%= t(@proposal.activity_area_whole_poland) %>
+        </div>
+      </div> <!--/row -->
+
+      <% unless @proposal.activity_area_whole_poland %>
+        <div class="row">
+          <div class="form-group col-sm-11 col-sm-offset-1">
+            <fieldset class="my-fieldset-short">
+            <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_another_areas_title') %></legend>
+              <!-- header for partial -->
+              <div class="row" >
+                <div class="form-group required col-sm-3">
+                  <strong><%= ProposalArea.human_attribute_name(:province_name) %></strong>
+                </div>
+                <div class="form-group required col-sm-3">
+                  <strong><%= ProposalArea.human_attribute_name(:district_name) %></strong>
+                </div>
+                <div class="form-group required col-sm-4">
+                  <strong><%= ProposalArea.human_attribute_name(:commune_name) %></strong>
+                </div>
+              </div>
+
+              <%= render partial: "proposal_areas/proposal_area", collection: @proposal.proposal_areas, as: :proposal_area %>
+
+            </fieldset>
+          </div>
+        </div> <!--/row -->
+
+      <% end %>
+
+    </fieldset>
+  </div>
+
+</div>  <!-- /row -->

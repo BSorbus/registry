@@ -109,9 +109,9 @@ class RegisterPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if user_activities.include? 'register_j:index'
-        scope.where(confirm_that_the_data_is_correct: true).all
+        scope.where.not(id: nil).all
       else
-        scope.where(id: -1)
+        scope.where(id: nil)
       end
     end
   end

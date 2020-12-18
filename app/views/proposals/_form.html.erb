@@ -1,5 +1,3 @@
-<%= javascript_include_tag "proposal_area_is_required" %>
-
 <div class="row">
   <div class="col-sm-12">
 
@@ -62,129 +60,9 @@
         </div>  <!-- /col-sm-5 -->
       </div>  <!-- /row -->
 
-      <div class="row">
-        <div class="col-sm-12">
-          <fieldset class="my-fieldset">
-            <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_networks_title') %></legend>
+      <%= render "form_#{proposal.service_type}", f: f %>
 
-            <div class='proposal_networks_title clearfix'>
-
-              <!-- header for partial -->
-              <div class="row" >
-                <div class="form-group required col-sm-5">
-                  <strong><%= ProposalNetwork.human_attribute_name(:network_type) %></strong>
-                </div>
-                <div class="form-group required col-sm-6">
-                  <strong><%= ProposalNetwork.human_attribute_name(:description) %></strong>
-                </div>
-              </div>
-
-              <div class='proposal_proposal_networks-sub-form'>
-                <%= f.fields_for :proposal_networks do |proposal_proposal_network_form|  %>
-                  <%= render 'proposal_networks/proposal_network_fields', f: proposal_proposal_network_form %> 
-                <% end %>
-              </div>
-              <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_networks, 'proposal_networks/proposal_network_fields') %>
-
-            </div>
-
-
-            <hr>
-
-
-            <div class='proposal_services clearfix'>
-
-              <!-- header for partial -->
-              <div class="row" >
-                <div class="form-group required col-sm-3">
-                  <strong><%= ProposalService.human_attribute_name(:service_type) %></strong>
-                </div>
-                <div class="form-group required col-sm-4">
-                  <strong><%= ProposalService.human_attribute_name(:description) %></strong>
-                </div>
-                <div class="form-group required col-sm-2">
-                  <strong><%= ProposalService.human_attribute_name(:only_wholesale) %></strong>
-                </div>
-                <div class="form-group required col-sm-2">
-                  <strong><%= ProposalService.human_attribute_name(:only_resale) %></strong>
-                </div>
-              </div>
-
-              <div class='proposal_services-sub-form'>
-                <%= f.fields_for :proposal_services do |proposal_services_form|  %>
-                  <%= render 'proposal_services/proposal_service_fields', f: proposal_services_form %> 
-                <% end %>
-              </div>
-              <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_services, 'proposal_services/proposal_service_fields') %>
-
-            </div>
-
-          </fieldset>
-        </div> <!--/col-sm-12 -->
-        
-      </div>  <!-- /row -->
-
-
-      <div class="row">
-
-        <div class="col-sm-12">
-
-          <div class="row">
-            <div class="col-sm-12">
-              <fieldset class="my-fieldset">
-                <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_area_title') %></legend>
-
-                <div class="row">
-                  <div class="form-group col-sm-12">
-                    <%= f.label :activity_area_whole_poland, class: 'control-label' %><br>
-                    <%= f.radio_button(:activity_area_whole_poland, true, disabled: false, onchange: "proposalAreIsRequired(this.value, this)") %>
-                    <%= f.label(:activity_area_whole_poland_true, t("true") ) %>
-                    <%= f.radio_button(:activity_area_whole_poland, false, disabled: false, onchange: "proposalAreIsRequired(this.value, this)") %>
-                    <%= f.label(:activity_area_whole_poland_false, t("false") ) %>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-sm-11 col-sm-offset-1">
-
-                    <div class='proposal_area_enabled_disabled'>
-                      <div class='proposal_areas_title clearfix'>
-                        <fieldset class="my-fieldset">
-                        <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_another_areas_title')%></legend>
-                          <!-- header for partial -->
-                          <div class="row" >
-                            <div class="form-group required col-sm-3">
-                              <strong><%= ProposalArea.human_attribute_name(:province_name) %></strong>
-                            </div>
-                            <div class="form-group required col-sm-3">
-                              <strong><%= ProposalArea.human_attribute_name(:district_name) %></strong>
-                            </div>
-                            <div class="form-group required col-sm-4">
-                              <strong><%= ProposalArea.human_attribute_name(:commune_name) %></strong>
-                            </div>
-                          </div>
-
-                          <div class='proposal_proposal_areas-sub-form'>
-                            <%= f.fields_for :proposal_areas do |proposal_proposal_area_form|  %>
-                              <%= render 'proposal_areas/proposal_area_fields', f: proposal_proposal_area_form %> 
-                            <% end %>
-                          </div>
-                          <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_areas, 'proposal_areas/proposal_area_fields') %>
-
-                        </fieldset>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </fieldset>
-            </div>
-          </div>
-        </div>
-
-      </div>  <!-- /row -->
-
+      <%= render "form_areas", f: f if ['j','t'].include?(proposal.service_type) %>
 
       <div class="row">
         <div class="col-sm-4">
@@ -249,7 +127,7 @@
       <div class="row">
         <div class="col-sm-12">
 
-          <%= link_to proposal.new_record? ? proposals_path(param[:service_type]) : proposal_path(proposal.service_type, proposal), class: "btn btn-default" do %>
+          <%= link_to proposal.new_record? ? proposals_path(params[:service_type]) : proposal_path(proposal.service_type, proposal), class: "btn btn-default" do %>
             <%= back_from_new_or_edit_legend %>
           <% end %>
 
@@ -269,10 +147,3 @@
     <div class="modal-content"></div>
   </div>
 </div>
-
-<script type="text/javascript">
-
-  var areaState = "<%= proposal.activity_area_whole_poland %>";
-  proposalAreIsRequired(areaState, null);
-
-</script>

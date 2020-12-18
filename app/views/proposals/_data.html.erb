@@ -41,7 +41,7 @@
               </div>
             </div>
             
-          </div>  <!-- /col-sm-6 -->
+          </div>  <!-- /col-sm-7 -->
 
 
           <div class="col-sm-5">
@@ -56,106 +56,15 @@
               </div>
             </div>  <!-- /row -->
             
-          </div>  <!-- /col-sm-6 -->
+          </div>  <!-- /col-sm-5 -->
 
         </div>  <!-- /row -->
 
-        <div class="row">
 
-          <div class="form-group col-sm-12">
-            <fieldset class="my-fieldset-short">
-              <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_networks_title') %></legend>
+        <%= render partial: "data_#{@proposal.service_type}" %>
 
-              <div class="row">
-                <div class="form-group col-sm-12">
+        <%= render partial: "data_areas" if ['j','t'].include?(@proposal.service_type) %>
 
-                  <!-- header for partial -->
-                  <div class="row" >
-                    <div class="form-group required col-sm-5">
-                      <strong><%= ProposalNetwork.human_attribute_name(:network_type) %></strong>
-                    </div>
-                    <div class="form-group required col-sm-6">
-                      <strong><%= ProposalNetwork.human_attribute_name(:description) %></strong>
-                    </div>
-                  </div>
-
-                  <%= render partial: "proposal_networks/proposal_network", collection: @proposal.proposal_networks, as: :proposal_network %>
-                  <%#= render @proposal.proposal_networks %>
-
-
-                  <hr>
-
-                  <!-- header for partial -->
-                  <div class="row" >
-                    <div class="form-group required col-sm-3">
-                      <strong><%= ProposalService.human_attribute_name(:service_type) %></strong>
-                    </div>
-                    <div class="form-group required col-sm-4">
-                      <strong><%= ProposalService.human_attribute_name(:description) %></strong>
-                    </div>
-                    <div class="form-group required col-sm-2">
-                      <strong><%= ProposalService.human_attribute_name(:only_wholesale) %></strong>
-                    </div>
-                    <div class="form-group required col-sm-2">
-                      <strong><%= ProposalService.human_attribute_name(:only_resale) %></strong>
-                    </div>
-                  </div>
-
-                  <%= render partial: "proposal_services/proposal_service", collection: @proposal.proposal_services, as: :proposal_service %>
-
-
-
-                </div>
-              </div> <!--/row -->
-
-            </fieldset>
-          </div>
-
-        </div>  <!-- /row -->
-
-        <div class="row">
-
-          <div class="form-group col-sm-12">
-            <fieldset class="my-fieldset-short">
-              <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_area_title') %></legend>
-
-              <div class="row">
-                <div class="form-group col-sm-12">
-                  <p><strong><%= Proposal.human_attribute_name(:activity_area_whole_poland) %></strong></p>
-                  <%= t(@proposal.activity_area_whole_poland) %>
-                </div>
-              </div> <!--/row -->
-
-              <% unless @proposal.activity_area_whole_poland %>
-                <div class="row">
-                  <div class="form-group col-sm-11 col-sm-offset-1">
-                    <fieldset class="my-fieldset-short">
-                    <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_another_areas_title') %></legend>
-                      <!-- header for partial -->
-                      <div class="row" >
-                        <div class="form-group required col-sm-3">
-                          <strong><%= ProposalArea.human_attribute_name(:province_name) %></strong>
-                        </div>
-                        <div class="form-group required col-sm-3">
-                          <strong><%= ProposalArea.human_attribute_name(:district_name) %></strong>
-                        </div>
-                        <div class="form-group required col-sm-4">
-                          <strong><%= ProposalArea.human_attribute_name(:commune_name) %></strong>
-                        </div>
-                      </div>
-
-                      <%= render partial: "proposal_areas/proposal_area", collection: @proposal.proposal_areas, as: :proposal_area %>
-
-                    </fieldset>
-                  </div>
-                </div> <!--/row -->
-
-              <% end %>
-
-            </fieldset>
-          </div>
-
-        </div>  <!-- /row -->
 
         <div class="row">
 

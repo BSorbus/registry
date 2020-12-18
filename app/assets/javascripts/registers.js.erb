@@ -115,9 +115,6 @@ $(document).ready(function() {
     columns: [
       { "data": "id", "visible": false },
       { "data": "register_no", "type": "num" },
-      { "data": "registration_approved" }, 
-      { "data": "current_approved" }, 
-      { "data": "deletion_approved" }, 
       { "data": "register_status",
         fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
           // sData - wartosc celi, oData - wiersza
@@ -138,6 +135,9 @@ $(document).ready(function() {
           }
         }
       },
+      { "data": "registration_approved" }, 
+      { "data": "current_approved" }, 
+      { "data": "deletion_approved" }, 
       { "data": "organization" },
       { "data": "nip" },
       { "data": "jointly_identifiers" }, 

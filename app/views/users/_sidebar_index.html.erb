@@ -30,18 +30,17 @@
   <div class="row">
     <div class="col-sm-12">
 
-      <% if policy(:user).new? %>
-        <ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
-   
+      <ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
+
+      <% if policy(:user).new? %> 
           <li role="presentation" class="brand-nav"><%= link_to new_user_path, title: t('.new'), rel: 'tooltip' do %>
             <span class="fa fa-plus"></span>
             <%= t('helpers.links.new') %>
             <% end %>
           </li>
+        <% end %>
 
-        </ul>
-
-      <% end %>
+      </ul>
 
     </div>
   </div>

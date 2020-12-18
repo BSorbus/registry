@@ -15,7 +15,7 @@ class ProposalPolicy < ApplicationPolicy
   end
 
   def new_j?
-    create?
+    create_j?
   end
 
   def create_j?
@@ -49,7 +49,7 @@ class ProposalPolicy < ApplicationPolicy
   end
 
   def new_p?
-    create?
+    create_p?
   end
 
   def create_p?
@@ -83,7 +83,7 @@ class ProposalPolicy < ApplicationPolicy
   end
 
   def new_t?
-    create?
+    create_t?
   end
 
   def create_t?
@@ -109,11 +109,9 @@ class ProposalPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if user_activities.include? 'proposal_j:index'
-        scope.where(confirm_that_the_data_is_correct: true).all
-      elsif user_activities.include? 'proposal_j:index_self'
-        scope.where(creator_id: @user.id, confirm_that_the_data_is_correct: true)
+        scope.where.not(id: nil).all
       else
-        scope.where(id: -1)
+        scope.where(id: nil)
       end
     end
   end

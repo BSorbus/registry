@@ -21,6 +21,12 @@
           </li>
         <%# end %>
 
+        <%# if policy(:proposal).index_j? || policy(:proposal).index_p? || policy(:proposal).index_t? %>
+          <li role="presentation" class="brand-nav" title="<%= t('reports.index.title') %>" rel='tooltip'>
+            <a href="#reports" aria-controls="reports" role="tab" data-toggle="tab"><%= report_icon_legend %></a>
+          </li>
+        <%# end %>
+
 
         <% if register_policy_check(@register, 'work', params[:service_type]) %>
           <li role="presentation" class="brand-nav" title="<%= t('works.index.title') %>" rel='tooltip'>
@@ -45,7 +51,7 @@
 
 
 <div class="sidebar-content-large hidden container-fluid">
-  <div class="center"><%= register_legend %></div>
+  <div class="center"><%= register_legend(params[:service_type]) %></div>
   <hr>
   <div class="row">
     <div class="col-sm-12">
@@ -57,13 +63,17 @@
           <a href="#register_show" aria-controls="register_show" role="tab" data-toggle="tab"><%= register_show_legend %></a>
         </li>
 
-
         <%# if policy(:proposal).index_j? || policy(:proposal).index_p? || policy(:proposal).index_t? %>
           <li role="presentation" class="brand-nav brand-nav-level-1" title="<%= t('proposals.index.title') %>" rel='tooltip'>
             <a href="#proposals" aria-controls="proposals" role="tab" data-toggle="tab"><%= proposal_index_legend %></a>
           </li>
         <%# end %>
 
+        <%# if policy(:proposal).index_j? || policy(:proposal).index_p? || policy(:proposal).index_t? %>
+          <li role="presentation" class="brand-nav brand-nav-level-1" title="<%= t('reports.index.title') %>" rel='tooltip'>
+            <a href="#reports" aria-controls="reports" role="tab" data-toggle="tab"><%= report_index_legend %></a>
+          </li>
+        <%# end %>
 
         <% if register_policy_check(@register, 'work', params[:service_type]) %>
           <li role="presentation" class="brand-nav brand-nav-level-1" title="<%= t('works.index.title') %>" rel='tooltip'>
@@ -72,12 +82,10 @@
         <% end %>  
 
         <hr>
-
         <li role="presentation" class="brand-nav"><%= link_to registers_path(params[:service_type]), title: t('.index'), rel: 'tooltip' do %>
             <%= back_to_index_legend %>
           <% end %>
         </li>
-
 
       </ul>
 

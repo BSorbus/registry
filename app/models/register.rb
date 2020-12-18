@@ -25,19 +25,11 @@ class Register < ApplicationRecord
   validates :register_status, presence: true
   validates :register_no, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
-  # REGISTER_STATUSES_VALID_UNIQUENESS = [ REGISTER_STATUS_CURRENT, REGISTER_STATUS_PENDING_CHANGES, REGISTER_STATUS_PENDING_DELETION ]
   validates :register_status_id,
     uniqueness: { scope: [:service_type, :organization_id], 
                   message: ->(object, data) do
                     I18n.t("activerecord.errors.messages.register_status_taken", register_status_name: "[RS] #{object.register_status.name}" )
                   end }, if: -> { RegisterStatus::REGISTER_STATUSES_VALID_UNIQUENESS.include?(register_status_id) }
-
-
-
-  # scopes
-  scope :only_service_type_j, -> { where(service_type: "j") }
-  scope :only_service_type_p, -> { where(service_type: "p") }
-  scope :only_service_type_t, -> { where(service_type: "t") }
 
   # callbacks
   before_validation :set_initial_data

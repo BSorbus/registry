@@ -22,10 +22,10 @@
               <tr>
                 <th>ID</th>
                 <th><%= Register.human_attribute_name(:register_no) %></th>
+                <th><%= Register.human_attribute_name(:register_status) %></th>
                 <th><%= Register.human_attribute_name(:proposal_registration_approved) %></th>
                 <th><%= Register.human_attribute_name(:proposal_current_approved) %></th>
                 <th><%= Register.human_attribute_name(:proposal_deletion_approved) %></th>
-                <th><%= Register.human_attribute_name(:register_status) %></th>
                 <th><%= Register.human_attribute_name(:organization) %></th>
                 <th><%= Register.human_attribute_name(:organization_nip) %></th>
                 <th><%= Register.human_attribute_name(:organization_jointly_identifiers) %></th>
@@ -40,23 +40,23 @@
               <%= text_field_tag :col1filter, params[:col1filter], id: 'col1filter', 'data-column' => "1", 
                     class: 'column_filter form-control input-sm', style: "width: 85%;" %>
             </th>
-            <th> <!-- proposal_registration_approved 2 -->
-              <%= text_field_tag :col2filter, params[:col2filter], id: 'col2filter', 'data-column' => "2", 
-                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
+            <th>  <!-- register_status 2 -->
+              <%= select( nil, "col2filter",
+                    RegisterStatus.all.order(:name).collect {|v| [ "#{v[:name]}", "#{v[:name]}" ] },
+                    { include_blank: true }, 
+                    { autofocus: false, class: 'column_filter form-control input-sm', 'data-column' => "2", style: "width: 85%;" }) %>            
             </th>
-            <th> <!-- proposal_current_approved 3 -->
+            <th> <!-- proposal_registration_approved 3 -->
               <%= text_field_tag :col3filter, params[:col3filter], id: 'col3filter', 'data-column' => "3", 
                     class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
             </th>
-            <th> <!-- proposal_deletion_approved 4 -->
+            <th> <!-- proposal_current_approved 4 -->
               <%= text_field_tag :col4filter, params[:col4filter], id: 'col4filter', 'data-column' => "4", 
                     class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
             </th>
-            <th>  <!-- register_status 5 -->
-              <%= select( nil, "col5filter",
-                    RegisterStatus.all.order(:name).collect {|v| [ "#{v[:name]}", "#{v[:name]}" ] },
-                    { include_blank: true }, 
-                    { autofocus: false, class: 'column_filter form-control input-sm', 'data-column' => "5", style: "width: 85%;" }) %>            
+            <th> <!-- proposal_deletion_approved 5 -->
+              <%= text_field_tag :col5filter, params[:col5filter], id: 'col5filter', 'data-column' => "5", 
+                    class: 'column_filter form-control input-sm', style: "width: 85%;" %>                
             </th>
             <th> <!-- organization 6 -->
               <%= text_field_tag :col6filter, params[:col6filter], id: 'col6filter', 'data-column' => "6", 

@@ -1,0 +1,70 @@
+<%= javascript_include_tag "proposal_area_is_required" %>
+
+
+<div class="row">
+
+  <div class="col-sm-12">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <fieldset class="my-fieldset">
+          <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_area_title') %></legend>
+
+          <div class="row">
+            <div class="form-group col-sm-12">
+              <%= f.label :activity_area_whole_poland, class: 'control-label' %><br>
+              <%= f.radio_button(:activity_area_whole_poland, true, disabled: false, onchange: "proposalAreIsRequired(this.value, this)") %>
+              <%= f.label(:activity_area_whole_poland_true, t("true") ) %>
+              <%= f.radio_button(:activity_area_whole_poland, false, disabled: false, onchange: "proposalAreIsRequired(this.value, this)") %>
+              <%= f.label(:activity_area_whole_poland_false, t("false") ) %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-11 col-sm-offset-1">
+
+              <div class='proposal_area_enabled_disabled'>
+                <div class='proposal_areas_title clearfix'>
+                  <fieldset class="my-fieldset">
+                  <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_another_areas_title')%></legend>
+                    <!-- header for partial -->
+                    <div class="row" >
+                      <div class="form-group required col-sm-3">
+                        <strong><%= ProposalArea.human_attribute_name(:province_name) %></strong>
+                      </div>
+                      <div class="form-group required col-sm-3">
+                        <strong><%= ProposalArea.human_attribute_name(:district_name) %></strong>
+                      </div>
+                      <div class="form-group required col-sm-4">
+                        <strong><%= ProposalArea.human_attribute_name(:commune_name) %></strong>
+                      </div>
+                    </div>
+
+                    <div class='proposal_proposal_areas-sub-form'>
+                      <%= f.fields_for :proposal_areas do |proposal_proposal_area_form|  %>
+                        <%= render 'proposal_areas/proposal_area_fields', f: proposal_proposal_area_form %> 
+                      <% end %>
+                    </div>
+                    <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_areas, 'proposal_areas/proposal_area_fields') %>
+
+                  </fieldset>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+    </div>
+  </div>
+
+</div>  <!-- /row -->
+
+
+<script type="text/javascript">
+
+  var areaState = "<%= f.object.activity_area_whole_poland %>";
+  proposalAreIsRequired(areaState, null);
+
+</script>

@@ -254,13 +254,11 @@ ActiveRecord::Schema.define(version: 2020_10_04_150526) do
     t.boolean "activity_area_whole_poland", default: true
     t.date "scheduled_start_date"
     t.date "scheduled_end_date"
-    t.integer "esod_category"
-    t.boolean "confirm_that_the_data_is_correct", default: false
-    t.string "write_status"
+    t.boolean "jst_providing_networks", default: false
+    t.boolean "jst_provision_telecom_services", default: false
+    t.boolean "jst_provision_related_services", default: false
+    t.boolean "jst_other_telecom_activities", default: false
     t.text "status_comment", default: ""
-    t.text "bank_pdf_blob_path"
-    t.text "face_image_blob_path"
-    t.text "attached_pdf_file_blob_path"
     t.text "note", default: ""
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

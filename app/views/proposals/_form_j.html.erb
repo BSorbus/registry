@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-sm-12">
+    <fieldset class="my-fieldset">
+      <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_networks_title') %></legend>
+
+      <div class="row" >
+        <div class="form-group">
+          <div class="col-sm-4">
+            <%= f.label :jst_providing_networks, class: 'control-label' %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.radio_button(:jst_providing_networks, true, disabled: false) %>
+            <%= f.label(:jst_providing_networks_true, t("true") ) %>
+            <%= f.radio_button(:jst_providing_networks, false, disabled: false) %>
+            <%= f.label(:jst_providing_networks_false, t("false") ) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div class="form-group">
+          <div class="col-sm-4">
+            <%= f.label :jst_provision_telecom_services, class: 'control-label' %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.radio_button(:jst_provision_telecom_services, true, disabled: false) %>
+            <%= f.label(:jst_provision_telecom_services_true, t("true") ) %>
+            <%= f.radio_button(:jst_provision_telecom_services, false, disabled: false) %>
+            <%= f.label(:jst_provision_telecom_services_false, t("false") ) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div class="form-group">
+          <div class="col-sm-4">
+            <%= f.label :jst_provision_related_services, class: 'control-label' %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.radio_button(:jst_provision_related_services, true, disabled: false) %>
+            <%= f.label(:jst_provision_related_services_true, t("true") ) %>
+            <%= f.radio_button(:jst_provision_related_services, false, disabled: false) %>
+            <%= f.label(:jst_provision_related_services_false, t("false") ) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div class="form-group">
+          <div class="col-sm-4">
+            <%= f.label :jst_other_telecom_activities, class: 'control-label' %>
+          </div>
+          <div class="col-sm-4">
+            <%= f.radio_button(:jst_other_telecom_activities, true, disabled: false) %>
+            <%= f.label(:jst_other_telecom_activities_true, t("true") ) %>
+            <%= f.radio_button(:jst_other_telecom_activities, false, disabled: false) %>
+            <%= f.label(:jst_other_telecom_activities_false, t("false") ) %>
+          </div>
+        </div>
+      </div>
+
+    </fieldset>
+  </div> <!--/col-sm-12 -->
+  
+</div>  <!-- /row -->

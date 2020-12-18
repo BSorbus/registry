@@ -18,18 +18,18 @@
 
     <div class="form-group col-sm-2">
 <!--       <%#= f.label :only_wholesale, class: 'control-label' %><br> -->
-      <%= f.radio_button(:only_wholesale, false, disabled: false) %>
-      <%= f.label(:only_wholesale_false, t("false") ) %>
       <%= f.radio_button(:only_wholesale, true, disabled: false) %>
       <%= f.label(:only_wholesale_true, t("true") ) %>
+      <%= f.radio_button(:only_wholesale, false, disabled: false) %>
+      <%= f.label(:only_wholesale_false, t("false") ) %>
     </div>
 
     <div class="form-group col-sm-2">
 <!--       <%#= f.label :only_resale, class: 'control-label' %><br> -->
-      <%= f.radio_button(:only_resale, false, disabled: false) %>
-      <%= f.label(:only_resale_false, t("false") ) %>
       <%= f.radio_button(:only_resale, true, disabled: false) %>
       <%= f.label(:only_resale_true, t("true") ) %>
+      <%= f.radio_button(:only_resale, false, disabled: false) %>
+      <%= f.label(:only_resale_false, t("false") ) %>
     </div>
 
     <div class="form-group col-sm-1">

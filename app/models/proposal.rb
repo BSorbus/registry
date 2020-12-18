@@ -34,7 +34,6 @@ class Proposal < ApplicationRecord
   validates :proposal_type, presence: true
   validates :proposal_status_id, presence: true, inclusion: { in: ProposalStatus::PROPOSAL_STATUSES }
   validates :proposal_status, presence: true
-  validates :esod_category, presence: true
   validates :register, presence: true, if: -> { ProposalType::PROPOSAL_TYPES_ENABLED_REGISTER_ID.include?(proposal_type_id) }
 
 
@@ -75,12 +74,6 @@ class Proposal < ApplicationRecord
                                                   (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED) && new_record? && register_id.present? }
   validate :type_deletion_status_created,  if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION) && 
                                                     (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED) && new_record? && register_id.present? }
-
-
-  # scopes
-  scope :only_service_type_j, -> { where(service_type: "j") }
-  scope :only_service_type_p, -> { where(service_type: "p") }
-  scope :only_service_type_t, -> { where(service_type: "t") }
 
   # nested
   accepts_nested_attributes_for :proposal_networks, reject_if: :all_blank, allow_destroy: true
@@ -143,11 +136,13 @@ class Proposal < ApplicationRecord
 
 
   def fullname
-    "#{insertion_date.strftime("%Y-%m-%d")}"
+    # "#{insertion_date.strftime("%Y-%m-%d")}"
+    insertion_date.present? ? insertion_date.strftime("%Y-%m-%d") : ""
   end
 
   def fullname_was
-    "#{insertion_date_was.strftime("%Y-%m-%d")}"
+    # "#{insertion_date_was.strftime("%Y-%m-%d")}"
+    insertion_date_was.present? ? insertion_date_was.strftime("%Y-%m-%d") : ""
   end
 
   def note_truncate
