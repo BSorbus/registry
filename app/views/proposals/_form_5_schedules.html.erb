@@ -1,0 +1,26 @@
+<div class="row">
+
+  <div class="form-group col-sm-12">
+    <fieldset class="my-fieldset-short">
+      <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_scheduled_title') %></legend>
+
+      <div class="row">
+
+        <div class="form-group required col-sm-3">
+          <%= f.label :scheduled_start_date, class: 'control-label' %>
+          <%= f.text_field :scheduled_start_date, class: 'form-control input-sm datepicker', 
+                            disabled: start_date_read_only %>
+        </div>
+
+        <div class="form-group col-sm-3">
+          <%= f.label :scheduled_end_date, class: 'control-label' %>
+          <%= f.text_field :scheduled_end_date, class: 'form-control input-sm datepicker', 
+                            disabled: end_date_read_only %>
+        </div>
+
+      </div> <!--/row -->
+
+    </fieldset>
+  </div>
+
+</div>  <!-- /row -->

@@ -1,4 +1,3 @@
-<h2>/views/proposals/_data_t</h2>
 <div class="row">
 
   <div class="form-group col-sm-12">
@@ -18,8 +17,8 @@
             </div>
           </div>
 
-          <%= render partial: "proposal_networks/proposal_network", collection: @proposal.proposal_networks, as: :proposal_network %>
-          <%#= render @proposal.proposal_networks %>
+          <%= render partial: "proposal_networks/proposal_network", collection: proposal.proposal_networks, as: :proposal_network %>
+          <%#= render proposal.proposal_networks %>
 
 
           <hr>
@@ -40,7 +39,7 @@
             </div>
           </div>
 
-          <%= render partial: "proposal_services/proposal_service", collection: @proposal.proposal_services, as: :proposal_service %>
+          <%= render partial: "proposal_services/proposal_service", collection: proposal.proposal_services, as: :proposal_service %>
 
 
 

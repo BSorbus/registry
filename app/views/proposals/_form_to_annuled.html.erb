@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-sm-12">
+
+    <%= form_with(model: proposal, url: { action: 'update_to_annuled' , service_type: params[:service_type] }, local: true) do |f| %>
+
+      <% input_disabled ||= false %>
+
+      <%= form_errors_for proposal %>
+
+      <div class="row">
+        <div class="col-sm-12">
+
+          <div class="alert alert-warning" role="alert">
+            <p class="center"><strong><%= t("helpers.links.proposal_to_annuled") %></strong></p>
+          </div>
+
+        </div>
+      </div>
+
+      <%= render "data_1_basic", proposal: proposal %>
+
+      <hr>
+
+      <div class="row">
+        <div class="col-sm-6">
+
+          <div class="row">
+            <div class="form-group required col-sm-4">
+              <%= f.label :annuled_date, class: 'control-label' %>
+              <%= f.text_field :annuled_date, class: 'form-control input-sm datepicker', disabled: false %>
+            </div>
+          </div>  <!-- /row -->
+          <div class="row">
+            <div class="form-group required col-sm-12">
+              <%= f.label :status_comment, class: 'control-label' %>
+              <%= f.trix_editor :status_comment %>
+              <%#= f.text_area :note, :rows => 4, class: 'form-control input-sm' %>
+            </div>
+          </div>  <!-- /row -->
+
+        </div>  <!-- /col-sm-7 -->
+
+        <div class="col-sm-6">
+
+          <div class="row">
+            <div class="form-group col-sm-12">
+              <%= f.label :note, class: 'control-label' %>
+              <%= f.trix_editor :note %>
+              <%#= f.text_area :note, :rows => 4, class: 'form-control input-sm' %>
+            </div>
+          </div>  <!-- /row -->
+          
+        </div>  <!-- /col-sm-5 -->
+      </div>  <!-- /row -->
+
+      <hr class="hr-without-top-margin">
+
+      <div class="row">
+        <div class="col-sm-12">
+
+          <%= link_to proposal_path(proposal.service_type, proposal), class: "btn btn-default" do %>
+            <%= back_from_new_or_edit_legend %>
+          <% end %>
+
+          <%= f.submit nil, data: { confirm: t('helpers.links.confirm_to_annuled', data: proposal.fullname) }, class: 'btn btn-success' %>
+
+        </div> <!--/col-sm-12 -->
+      </div> <!-- /row -->
+      
+    <% end %>
+
+  </div> <!--/col-sm-12-->
+</div>

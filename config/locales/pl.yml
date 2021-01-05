@@ -74,11 +74,64 @@ pl:
     edit:
       title: 'Edycja -> Wniosek'
     fieldset:
+      proposal_basic_title: 'Dane podstawowe wniosku'
       proposal_networks_title: 'Opis działalności telekomunikacyjnej, której dotyczy wniosek (C)'
       proposal_area_title: 'Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji (D)'
       proposal_another_areas_title: 'Inne obszary'
       proposal_scheduled_title: 'Planowane daty (E, F)'
       proposal_attachments_title: 'Załączniki'
+  proposal_candidates:
+    show_step1:
+      fieldset_title: 'Rodzaj wniosku'
+    show_step2:
+      fieldset_title: 'Dotyczy'
+    show_step3:
+      fieldset_title: 'Działalność'
+    show_step4:
+      fieldset_title: 'Obszar'
+    show_step5:
+      fieldset_title: 'Załączniki'
+    show_step6:
+      fieldset_title: 'Podsumowanie'
+    wizard_steps:
+      title: 'Kreator wniosku'
+      next_step: 'Dalej'
+      previous_step: 'Wstecz'
+      step1:
+        title: 'Kreator wniosku'
+        submit: 'Dotyczy'
+      step2:
+        title: 'Kreator wniosku'
+        submit_back: 'Rodzaj wniosku'
+        submit: 'Działalność'
+      step3:
+        title: 'Kreator wniosku'
+        submit_back: 'Dotyczy'
+        submit: 'Obszar'
+      step4:
+        title: 'Kreator wniosku'
+        submit_back: 'Działalność'
+        submit: 'Załączniki'
+      step5:
+        title: 'Kreator wniosku'
+        submit_back: 'Obszar'
+        submit: 'Podsumowanie'
+      step6:
+        title: 'Kreator wniosku'
+        submit_back: 'Załączniki'
+        submit: 'Zapisz wniosek!'
+      form_step1:
+        fieldset_title: 'Rodzaj wniosku'
+      form_step2:
+        fieldset_title: 'Dotyczy'
+      form_step3:
+        fieldset_title: 'Działalność'
+      form_step4:
+        fieldset_title: 'Obszar'
+      form_step5:
+        fieldset_title: 'Załączniki'
+      form_step6:
+        fieldset_title: 'Podsumowanie'
   proposals_j:
     index:
       title: 'Wnioski JST'
@@ -204,7 +257,7 @@ pl:
       user: 'Użytkownik'
       work: 'Dziennik operacji'
     attributes:
-      address:
+      address: &address_content
         address_type: 'Typ'
         address_type_id: 'Typ'
         country_code: "Kraj"
@@ -255,28 +308,7 @@ pl:
         organization_id: 'Organizacja'
         user: 'Użytkownik'
         organization: 'Organizacja'
-      organization/addresses:
-        address_type: 'Typ'
-        address_type_id: 'Typ'
-        country_code: "Kraj"
-        address_combine_id: 'Adres'
-        province_code: 'Województwo (Id)'
-        province_name: 'Województwo'
-        district_code: 'Powiat (Id)'
-        district_name: 'Powiat'
-        commune_code: 'Gmina (Id)'
-        commune_name: 'Gmina'
-        city_code: 'Miejscowość (Id)'
-        city_name: 'Miejscowość'
-        street_code: 'Ulica (Id)'
-        street_name: 'Ulica'
-        street_attribute: 'Atrybut'
-        address_city: 'Miejscowość'
-        address_street: 'Ulica'
-        address_house: 'Dom'
-        address_number: 'Lokal'
-        address_postal_code: 'Kod pocztowy'
-        _destroy: 'Usuń [x]'
+      organization/addresses: *address_content
       organization/features:
         base: '[Organizacja]'
         feature_type: '[Identyfikatory/Inne atrybuty]: Atrybut'
@@ -295,11 +327,20 @@ pl:
         feature_type_id: '[Przedstawiciele]:[Identyfikatory/Inne atrybuty]: Atrybut'
         feature_value: '[Przedstawiciele]:[Identyfikatory/Inne atrybuty]: Wartość atrybutu'
         _destroy: 'Usuń [x]'
-      proposal:
+      proposal: &proposal_content
+        service_type: 'Rodzaj Rejestru'
         proposal_type_id: 'Typ'
         proposal_type: 'Typ'
         proposal_status_id: 'Status'
         proposal_status: 'Status'
+        insertion_date: 'Data wniosku'
+        approved_date: 'Data akceptacji (wpisu)'
+        rejected_date: 'Data odrzucenia'
+        annuled_date: 'Data anulowania'
+        note: 'Adnotacje i uwagi'
+        status_comment: 'Komentarz do akceptacji/odrzucenia/anulowania'
+        author_id: 'Autor'
+        author: 'Autor'
         register_id: 'Dotyczy Nr Rej'
         register: 'Dotyczy Nr Rej'
         organization_id: 'Organizacja'
@@ -308,19 +349,19 @@ pl:
         organization_jointly_identifiers: 'Inne identyfikatory'
         organization_jointly_addresses: 'Adresy'
         organization_jointly_addresses_ext: 'Inne atrybuty'
-        insertion_date: 'Data zgłoszenia'
+        activity_area_whole_poland: 'Rzeczpospolita Polska - obszar całego kraju'
+        scheduled_start_date: 'Data rozpoczęcia'
+        scheduled_end_date: 'Data zakończenia'
         jst_providing_networks: 'Dostarczanie publicznie dostępnych sieci telekomunikacyjnej'
         jst_provision_telecom_services: 'Świadczenie publicznie dostępnych usług telekomunikacyjnych'
         jst_provision_related_services: 'Świadczenie usług powiązanych'
         jst_other_telecom_activities: 'Pozostała działalność w zakresie telekomunikacji'
-        scheduled_start_date: 'Data rozpoczęcia'
-        scheduled_end_date: 'Data zakończenia'
-        activity_area_whole_poland: 'Rzeczpospolita Polska - obszar całego kraju'
-        note: 'Adnotacje i uwagi'
-        author_id: 'Autor'
-        author: 'Autor'
+        jst_date_of_adopting_the_resolution_date: 'Data uchwały'
+        jst_resolution_number: 'Numer uchwały'
         _destroy: 'Usuń [x]'
-      proposal_area:
+      proposal_candidate: *proposal_content
+      proposal_area: &proposal_area_content
+        base: '[Wniosek]'
         province_code: 'Województwo (Id)'
         province_name: 'Województwo'
         district_code: 'Powiat (Id)'
@@ -328,18 +369,21 @@ pl:
         commune_code: 'Gmina (Id)'
         commune_name: 'Gmina'
         _destroy: 'Usuń [x]'
-      proposal_attachment:
+      proposal_attachment: &proposal_attachment_content
+        base: '[Wniosek]'
         attachment_type_id: 'Rodzaj załącznika'
         attachment_type: 'Rodzaj załącznika'
         attached_pdf_file: 'Plik'
         _destroy: 'Usuń [x]'
-      proposal_network:
+      proposal_network: &proposal_network_content
+        base: '[Wniosek]'
         network_type_id: 'Rodzaj sieci'
         network_type: 'Rodzaj sieci'
         description: 'Opis sieci'
         note: 'Adnotacje i uwagi'
         _destroy: 'Usuń [x]'
-      proposal_service:
+      proposal_service: &proposal_service_content
+        base: '[Wniosek]'
         service_type_id: 'Rodzaj usługi'
         service_type: 'Rodzaj usługi'
         description: 'Opis usługi'
@@ -347,35 +391,15 @@ pl:
         only_resale: 'Wyłącznie odsprzedaż'
         note: 'Adnotacje i uwagi'
         _destroy: 'Usuń [x]'
-      proposal/proposal_attachments:
-        base: '[Wniosek]'
-        attachment_type_id: '[Załączniki]: Rodzaj załącznika'
-        attachment_type: '[Załączniki]: Rodzaj załącznika'
-        attached_pdf_file: '[Załączniki]: Plik'
-        _destroy: 'Usuń [x]'
-      proposal/proposal_areas:
-        base: '[Wniosek]'
-        province_code: 'Województwo (Id)'
-        province_name: 'Województwo'
-        district_code: 'Powiat (Id)'
-        district_name: 'Powiat'
-        commune_code: 'Gmina (Id)'
-        commune_name: 'Gmina'
-        _destroy: 'Usuń [x]'
-      proposal/proposal_networks:
-        base: '[Wniosek]'
-        network_type_id: '[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych]: Rodzaj'
-        network_type: '[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych]: Rodzaj'
-        description: '[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych]: Opis sieci'
-        _destroy: 'Usuń [x]'
-      proposal/proposal_networks/proposal_services:
-        base: '[Wniosek][Dostarczanie publicznie dostępnych sieci telekomunikacyjnych]'
-        service_type_id: '[Wniosek][Dostarczanie publicznie dostępnych sieci telekomunikacyjnych]: Rodzaj'
-        service_type: '[Wniosek][Dostarczanie publicznie dostępnych sieci telekomunikacyjnych]: Rodzaj'
-        description: '[Wniosek][Dostarczanie publicznie dostępnych sieci telekomunikacyjnych]: Opis sieci'
-        _destroy: 'Usuń [x]'
+      proposal/proposal_attachments: *proposal_attachment_content
+      proposal/proposal_areas: *proposal_area_content
+      proposal/proposal_networks: *proposal_network_content
+      proposal/proposal_services: *proposal_service_content
+      proposal_candidate/proposal_attachments: *proposal_attachment_content
+      proposal_candidate/proposal_areas: *proposal_area_content
+      proposal_candidate/proposal_networks: *proposal_network_content
+      proposal_candidate/proposal_services: *proposal_service_content
       register:
-        insertion_date: 'Data wpisu'
         register_no: 'Nr'
         register_status_id: 'Status'
         register_status: 'Status'
@@ -385,9 +409,12 @@ pl:
         organization_jointly_identifiers: 'Inne identyfikatory'
         organization_jointly_addresses: 'Adresy'
         organization_jointly_addresses_ext: 'Inne atrybuty'
-        proposal_registration_approved: 'Data wpisu'
-        proposal_current_approved: 'Data ostatniej aktualizacji'
-        proposal_deletion_approved: 'Data wykreślenia'
+        proposal_registration_approved_insertion_date: 'Data wniosku o wpis'
+        proposal_registration_approved_approved_date: 'Data akceptacji (wpisu)'
+        proposal_current_approved_insertion_date: 'Data ostatniego wniosku o zmianę'
+        proposal_current_approved_approved_date: 'Data akceptacji (wpisu)'
+        proposal_deletion_approved_insertion_date: 'Data wniosku o wykreślenie'
+        proposal_deletion_approved_approved_date: 'Data akceptacji (wpisu)'
         flat: 'Wnioski'
         name: 'Nazwa'
         note: 'Adnotacje i uwagi'
@@ -445,6 +472,17 @@ pl:
               proposal_networks_network_type_blank: "[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych] - musisz określić przynajmniej jeden spośród: %{data}"
               proposal_services_service_type_nested_taken: "[Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych] - ten sam rodzaj usługi nie może być wielokrotnie wprowadzany"
               proposal_services_service_type_blank: "[Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych] - musisz określić przynajmniej jeden spośród: %{data}"
+              network_type_and_network_service_blank: "[Opis działalności telekomunikacyjnej, której dotyczy wniosek] - musisz określić przynajmniej jeden rodzaj sieci lub usługi"
+              proposal_areas_proposal_codes_nested_taken: "[Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji] - ten sam obszar nie może być wielokrotnie wprowadzany"
+              proposal_proposal_areas_blank: "[Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji (D)][Inne obszary] - musisz określić przynajmniej jeden obszar"
+        proposal_candidate:
+          attributes:
+            base:
+              proposal_networks_network_type_nested_taken: "[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych] - ten sam rodzaj sieci nie może być wielokrotnie wprowadzany"
+              proposal_networks_network_type_blank: "[Dostarczanie publicznie dostępnych sieci telekomunikacyjnych] - musisz określić przynajmniej jeden spośród: %{data}"
+              proposal_services_service_type_nested_taken: "[Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych] - ten sam rodzaj usługi nie może być wielokrotnie wprowadzany"
+              proposal_services_service_type_blank: "[Świadczenie publicznie dostępnych usług telekomunikacyjnych i usług powiązanych] - musisz określić przynajmniej jeden spośród: %{data}"
+              network_type_and_network_service_blank: "[Działalność] - musisz określić przynajmniej jeden rodzaj sieci lub usługi"
               proposal_areas_proposal_codes_nested_taken: "[Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji] - ten sam obszar nie może być wielokrotnie wprowadzany"
               proposal_proposal_areas_blank: "[Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji (D)][Inne obszary] - musisz określić przynajmniej jeden obszar"
         representative:
@@ -509,7 +547,6 @@ pl:
       update?: ' BRAK UPRAWNIEŃ: Nie możesz edytować danych organizacji!'
       create?: ' BRAK UPRAWNIEŃ: Nie możesz tworzyć organizacji!'
       destroy?: ' BRAK UPRAWNIEŃ: Nie możesz usuwać organizacji!'
-      add_remove_organization_user?: ' BRAK UPRAWNIEŃ: Nie możesz do grup dowawać ani usuwać użytkowników!'
   date:
     abbr_day_names:
     - nie
@@ -708,6 +745,10 @@ pl:
       confirm_add: 'Czy na pewno chcesz dodać ten wpis?'
       confirm_add_user: ' - Czy na pewno chcesz dodać do bazy użytkowników ten wpis?'
       confirm_send_mail: 'Na pewno chcesz wysłać email o udostepnieniu składnicy do %{data}?'
+      confirm_to_add_after_verification: 'Czy na pewno zweryfikowałeś dane wniosku i chcesz dodać ten wpis: "%{data}"?'
+      confirm_to_approved: 'Na pewno chcesz zaakceptować wniosek: "%{data}"?'
+      confirm_to_rejected: 'Na pewno chcesz odrzucić wniosek: "%{data}"?'
+      confirm_to_annuled: 'Na pewno chcesz anulować wniosek: "%{data}"?'
       destroy: "Usuń"
       destroy_account: "Usuń moje konto"
       send_email: "Wyślij email"
@@ -721,6 +762,9 @@ pl:
       not_exist_in_list:  'Nie ma pozycji na liście wyboru?'
       help:  'Pomoc'
       copy_to_clipboard:  'Kopiuj do Schowka'
+      proposal_to_approved: 'Zaakceptuj'
+      proposal_to_rejected: 'Odrzuć'
+      proposal_to_annuled: 'Anuluj'
     titles:
       edit: "Edycja %{model}"
       save: "Zapisz %{model}"
@@ -748,6 +792,7 @@ pl:
     select2commune: 'Wybierz Gminę'
     select2user: 'Wybierz Użytkownika'
     select2organization: 'Wybierz Organizację'
+    select2register: 'Wybierz z Rejestru'
   number:
     currency:
       format:

@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-sm-12">
+
+    <fieldset class="my-fieldset">
+      <legend class="my-fieldset"><%= t('.fieldset_title') %></legend>
+
+
+      <% if f.object.proposal_type_id == ProposalType::PROPOSAL_TYPE_REGISTRATION %>
+
+        <div class="row">
+          <div class="form-group col-sm-8">
+
+            <div class="row">
+              <div class="form-group required col-sm-12">
+                <%= f.label :organization_id, class: 'control-label' %>
+                <%= f.hidden_field :organization_id, 
+                                  class: "form-control input-sm select2organization", 
+                                  placeholder: t('placeholder.select2organization'),
+                                  style: "width:100%",
+                                  "data-locale": "#{params[:locale]}" %>
+              </div>
+            </div>
+
+          </div>  
+
+          <div class="form-group col-sm-4">
+            <div class="row">
+              <div class="col-sm-12">
+                <blockquote>
+                  <p>Wybierz Organizację, której dotyczy wniosek.</p>
+                  <p>Warunki wyszukiwania oddzielaj spacją. Np. Bydgoszcz Fordońska.</p>
+                </blockquote>
+              </div> <!-- /.col-sm-5 -->
+            </div> <!--/row -->
+          </div>
+        </div> <!--/row -->      
+
+      <% else %>
+
+        <div class="row">
+          <div class="form-group col-sm-8">
+
+            <div class="row">
+              <div class="form-group required col-sm-12">
+                <%= f.label :register_id, class: 'control-label' %>
+                <%= f.hidden_field :register_id, 
+                                  class: "form-control input-sm select2register", 
+                                  placeholder: t('placeholder.select2register'),
+                                  style: "width:100%",
+                                  "data-locale": "#{params[:locale]}",
+                                  "data-service_type": "#{f.object.service_type}" %>
+              </div>
+            </div>
+
+          </div>  
+
+          <div class="form-group col-sm-4">
+            <div class="row">
+              <div class="col-sm-12">
+                <blockquote>
+                  <p>Wybierz pozycję z Rejestru, której dotyczy wniosek.</p>
+                  <p>Lista zawiera tylko pozycje o statusie "aktualny".</p>
+                  <p>Warunki wyszukiwania oddzielaj spacją. Np. 2002-10 telefonika.</p>
+                </blockquote>
+              </div> <!-- /.col-sm-5 -->
+            </div> <!--/row -->
+          </div>
+        </div> <!--/row -->      
+
+      <% end %>
+
+    </fieldset>
+
+  </div> <!--/col-sm-12 -->
+</div> <!--/row -->
+

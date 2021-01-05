@@ -1,0 +1,89 @@
+$(document).ready(function() {
+
+  function registerFormatResult(item, container, query, escapeMarkup) {
+    if (item.id) {
+      var registerNo = markMatch(item.data_obj.register_no.toString(), query.term);
+      var approvedDate = markMatch(item.data_obj.proposal_registration_approved.approved_date, query.term);
+
+      var organizationName = markMatch(item.data_obj.organization.fullname, query.term);
+      var organizationNip = markMatch(item.data_obj.organization.nip, query.term);
+
+      return  "<strong>" + registerNo   + "</strong>" +  "<div class='pull-right'>&nbsp" + organizationName + "</div><br>" + 
+                           approvedDate               +  "<div class='pull-right'>&nbsp[ NIP: " + organizationNip + " ]</div>";
+
+    } else {
+      return "";
+    }
+  };
+
+  function registerFormatSelection(item) {
+    if (item.id) {
+      var registerNo = item.data_obj.register_no.toString();
+      var approvedDate = item.data_obj.proposal_registration_approved.approved_date;
+
+      var organizationName = item.data_obj.organization.fullname;
+      var organizationNip = item.data_obj.organization.nip;
+
+      return  registerNo + 
+              ' [' + approvedDate + '] ' +
+              ', ' + organizationName + 
+              ' [' + organizationNip  + ']';
+    } else {
+      return "";
+    }
+  };
+
+
+  $('.select2register').select2({
+    //minimumInputLength: 1,
+    allowClear: false,
+    ajax: {
+      url: function() {
+        return "/" + this.attr('data-locale') + "/" + this.attr('data-service_type') + "/registers/select2_index.json"
+      }, 
+      dataType: 'json',
+      quietMillis: 250,
+      type: 'GET',
+      data: function(term, page) {
+        return {
+          q: term,
+          page_limit: 10,
+          page: page
+        };
+      },
+      results: function(data, page) {
+        var more = (page * 10) < data.meta.total_count;
+        var registers = $.map(data.registers, function(register, i) {
+          // return { id: register.id, text: register.fullname };
+          return { data_obj: register, id: register.id };
+        });
+        return { results: registers, more: more };
+      }
+    },
+    formatAjaxError: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      if (jqXHR.status == 401) {
+        window.location.reload();
+      } else {
+        getErrorMessage(jqXHR, jqXHR.status);
+      }
+      return errorThrown + " " + jqXHR.responseText;
+    },
+    initSelection: function(element, callback) {
+      var id=$(element).val();
+      if (id!=="") {
+        $.get("/" + element.context.attributes['data-locale'].value + "/" + element.context.attributes['data-service_type'].value + "/registers/"+id+".json", function(data_from_json) {
+          if(data_from_json)
+            // callback({ id: data_from_json.id, text: data_from_json.fullname });
+            callback( { data_obj: data_from_json, id: data_from_json.id } );
+        });
+      }
+    },
+    formatResult: registerFormatResult, // omitted for brevity, see the source of this page
+    formatSelection: registerFormatSelection, // omitted for brevity, see the source of this page
+    dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+    escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+  });
+
+
+});

@@ -10,16 +10,16 @@ class RegisterDatatable < AjaxDatatablesRails::ActiveRecord
 
   def view_columns
     @view_columns ||= {
-      id:                     { source: "Register.id", cond: :eq, searchable: false, orderable: false },
-      register_no:            { source: "Register.register_no", cond: :like, searchable: true, orderable: true },
-      register_status:        { source: "RegisterStatus.name", cond: :like, searchable: true, orderable: true },
-      registration_approved:  { source: "Proposal.insertion_date", cond: :like, searchable: true, orderable: true },
-      current_approved:       { source: "t4_r3", cond: filter_current_approved_insertion_date, searchable: true, orderable: true },
-      deletion_approved:      { source: "t5_r3", cond: filter_deletion_approved_insertion_date, searchable: true, orderable: true },
-      organization:           { source: "Organization.name", cond: :like, searchable: true, orderable: true },
-      nip:                    { source: "Organization.nip", cond: :like, searchable: true, orderable: true },
-      jointly_identifiers:    { source: "Organization.jointly_identifiers", cond: :like, searchable: true, orderable: true },
-      jointly_addresses:      { source: "Organization.jointly_addresses", cond: :like, searchable: true, orderable: true }
+      id:                                   { source: "Register.id", cond: :eq, searchable: false, orderable: false },
+      register_no:                          { source: "Register.register_no", cond: :like, searchable: true, orderable: true },
+      register_status:                      { source: "RegisterStatus.name", cond: :like, searchable: true, orderable: true },
+      registration_approved_insertion_date: { source: "Proposal.insertion_date", cond: :like, searchable: true, orderable: true },
+      current_approved_insertion_date:      { source: "t4_r3", cond: filter_current_approved_insertion_date, searchable: true, orderable: true },
+      deletion_approved_insertion_date:     { source: "t5_r3", cond: filter_deletion_approved_insertion_date, searchable: true, orderable: true },
+      organization:                         { source: "Organization.name", cond: :like, searchable: true, orderable: true },
+      nip:                                  { source: "Organization.nip", cond: :like, searchable: true, orderable: true },
+      jointly_identifiers:                  { source: "Organization.jointly_identifiers", cond: :like, searchable: true, orderable: true },
+      jointly_addresses:                    { source: "Organization.jointly_addresses", cond: :like, searchable: true, orderable: true }
 #      flat:                 { source: "Register.id", cond: filter_custom_column_condition }
     }
   end
@@ -27,16 +27,16 @@ class RegisterDatatable < AjaxDatatablesRails::ActiveRecord
   def data
     records.map do |record|
       {
-        id:                     record.id,
-        register_no:            link_to( record.fullname, register_path(record.service_type, record) ),
-        register_status:        record.register_status.name,
-        registration_approved:  link_registration_approved(record),
-        current_approved:       link_current_approved(record),
-        deletion_approved:      link_deletion_approved(record),
-        organization:           link_to( record.organization.fullname, organization_path(record.organization) ),
-        nip:                    record.organization.nip, 
-        jointly_identifiers:    record.organization.jointly_identifiers.html_safe, 
-        jointly_addresses:      record.organization.jointly_addresses.html_safe
+        id:                                   record.id,
+        register_no:                          link_to( record.fullname, register_path(record.service_type, record) ),
+        register_status:                      record.register_status.name,
+        registration_approved_insertion_date: link_registration_approved(record),
+        current_approved_insertion_date:      link_current_approved(record),
+        deletion_approved_insertion_date:     link_deletion_approved(record),
+        organization:                         link_to( record.organization.fullname, organization_path(record.organization) ),
+        nip:                                  record.organization.nip, 
+        jointly_identifiers:                  record.organization.jointly_identifiers.html_safe, 
+        jointly_addresses:                    record.organization.jointly_addresses.html_safe
 #        flat:                    record.flat_proposals_with_type_and_status
       }
     end

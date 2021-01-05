@@ -1,8 +1,6 @@
 class Proposal < ApplicationRecord
+  extend ActiveModel::Translation
   include ActionView::Helpers::TextHelper
-
-  # attribute :multi_app_identifier, :uuid, default: -> { SecureRandom.uuid }
-  # attribute :proposal_status_id, :uuid, default: ProposalStatus::PROPOSAL_STATUS_CREATED
 
   # relations
   belongs_to :author, class_name: "User", foreign_key: :author_id
@@ -14,6 +12,8 @@ class Proposal < ApplicationRecord
   has_one :register_registration_approved, class_name: "Register", foreign_key: :proposal_registration_approved_id, inverse_of: :proposal_registration_approved
   has_one :register_current_approved, class_name: "Register", foreign_key: :proposal_current_approved_id, inverse_of: :proposal_current_approved
   has_one :register_deletion_approved, class_name: "Register", foreign_key: :proposal_deletion_approved_id, inverse_of: :proposal_deletion_approved
+
+  has_one :proposal_candidate, dependent: :destroy
 
   has_many :proposal_networks, dependent: :destroy
   has_many :proposal_services, dependent: :destroy
@@ -28,6 +28,7 @@ class Proposal < ApplicationRecord
 
   # validates
   validates :service_type, presence: true, inclusion: { in: ['j', 'p', 't'] }
+  validates :insertion_date, presence: true
   validates :author, presence: true
   validates :organization, presence: true
   validates :proposal_type_id, presence: true, inclusion: { in: ProposalType::PROPOSAL_TYPES }
@@ -37,9 +38,23 @@ class Proposal < ApplicationRecord
   validates :register, presence: true, if: -> { ProposalType::PROPOSAL_TYPES_ENABLED_REGISTER_ID.include?(proposal_type_id) }
 
 
-  validate :end_after_start
+  validate :scheduled_date_end_after_start
+
+#scheduled_date after insertion
+
   validates :scheduled_start_date, presence: true
-  validates :scheduled_end_date, presence: true,  if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION) }
+  validates :scheduled_end_date, presence: true, if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION) }
+
+  validate :approved_date_after_insertion_date
+  validates :approved_date, presence: true, if: -> { (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_APPROVED) }
+
+  validate :rejected_date_after_insertion_date
+  validates :rejected_date, presence: true, if: -> { (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_REJECTED) }
+
+  validate :annuled_date_after_insertion_date
+  validates :annuled_date, presence: true, if: -> { (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_ANNULLED) }
+
+  validate :loofah_status_comment_present, if: -> { ProposalStatus::PROPOSAL_STATUSES_ENABLED_STATUS_COMMENT.include?(proposal_status_id) }
 
   # # if create/update proposal only one rec can have the status ProposalStatus::PROPOSAL_STATUS_CREATED
   # validates :proposal_status_id, 
@@ -49,16 +64,20 @@ class Proposal < ApplicationRecord
   #                 end }, if: -> { proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED }
                   
 
-#  validate :proposal_networks_network_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_NETWORK.include?(proposal_type_id) }
+#  validate :proposal_networks_network_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_PRESENCE_NETWORK_OR_SERVICE.include?(proposal_type_id) }
   validate_nested_uniqueness_of :proposal_networks, uniq_key: :network_type_id, scope: [:proposal], 
                                   case_sensitive: false, error_key: :proposal_networks_network_type_nested_taken, 
-                                if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_NETWORK.include?(proposal_type_id) }
+                                if: -> { ProposalType::PROPOSAL_TYPES_PRESENCE_NETWORK_OR_SERVICE.include?(proposal_type_id) }
 
 
-#  validate :proposal_services_service_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE.include?(proposal_type_id) }
+#  validate :proposal_services_service_type_presence, if: -> { ProposalType::PROPOSAL_TYPES_PRESENCE_NETWORK_OR_SERVICE.include?(proposal_type_id) }
   validate_nested_uniqueness_of :proposal_services, uniq_key: :service_type_id, scope: [:proposal], 
                                   case_sensitive: false, error_key: :proposal_services_service_type_nested_taken,
-                                if: -> { ProposalType::PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE.include?(proposal_type_id) }
+                                if: -> { ProposalType::PROPOSAL_TYPES_PRESENCE_NETWORK_OR_SERVICE.include?(proposal_type_id) }
+
+  validates :jst_date_of_adopting_the_resolution_date, presence: true, if: -> { (service_type == 'j') }
+  validates :jst_resolution_number, presence: true, length: { in: 1..200 }, if: -> { (service_type == 'j') }
+  validate :network_type_or_service_type_presence, if: -> { (service_type == 't') && ProposalType::PROPOSAL_TYPES_PRESENCE_NETWORK_OR_SERVICE.include?(proposal_type_id) }
 
 
   validate :proposal_proposal_areas_presence, if: -> { activity_area_whole_poland == false }
@@ -68,12 +87,12 @@ class Proposal < ApplicationRecord
 
 
   # validation on create proposal any type - always new_record? == true 
-  validate :type_registration_status_created, if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_REGISTRATION) && 
-                                                        (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED) && new_record? }
-  validate :type_change_status_created,  if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_CHANGE) && 
-                                                  (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED) && new_record? && register_id.present? }
-  validate :type_deletion_status_created,  if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION) && 
-                                                    (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED) && new_record? && register_id.present? }
+  validate :can_as_registration, if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_REGISTRATION) && 
+                                          (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED) && new_record? && organization_id.present? }
+  validate :can_as_change,  if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_CHANGE) && 
+                                     (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED) && new_record? && organization_id.present? && register_id.present? }
+  validate :can_as_deletion,  if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION) && 
+                                                    (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED) && new_record? && organization_id.present? && register_id.present? }
 
   # nested
   accepts_nested_attributes_for :proposal_networks, reject_if: :all_blank, allow_destroy: true
@@ -82,9 +101,9 @@ class Proposal < ApplicationRecord
   accepts_nested_attributes_for :proposal_attachments, reject_if: :all_blank, allow_destroy: true
 
 
-  def type_registration_status_created
+  def can_as_registration
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_REGISTRATION 
-    #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED 
+    #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
       errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}" ) )
     else
@@ -98,7 +117,7 @@ class Proposal < ApplicationRecord
     end
   end
 
-  def type_change_status_created
+  def can_as_change
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_CHANGE 
     #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
@@ -116,7 +135,7 @@ class Proposal < ApplicationRecord
     end
   end
 
-  def type_deletion_status_created
+  def can_as_deletion
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION 
     #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
@@ -185,29 +204,42 @@ class Proposal < ApplicationRecord
     "(" + %w(proposals.name).map { |column| "#{column} ilike #{escaped_query_str}" }.join(" OR ") + ")"
   end
 
-  def can_create_proposal_type_registration?
-    organization_id
-  end
-
-  def can_updated?
+  def can_update?
     true
   end
 
-  def can_deleted?
+  def can_approve?
+    proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
+  end
+
+  def can_reject?
+    proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
+  end
+
+  def can_annul?
+    [ProposalStatus::PROPOSAL_STATUS_APPROVED, ProposalStatus::PROPOSAL_STATUS_REJECTED].include?(proposal_status_id)
+    # proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
+  end
+
+  def can_delete?
     true
   end
 
-  def can_create_proposal_type_deletion?
-    true
-  end
+  # def can_create_proposal_type_registration?
+  #   organization_id
+  # end
 
-  def can_create_proposal_type_change?
-    true
-  end
+  # def can_create_proposal_type_deletion?
+  #   true
+  # end
 
-  def can_create_proposal_type_certificate?
-    true
-  end
+  # def can_create_proposal_type_change?
+  #   true
+  # end
+
+  # def can_create_proposal_type_certificate?
+  #   true
+  # end
 
   def save_and_change_register_status
     ActiveRecord::Base.transaction do
@@ -218,14 +250,14 @@ class Proposal < ApplicationRecord
           when ProposalType::PROPOSAL_TYPE_CHANGE
             register = self.register
             register.update_status_when_proposal_type_change(self)
-            add_errors(register) if register.invalid?
+            add_errors(register) unless register.valid?
             register.save!
-          # when ProposalStatus::PROPOSAL_TYPE_CERTIFICATE
           when ProposalType::PROPOSAL_TYPE_DELETION
             register = self.register
             register.update_status_when_proposal_type_deletion(self)
-            add_errors(register) if register.invalid?
+            add_errors(register) unless register.valid?
             register.save!
+          # when ProposalStatus::PROPOSAL_TYPE_CERTIFICATE
           end
         end
         self.save!
@@ -238,8 +270,6 @@ class Proposal < ApplicationRecord
         Rails.logger.error("#{exception.record.class}: #{e}")
       end
       Rails.logger.error('================================================================================')
-      # Service type - nie znajduje się na liście dopuszczalnych wartości
-      # Esod category - nie może być puste
 
       # exception.record.errors.each do |att, mess|
       #   puts att # service_type
@@ -258,14 +288,13 @@ class Proposal < ApplicationRecord
       nil #self.register is nil
     when ProposalStatus::PROPOSAL_STATUS_APPROVED
       new_register = self.build_register(self.attributes.slice(*Register.attribute_names)
-                        .merge(register_status_id: RegisterStatus::REGISTER_STATUS_CURRENT, id: nil, proposal_registration_approved_id: self.id, proposal_current_approved_id: self.id) )
+                        .merge(register_status_id: RegisterStatus::REGISTER_STATUS_CURRENT, id: nil, proposal_registration_approved_id: self.id, proposal_current_approved_id: nil) )
+                        # .merge(register_status_id: RegisterStatus::REGISTER_STATUS_CURRENT, id: nil, proposal_registration_approved_id: self.id, proposal_current_approved_id: self.id) )
       add_errors(new_register) if new_register.invalid?
       new_register.save!
       self.register = new_register
     when ProposalStatus::PROPOSAL_STATUS_REJECTED
       nil #self.register is nil
-    when ProposalStatus::PROPOSAL_STATUS_CLOSED
-      # self.register_status = RegisterStatus::REGISTER_STATUS_CURRENT
     when ProposalStatus::PROPOSAL_STATUS_ANNULLED
       nil #self.register is nil CAN_ANNULED only PROPOSAL_STATUS_CREATED
       # self.register_status = RegisterStatus::REGISTER_STATUS_CURRENT      
@@ -275,14 +304,49 @@ class Proposal < ApplicationRecord
 
   private
 
-    def end_after_start
-      return if scheduled_end_date.blank? || scheduled_start_date.blank?
-     
+    def scheduled_date_end_after_start
+      return if scheduled_end_date.blank? || scheduled_start_date.blank?     
       if scheduled_end_date < scheduled_start_date
         errors.add(:scheduled_end_date, I18n.t('errors.messages.greater_than_or_equal_to', count: scheduled_start_date.strftime('%Y-%m-%d')  ) ) 
         # errors.add(:scheduled_end_date, 'nie może być wcześniejsza "Początek"') 
         # throw :abort 
       end 
+    end
+
+    def approved_date_after_insertion_date
+      return if approved_date.blank? || insertion_date.blank?     
+      if approved_date < insertion_date
+        errors.add(:approved_date, I18n.t('errors.messages.greater_than_or_equal_to', count: insertion_date.strftime('%Y-%m-%d')  ) ) 
+      end 
+    end
+
+    def rejected_date_after_insertion_date
+      return if rejected_date.blank? || insertion_date.blank?     
+      if rejected_date < insertion_date
+        errors.add(:rejected_date, I18n.t('errors.messages.greater_than_or_equal_to', count: insertion_date.strftime('%Y-%m-%d')  ) ) 
+      end 
+    end
+
+    def annuled_date_after_insertion_date
+      return if annuled_date.blank? || insertion_date.blank?     
+      if annuled_date < insertion_date
+        errors.add(:annuled_date, I18n.t('errors.messages.greater_than_or_equal_to', count: insertion_date.strftime('%Y-%m-%d')  ) ) 
+      end 
+    end
+
+    def loofah_status_comment_present
+      unless Loofah.fragment(status_comment).text.present?
+        errors.add(:status_comment, :blank ) 
+      end 
+    end
+
+    def network_type_or_service_type_presence
+      network_is_empty = proposal_networks.reject(&:marked_for_destruction?).reject { |x| not FeatureType.only_network_type.ids.include?(x.network_type_id) }.empty?
+      service_is_empty = proposal_services.reject(&:marked_for_destruction?).reject { |x| not FeatureType.only_service_type.ids.include?(x.service_type_id) }.empty?
+
+      if network_is_empty && service_is_empty
+        errors.add(:base, :network_type_and_network_service_blank)
+      end      
     end
 
     def proposal_networks_network_type_presence
@@ -307,7 +371,7 @@ class Proposal < ApplicationRecord
 
     def add_errors(model_in_transaction)
       model_in_transaction.errors.each do |attribute, message|
-        errors.add("#{model_in_transaction.model_name.human}: #{attribute}", "#{message}")
+        errors.add("#{model_in_transaction.model_name.human}: #{model_in_transaction.class.human_attribute_name(attribute)}", "#{message}")
       end
     end
 

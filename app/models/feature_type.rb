@@ -10,11 +10,13 @@ class FeatureType < ApplicationRecord
   has_many :address_type_addresses, class_name: "Address", foreign_key: "address_type_id", inverse_of: :address_type
   has_many :feature_type_features, class_name: "Feature", foreign_key: "feature_type_id", inverse_of: :feature_type
   has_many :representative_type_representatives, class_name: "Representative", foreign_key: "representative_type_id", inverse_of: :representative_type
-  has_many :proposal_network_type_network, class_name: "ProposalNetwork", foreign_key: "network_type_id", inverse_of: :network_type
-  has_many :proposal_service_type_service, class_name: "ProposalService", foreign_key: "service_type_id", inverse_of: :service_type
+  has_many :proposal_network_type_networks, class_name: "ProposalNetwork", foreign_key: "network_type_id", inverse_of: :network_type
+  has_many :proposal_service_type_services, class_name: "ProposalService", foreign_key: "service_type_id", inverse_of: :service_type
   has_many :proposal_attachment_type_attachment, class_name: "ProposalAttachment", foreign_key: "attachment_type_id", inverse_of: :attachment_type
 
-
+  has_many :proposal_network_candidate_type_networks, class_name: "ProposalNetworkCandidate", foreign_key: "network_type_id", inverse_of: :network_type
+  has_many :proposal_service_candidate_type_services, class_name: "ProposalServiceCandidate", foreign_key: "service_type_id", inverse_of: :service_type
+  has_many :proposal_attachment_candidate_type_attachments, class_name: "ProposalAttachmentCandidate", foreign_key: "attachment_type_id", inverse_of: :attachment_type
 
   # validates
   validates :name, presence: true,

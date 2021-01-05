@@ -118,10 +118,11 @@ $(document).ready(function() {
       { "data": "proposal_type", 
         fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
           // sData - wartosc celi, oData - wiersza
-          if ( sData == 'wpis do rejestru' ) {
-            $(nTd).addClass('datatable-cell-proposal-type-registration');
-          }
-          else if ( sData == 'wykreślenie z rejestru' ) {
+          // if ( sData == 'wpis do rejestru' ) {
+          //   $(nTd).addClass('datatable-cell-proposal-type-registration');
+          // }
+          // else if ( sData == 'wykreślenie z rejestru' ) {
+          if ( sData == 'wykreślenie z rejestru' ) {
             $(nTd).addClass('datatable-cell-proposal-type-deletion');
           }
           else if ( sData == 'zmiana wpisu w rejestrze' ) {
@@ -132,17 +133,15 @@ $(document).ready(function() {
       { "data": "proposal_status", 
         fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
           // sData - wartosc celi, oData - wiersza
-          if ( sData == 'w trakcie rozpatrywania' ) {
-            $(nTd).addClass('datatable-cell-proposal-status-pending');
-          }
-          else if ( sData == 'zaakceptowany' ) {
+          // if ( sData == 'nowy' ) {
+          //   $(nTd).addClass('datatable-cell-proposal-status-pending');
+          // }
+          // else if ( sData == 'zaakceptowany' ) {
+          if ( sData == 'zaakceptowany' ) {
             $(nTd).addClass('datatable-cell-proposal-status-approved');
           }
           else if ( sData == 'odrzucony' ) {
             $(nTd).addClass('datatable-cell-proposal-status-rejected');
-          }
-          else if ( sData == 'zamknięty' ) {
-            $(nTd).addClass('datatable-cell-proposal-status-closed');
           }
           else if ( sData == 'anulowany' ) {
             $(nTd).addClass('datatable-cell-proposal-status-annuled');
@@ -154,7 +153,7 @@ $(document).ready(function() {
       { "data": "nip" },
       { "data": "jointly_identifiers" }, 
       { "data": "jointly_addresses" }, 
-      { "data": "note" },
+      { "data": "approved_date" },
       // { "data": "author" }
       // { "data": "flat", 
       //   "sortable": false }

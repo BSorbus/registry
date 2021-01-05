@@ -15,22 +15,38 @@
   <div class="row">
     <%if register.proposal_registration_approved.present?  %>
       <div class="form-group col-sm-4">
-        <p><strong><%= Register.human_attribute_name(:proposal_registration_approved) %></strong></p>
+        <p><strong><%= Register.human_attribute_name(:proposal_registration_approved_insertion_date) %></strong></p>
         <%= link_to(register.proposal_registration_approved.fullname, proposal_path(register.service_type, register.proposal_registration_approved)) %>
       </div>
-    <% end %>
-
-    <%if register.proposal_current_approved.present?  %>
       <div class="form-group col-sm-4">
-        <p><strong><%= Register.human_attribute_name(:proposal_current_approved) %></strong></p>
-        <%= link_to(register.proposal_current_approved.fullname, proposal_path(register.service_type, register.proposal_current_approved)) %>
+        <p><strong><%= Register.human_attribute_name(:proposal_registration_approved_approved_date) %></strong></p>
+        <%= formated_date(register.proposal_registration_approved.approved_date) %>
       </div>
     <% end %>
+  </div>
 
+  <div class="row">
+    <%if register.proposal_current_approved.present?  %>
+      <div class="form-group col-sm-4">
+        <p><strong><%= Register.human_attribute_name(:proposal_current_approved_insertion_date) %></strong></p>
+        <%= link_to(register.proposal_current_approved.fullname, proposal_path(register.service_type, register.proposal_current_approved)) %>
+      </div>
+      <div class="form-group col-sm-4">
+        <p><strong><%= Register.human_attribute_name(:proposal_current_approved_approved_date) %></strong></p>
+        <%= formated_date(register.proposal_current_approved.approved_date) %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="row">
     <%if register.proposal_deletion_approved.present?  %>
       <div class="form-group col-sm-4">
-        <p><strong><%= Register.human_attribute_name(:proposal_deletion_approved) %></strong></p>
+        <p><strong><%= Register.human_attribute_name(:proposal_deletion_approved_insertion_date) %></strong></p>
         <%= link_to(register.proposal_deletion_approved.fullname, proposal_path(register.service_type, register.proposal_deletion_approved)) %>
+      </div>
+      <div class="form-group col-sm-4">
+        <p><strong><%= Register.human_attribute_name(:proposal_deletion_approved_approved_date) %></strong></p>
+        <%= formated_date(register.proposal_deletion_approved.approved_date) %>
       </div>
     <% end %>
   </div>

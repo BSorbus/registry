@@ -1,0 +1,62 @@
+<div class="row">
+
+  <div class="form-group col-sm-12">
+    <fieldset class="my-fieldset-short">
+      <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_basic_title') %></legend>
+
+      <div class="row">
+        <div class="form-group col-sm-3">
+          <p><strong><%= Proposal.human_attribute_name(:insertion_date) %></strong></p>
+          <%= formated_date(proposal.insertion_date) %>
+        </div>
+
+        <div class="form-group col-sm-3">
+          <p><strong><%= Proposal.human_attribute_name(:proposal_type) %></strong></p>
+          <%= proposal.proposal_type.name %>
+        </div>
+
+        <%if proposal.register.present?  %>
+          <div class="form-group col-sm-3">
+            <p><strong><%= Proposal.human_attribute_name(:register) %></strong></p>
+            <%= link_to(proposal.register.fullname, register_path(proposal.service_type, proposal.register)) %>
+          </div>
+        <% end %>
+
+        <div class="form-group col-sm-3">
+          <p><strong><%= Proposal.human_attribute_name(:proposal_status) %></strong></p>
+          <%= proposal.proposal_status.name %>
+        </div>
+      </div>
+
+      <div class="row">
+        <% if proposal.approved_date.present? %>
+          <div class="form-group col-sm-3">
+            <p><strong><%= Proposal.human_attribute_name(:approved_date) %></strong></p>
+            <%= formated_date(proposal.approved_date) %>
+          </div>
+        <% end %>
+        <% if proposal.rejected_date.present? %>
+          <div class="form-group col-sm-3">
+            <p><strong><%= Proposal.human_attribute_name(:rejected_date) %></strong></p>
+            <%= formated_date(proposal.rejected_date) %>
+          </div>
+        <% end %>
+        <% if proposal.annuled_date.present? %>
+          <div class="form-group col-sm-3">
+            <p><strong><%= Proposal.human_attribute_name(:annuled_date) %></strong></p>
+            <%= formated_date(proposal.annuled_date) %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-12">
+          <p><strong><%= Proposal.human_attribute_name(:organization) %></strong></p>
+          <%= link_to(proposal.organization.fullname_with_nip, organization_path(proposal.organization)) %>
+        </div>
+      </div>
+
+    </fieldset>
+  </div>
+
+</div>  <!-- /row -->

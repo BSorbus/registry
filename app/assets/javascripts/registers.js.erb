@@ -118,10 +118,11 @@ $(document).ready(function() {
       { "data": "register_status",
         fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
           // sData - wartosc celi, oData - wiersza
-          if ( sData == 'aktualny' ) {
-            $(nTd).addClass('datatable-cell-register-status-current');
-          }
-          else if ( sData == 'jest wniosek o zmianę' ) {
+          // if ( sData == 'aktualny' ) {
+          //   $(nTd).addClass('datatable-cell-register-status-current');
+          // }
+          // else if ( sData == 'jest wniosek o zmianę' ) {
+          if ( sData == 'jest wniosek o zmianę' ) {
             $(nTd).addClass('datatable-cell-register-status-pending_changes');
           }
           else if ( sData == 'jest wniosek o wykreślenie' ) {
@@ -135,9 +136,9 @@ $(document).ready(function() {
           }
         }
       },
-      { "data": "registration_approved" }, 
-      { "data": "current_approved" }, 
-      { "data": "deletion_approved" }, 
+      { "data": "registration_approved_insertion_date" }, 
+      { "data": "current_approved_insertion_date" }, 
+      { "data": "deletion_approved_insertion_date" }, 
       { "data": "organization" },
       { "data": "nip" },
       { "data": "jointly_identifiers" }, 

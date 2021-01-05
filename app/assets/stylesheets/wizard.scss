@@ -1,0 +1,130 @@
+
+/* SASS */
+$inactiveColor: #f5f5f5;
+$inactiveDotColor: #e0e0e0;
+$activeColor:  lighten(#BECC25, 40%);/*#fbe8aa; */
+$activeDotColor: #BECC25; /*#fbbd19;*/
+$stepNameColor: #595959;
+$dotRadius: 16px;
+$barThickness: $dotRadius * .66;
+$stepNameSize: 1.6rem;
+
+.multistep {
+    .multistep-step {
+        padding: 0;
+        position: relative;
+        margin-bottom: 10px;
+
+        .multistep-stepname {
+            margin-bottom: $dotRadius;
+            color: $stepNameColor;
+            font-size: $stepNameSize;
+            white-space: nowrap;
+        }
+
+        .multistep-dot {
+            position: absolute;
+            right: 50%;
+            left: 50%;
+            width: $dotRadius * 2;
+            height: $dotRadius * 2;
+            display: block;
+            margin-top: -$dotRadius;
+            margin-left: -$dotRadius + .5;
+            border-radius: 50%;
+            background: $inactiveColor;
+            &:after {
+                content: ' ';
+                border-radius: 50px;
+                position: absolute;
+                top: $dotRadius / 2;
+                bottom: $dotRadius / 2;
+                left: $dotRadius / 2;
+                right: $dotRadius / 2;
+                background: $inactiveDotColor;
+            }
+        }
+
+        .progress {
+            position: absolute;
+            width: 100%;
+            height: $barThickness;
+            margin-top: -$barThickness / 2;
+            box-shadow: none;
+            border-radius: 0;
+
+            .progress-bar {
+                width: 0px;
+                box-shadow: none;
+                background: $activeColor;
+            }
+        }
+
+        &:first-child > .progress {
+            left: 50%;
+            width: 50%;
+        }
+
+        &:last-child > .progress {
+            width: 50%;
+        }
+
+        &.complete {
+            .multistep-dot {
+                background: $activeColor;
+
+                &:after {
+                    background: $activeDotColor;
+                }
+            }
+
+            .progress > .progress-bar {
+                width: 100%;
+            }
+        }
+
+        &.next:hover {
+            .multistep-dot {
+                background: $activeColor;
+            }
+
+            .multistep-dot:after {
+                background: $activeDotColor;
+            }
+        }
+
+        &.current {
+            .multistep-dot {
+                background: $activeColor;
+
+                &:after {
+                    background: $activeDotColor;
+                }
+            }
+
+            .progress > .progress-bar {
+                width: 50%;
+            }
+
+            &:first-child > .progress > .progress-bar {
+                width: 0%;
+            }
+
+            &:last-child > .progress > .progress-bar {
+                width: 100%;
+            }
+        }
+
+        a.multistep-dot {
+            pointer-events: none;
+        }
+
+        &.complete a.multistep-dot {
+            pointer-events: all;
+        }
+
+        &.next a.multistep-dot {
+            pointer-events: all;
+        }
+    }
+}

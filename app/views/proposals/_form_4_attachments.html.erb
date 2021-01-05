@@ -1,0 +1,31 @@
+<div class="row">
+
+  <div class="col-sm-12">
+    <fieldset class="my-fieldset">
+      <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_attachments_title') %></legend>
+
+      <div class='proposal_attachments_title clearfix'>
+
+        <!-- header for partial -->
+        <div class="row" >
+          <div class="form-group required col-sm-5">
+            <strong><%= ProposalAttachment.human_attribute_name(:attachment_type) %></strong>
+          </div>
+          <div class="form-group required col-sm-6">
+            <strong><%= ProposalAttachment.human_attribute_name(:attached_pdf_file) %></strong>
+          </div>
+        </div>
+
+        <div class='proposal_proposal_attachments-sub-form'>
+          <%= f.fields_for :proposal_attachments do |proposal_proposal_attachment_form|  %>
+            <%= render 'proposal_attachments/proposal_attachment_fields', f: proposal_proposal_attachment_form %> 
+          <% end %>
+        </div>
+        <%= link_to_add_fields( t("helpers.links.link_to_add_fields_nested"), f, :proposal_attachments, 'proposal_attachments/proposal_attachment_fields') %>
+
+      </div>
+
+    </fieldset>
+  </div> <!--/col-sm-12 -->
+
+</div>  <!-- /row -->

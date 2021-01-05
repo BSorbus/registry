@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_04_150526) do
+ActiveRecord::Schema.define(version: 2020_10_04_150525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -177,6 +177,23 @@ ActiveRecord::Schema.define(version: 2020_10_04_150526) do
     t.index ["short_name"], name: "index_organizations_on_short_name"
   end
 
+  create_table "proposal_area_candidates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "proposal_candidate_id"
+    t.string "province_code", default: ""
+    t.string "province_name", default: ""
+    t.string "district_code", default: ""
+    t.string "district_name", default: ""
+    t.string "commune_code", default: ""
+    t.string "commune_name", default: ""
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commune_name"], name: "index_proposal_area_candidates_on_commune_name"
+    t.index ["district_name"], name: "index_proposal_area_candidates_on_district_name"
+    t.index ["proposal_candidate_id", "province_code", "district_code", "commune_code"], name: "idx_proposal_area_cs_xxx_code_uniqueness", unique: true
+    t.index ["proposal_candidate_id"], name: "index_proposal_area_candidates_on_proposal_candidate_id"
+    t.index ["province_name"], name: "index_proposal_area_candidates_on_province_name"
+  end
+
   create_table "proposal_areas", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "proposal_id"
     t.string "province_code", default: ""
@@ -194,6 +211,15 @@ ActiveRecord::Schema.define(version: 2020_10_04_150526) do
     t.index ["province_name"], name: "index_proposal_areas_on_province_name"
   end
 
+  create_table "proposal_attachment_candidates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "proposal_candidate_id"
+    t.uuid "attachment_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["attachment_type_id"], name: "index_proposal_attachment_candidates_on_attachment_type_id"
+    t.index ["proposal_candidate_id"], name: "index_proposal_attachment_candidates_on_proposal_candidate_id"
+  end
+
   create_table "proposal_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "proposal_id"
     t.uuid "attachment_type_id"
@@ -201,6 +227,52 @@ ActiveRecord::Schema.define(version: 2020_10_04_150526) do
     t.datetime "updated_at", null: false
     t.index ["attachment_type_id"], name: "index_proposal_attachments_on_attachment_type_id"
     t.index ["proposal_id"], name: "index_proposal_attachments_on_proposal_id"
+  end
+
+  create_table "proposal_candidates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "author_id"
+    t.string "service_type", limit: 1, default: "", null: false
+    t.date "insertion_date"
+    t.date "approved_date"
+    t.date "rejected_date"
+    t.date "annuled_date"
+    t.bigint "proposal_type_id"
+    t.bigint "proposal_status_id"
+    t.uuid "organization_id"
+    t.uuid "register_id"
+    t.boolean "activity_area_whole_poland", default: true
+    t.date "scheduled_start_date"
+    t.date "scheduled_end_date"
+    t.boolean "jst_providing_networks", default: false
+    t.boolean "jst_provision_telecom_services", default: false
+    t.boolean "jst_provision_related_services", default: false
+    t.boolean "jst_other_telecom_activities", default: false
+    t.date "jst_date_of_adopting_the_resolution_date"
+    t.string "jst_resolution_number", default: ""
+    t.text "status_comment", default: ""
+    t.text "note", default: ""
+    t.string "wizard_saved_step"
+    t.uuid "proposal_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_proposal_candidates_on_author_id"
+    t.index ["organization_id"], name: "index_proposal_candidates_on_organization_id"
+    t.index ["proposal_id"], name: "index_proposal_candidates_on_proposal_id"
+    t.index ["proposal_status_id"], name: "index_proposal_candidates_on_proposal_status_id"
+    t.index ["proposal_type_id"], name: "index_proposal_candidates_on_proposal_type_id"
+    t.index ["register_id"], name: "index_proposal_candidates_on_register_id"
+    t.index ["service_type"], name: "index_proposal_candidates_on_service_type"
+  end
+
+  create_table "proposal_network_candidates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "proposal_candidate_id"
+    t.uuid "network_type_id"
+    t.text "description", default: ""
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["network_type_id"], name: "index_proposal_network_candidates_on_network_type_id"
+    t.index ["proposal_candidate_id", "network_type_id"], name: "idx_proposal_network_cs_proposal_id_network_type_uniqueness", unique: true
+    t.index ["proposal_candidate_id"], name: "index_proposal_network_candidates_on_proposal_candidate_id"
   end
 
   create_table "proposal_networks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -212,6 +284,19 @@ ActiveRecord::Schema.define(version: 2020_10_04_150526) do
     t.index ["network_type_id"], name: "index_proposal_networks_on_network_type_id"
     t.index ["proposal_id", "network_type_id"], name: "idx_proposal_networks_proposal_id_network_type_uniqueness", unique: true
     t.index ["proposal_id"], name: "index_proposal_networks_on_proposal_id"
+  end
+
+  create_table "proposal_service_candidates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "proposal_candidate_id"
+    t.uuid "service_type_id"
+    t.text "description", default: ""
+    t.boolean "only_wholesale", default: false
+    t.boolean "only_resale", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proposal_candidate_id", "service_type_id"], name: "idx_proposal_service_cs_proposal_service_type_uniqueness", unique: true
+    t.index ["proposal_candidate_id"], name: "index_proposal_service_candidates_on_proposal_candidate_id"
+    t.index ["service_type_id"], name: "index_proposal_service_candidates_on_service_type_id"
   end
 
   create_table "proposal_services", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -247,6 +332,9 @@ ActiveRecord::Schema.define(version: 2020_10_04_150526) do
     t.uuid "author_id"
     t.string "service_type", limit: 1, default: "", null: false
     t.date "insertion_date"
+    t.date "approved_date"
+    t.date "rejected_date"
+    t.date "annuled_date"
     t.bigint "proposal_type_id"
     t.bigint "proposal_status_id"
     t.uuid "organization_id"
@@ -258,6 +346,8 @@ ActiveRecord::Schema.define(version: 2020_10_04_150526) do
     t.boolean "jst_provision_telecom_services", default: false
     t.boolean "jst_provision_related_services", default: false
     t.boolean "jst_other_telecom_activities", default: false
+    t.date "jst_date_of_adopting_the_resolution_date"
+    t.string "jst_resolution_number", default: ""
     t.text "status_comment", default: ""
     t.text "note", default: ""
     t.datetime "created_at", null: false
@@ -393,11 +483,23 @@ ActiveRecord::Schema.define(version: 2020_10_04_150526) do
   add_foreign_key "organizations", "feature_types", column: "jst_legal_form_type_id"
   add_foreign_key "organizations", "feature_types", column: "legal_form_type_id"
   add_foreign_key "organizations", "users", column: "author_id"
+  add_foreign_key "proposal_area_candidates", "proposal_candidates"
   add_foreign_key "proposal_areas", "proposals"
+  add_foreign_key "proposal_attachment_candidates", "feature_types", column: "attachment_type_id"
+  add_foreign_key "proposal_attachment_candidates", "proposal_candidates"
   add_foreign_key "proposal_attachments", "feature_types", column: "attachment_type_id"
   add_foreign_key "proposal_attachments", "proposals"
+  add_foreign_key "proposal_candidates", "organizations"
+  add_foreign_key "proposal_candidates", "proposal_statuses"
+  add_foreign_key "proposal_candidates", "proposal_types"
+  add_foreign_key "proposal_candidates", "proposals"
+  add_foreign_key "proposal_candidates", "users", column: "author_id"
+  add_foreign_key "proposal_network_candidates", "feature_types", column: "network_type_id"
+  add_foreign_key "proposal_network_candidates", "proposal_candidates"
   add_foreign_key "proposal_networks", "feature_types", column: "network_type_id"
   add_foreign_key "proposal_networks", "proposals"
+  add_foreign_key "proposal_service_candidates", "feature_types", column: "service_type_id"
+  add_foreign_key "proposal_service_candidates", "proposal_candidates"
   add_foreign_key "proposal_services", "feature_types", column: "service_type_id"
   add_foreign_key "proposal_services", "proposals"
   add_foreign_key "proposals", "organizations"

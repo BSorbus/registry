@@ -30,11 +30,53 @@ class RegistersController < ApplicationController
     end
   end
 
+  def select2_index
+    register_authorize(:register, "index", params[:service_type])
+    params[:q] = params[:q]
+    @registers = Register.includes(:organization, :proposal_registration_approved).references(:organization)
+      .where(service_type: params[:service_type], register_status_id: RegisterStatus::REGISTER_STATUS_CURRENT)
+      .finder_register(params[:q]).order(:register_no)
+    @registers_on_page = @registers.page(params[:page]).per(params[:page_limit])
+    
+  #   render json: { 
+  #     registers: @registers_on_page.as_json(methods: :fullname, only: [:id, :fullname, :register_no, :service_type]),
+  #     meta: { total_count: @registers.count }  
+  #   } 
+
+    respond_to do |format|
+      format.json {
+        render json: { 
+          registers: JSON.parse(@registers_on_page.to_json(
+            only: [:id, :register_no, :service_type],
+            include: {
+              organization: {methods: :fullname, only: [:id, :fullname, :name, :nip]},
+              proposal_registration_approved: {methods: :fullname, only: [:id, :fullname, :approved_date]}
+            }
+          )),
+          meta: { total_count: @registers.count }  
+        } 
+      }
+    end
+  end
+
   # GET /registers/1
   # GET /registers/1.json
   def show
     #authorize @register, :show?
     register_authorize(@register, "show", params[:service_type])
+
+    respond_to do |format|
+      format.html { render :show }
+      format.json {
+        render json: JSON.parse(@register.to_json(
+          only: [:id, :register_no, :service_type],
+          include: {
+            organization: {methods: :fullname, only: [:id, :fullname, :name, :nip]},
+            proposal_registration_approved: {methods: :fullname, only: [:id, :fullname, :approved_date]}
+          }
+        ))
+      } 
+    end
   end
 
   # GET /registers/new

@@ -100,3 +100,5 @@ gem 'country_select', '~> 4.0'
 
 gem 'paper_trail'
 gem 'paper_trail-association_tracking'
+
+gem 'wicked'

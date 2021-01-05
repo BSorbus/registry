@@ -26,12 +26,36 @@ class ProposalPolicy < ApplicationPolicy
     update_j?
   end
 
+  def edit_to_approved_j?
+    update_to_approved_j?
+  end
+
+  def edit_to_rejected_j?
+    update_to_rejected_j?
+  end
+
+  def edit_to_annuled_j?
+    update_to_annuled_j?
+  end
+
   def update_j?
-    user_activities.include?('proposal_j:update')
+    @model.can_update? && user_activities.include?('proposal_j:update')
+  end
+
+  def update_to_approved_j?
+    @model.can_approve? && user_activities.include?('proposal_j:approve')
+  end
+
+  def update_to_rejected_j?
+    @model.can_reject? && user_activities.include?('proposal_j:reject')
+  end
+
+  def update_to_annuled_j?
+    @model.can_annul? && user_activities.include?('proposal_j:reject')
   end
 
   def destroy_j?
-    user_activities.include?('proposal_j:delete')
+    @model.can_delete? && user_activities.include?('proposal_j:delete')
   end
  
   def work_j?
@@ -60,12 +84,36 @@ class ProposalPolicy < ApplicationPolicy
     update_p?
   end
 
+  def edit_to_approved_p?
+    update_to_approved_p?
+  end
+
+  def edit_to_rejected_p?
+    update_to_rejected_p?
+  end
+
+  def edit_to_annuled_p?
+    update_to_annuled_p?
+  end
+
   def update_p?
-    user_activities.include?('proposal_p:update')
+    @model.can_update? && user_activities.include?('proposal_p:update')
+  end
+
+  def update_to_approved_p?
+    @model.can_approve? && user_activities.include?('proposal_p:approve')
+  end
+
+  def update_to_rejected_p?
+    @model.can_reject? && user_activities.include?('proposal_p:reject')
+  end
+
+  def update_to_annuled_p?
+    @model.can_annul? && user_activities.include?('proposal_p:reject')
   end
 
   def destroy_p?
-    user_activities.include?('proposal_p:delete')
+    @model.can_delete? && user_activities.include?('proposal_p:delete')
   end
  
   def work_p?
@@ -94,12 +142,36 @@ class ProposalPolicy < ApplicationPolicy
     update_t?
   end
 
+  def edit_to_approved_t?
+    update_to_approved_t?
+  end
+
+  def edit_to_rejected_t?
+    update_to_rejected_t?
+  end
+
+  def edit_to_annuled_t?
+    update_to_annuled_t?
+  end
+
   def update_t?
-    user_activities.include?('proposal_t:update')
+    @model.can_update? && user_activities.include?('proposal_t:update')
+  end
+
+  def update_to_approved_t?
+    @model.can_approve? && user_activities.include?('proposal_t:approve')
+  end
+
+  def update_to_rejected_t?
+    @model.can_reject? && user_activities.include?('proposal_t:reject')
+  end
+
+  def update_to_annuled_t?
+    @model.can_annul? && user_activities.include?('proposal_t:reject')
   end
 
   def destroy_t?
-    user_activities.include?('proposal_t:delete')
+    @model.can_delete? && user_activities.include?('proposal_t:delete')
   end
  
   def work_t?

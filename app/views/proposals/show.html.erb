@@ -13,7 +13,7 @@
           <div class="tab-content clearfix">
 
             <div role="tabpanel" class="tab-pane active" id="proposal_show">
-              <%= render 'data', input_disabled: true, subtitle: proposal_info_legend(@proposal) %>
+              <%= render 'data', proposal: @proposal, subtitle: proposal_info_legend(@proposal) %>
             </div>
 
             <div role="tabpanel" class="tab-pane" id="works">

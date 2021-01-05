@@ -1,0 +1,24 @@
+<div class="row">
+
+  <div class="form-group col-sm-12">
+    <fieldset class="my-fieldset-short">
+      <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_scheduled_title') %></legend>
+
+      <div class="row">
+
+        <div class="form-group col-sm-3">
+          <p><strong><%= Proposal.human_attribute_name(:scheduled_start_date) %></strong></p>
+          <%= formated_date(proposal.scheduled_start_date) %>
+        </div>
+
+        <div class="form-group col-sm-3">
+          <p><strong><%= Proposal.human_attribute_name(:scheduled_end_date) %></strong></p>
+          <%= formated_date(proposal.scheduled_end_date) %>
+        </div>
+
+      </div> <!--/row -->
+
+    </fieldset>
+  </div>
+
+</div>  <!-- /row -->

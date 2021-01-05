@@ -10,15 +10,12 @@ class ProposalType < ActiveRecord::Base
                      PROPOSAL_TYPE_DELETION,
                      PROPOSAL_TYPE_CERTIFICATE ]
 
-  PROPOSAL_TYPES_VALID_PROPOSAL_NETWORK = [ PROPOSAL_TYPE_REGISTRATION,
-                                            PROPOSAL_TYPE_CHANGE ]
-
-  PROPOSAL_TYPES_VALID_PROPOSAL_SERVICE = [ PROPOSAL_TYPE_REGISTRATION,
-                                            PROPOSAL_TYPE_CHANGE ]
+  PROPOSAL_TYPES_PRESENCE_NETWORK_OR_SERVICE = [ PROPOSAL_TYPE_REGISTRATION,
+                                                 PROPOSAL_TYPE_CHANGE ]
 
   PROPOSAL_TYPES_ENABLED_REGISTER_ID = [ PROPOSAL_TYPE_CHANGE,
-                                                 PROPOSAL_TYPE_DELETION,
-                                                 PROPOSAL_TYPE_CERTIFICATE ]
+                                         PROPOSAL_TYPE_DELETION,
+                                         PROPOSAL_TYPE_CERTIFICATE ]
 
   # relations
   has_many :proposals, dependent: :nullify

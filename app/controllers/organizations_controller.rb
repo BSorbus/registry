@@ -38,11 +38,25 @@ class OrganizationsController < ApplicationController
   def select2_index
     authorize :organization, :index?
     params[:q] = params[:q]
-    @organizations = Organization.order(:name).finder_organization(params[:q])
+    @organizations = Organization.includes(:features, :addresses).references(:features, :addresses)
+      .order(:name).finder_organization(params[:q])
     @organizations_on_page = @organizations.page(params[:page]).per(params[:page_limit])
     
     render json: { 
-      organizations: @organizations_on_page.as_json(methods: :fullname, only: [:id, :fullname, :name, :nip, :jointly_identifiers]),
+      organizations: @organizations_on_page.as_json(methods: :fullname, only: [:id, :fullname, :name, :nip, :jointly_identifiers],
+          include: {
+            feature_identifiers: {only: [:id, :feature_value],
+              include: { 
+                feature_type: {only: [:id, :name]}
+              }
+            },
+            addresses: {except: [:address_type_id, :addressable_type, :addressable_id],
+              include: { 
+                address_type: {only: [:id, :name]}
+              }
+            }
+          }
+        ),
       meta: { total_count: @organizations.count }  
     } 
   end
@@ -51,6 +65,45 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1.json
   def show
     authorize @organization, :show?
+
+    respond_to do |format|
+      format.html { render :show }
+      format.json {
+        render json: JSON.parse(@organization.to_json(methods: :fullname, only: [:id, :fullname, :name, :nip, :jointly_identifiers],
+            include: {
+              feature_identifiers: {only: [:id, :feature_value],
+                include: { 
+                  feature_type: {only: [:id, :name]}
+                }
+              },
+              feature_address_exts: {only: [:id, :feature_value],
+                include: { 
+                  feature_type: {only: [:id, :name]}
+                }
+              },
+              addresses: {except: [:address_type_id, :addressable_type, :addressable_id],
+                include: { 
+                  address_type: {only: [:id, :name]}
+                }
+              },
+              representatives: {except: [:organization_id, :representative_type_id],
+                include: {
+                  features: {only: [:id, :feature_value],
+                    include: { 
+                      feature_type: {only: [:id, :name]}
+                    }
+                  },
+                  addresses: {except: [:address_type_id, :addressable_type, :addressable_id],
+                    include: { 
+                      address_type: {only: [:id, :name]}
+                    }
+                  }
+                }
+              }
+            }
+          ))
+      } 
+    end
   end
 
   # GET /organizations/new

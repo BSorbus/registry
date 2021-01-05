@@ -206,7 +206,9 @@ class Organization < ApplicationRecord
   def self.one_param_sql(one_query_word)
     #escaped_query_str = sanitize("%#{query_str}%")
     escaped_query_str = Loofah.fragment("'%#{one_query_word}%'").text
-    "(" + %w(organizations.name organizations.nip organizations.jointly_identifiers organizations.jointly_addresses organizations.jointly_addresses_ext).map { |column| "#{column} ilike #{escaped_query_str}" }.join(" OR ") + ")"
+    # "(" + %w(organizations.name organizations.nip organizations.jointly_identifiers organizations.jointly_addresses organizations.jointly_addresses_ext).map { |column| "#{column} ilike #{escaped_query_str}" }.join(" OR ") + ")"
+    "(" + ["organizations.name", "organizations.nip", "organizations.nip", "features.feature_value", "addresses.province_name", "addresses.city_name", "addresses.street_name"].map { |column| "#{column} ilike #{escaped_query_str}" }.join(" OR ") + ")"
+
   end
 
   private

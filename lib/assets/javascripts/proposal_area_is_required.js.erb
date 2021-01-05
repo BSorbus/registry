@@ -12,8 +12,8 @@ function proposalAreIsRequired(area_enabled, obj) {
     // ukryj przycisk
     var list = document.getElementsByClassName("proposal_area_enabled_disabled");
     for (var i = 0; i < list.length; i++) {
-      //$(list[i]).hide();
-      $(list[i]).slideUp('normal');
+      $(list[i]).hide();
+      //$(list[i]).slideUp('normal');
     };
 
   } else {
@@ -21,8 +21,8 @@ function proposalAreIsRequired(area_enabled, obj) {
     //alert('NIE');
     var list = document.getElementsByClassName("proposal_area_enabled_disabled");
     for (var i = 0; i < list.length; i++) {
-      //$(list[i]).show();
-      $(list[i]).slideDown('normal');
+      $(list[i]).show();
+      //$(list[i]).slideDown('normal');
     };
 
   }

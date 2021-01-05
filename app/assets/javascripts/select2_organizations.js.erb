@@ -1,25 +1,48 @@
 $(document).ready(function() {
 
   function organizationFormatResult(item, container, query, escapeMarkup) {
-    if (isEmpty(item.id)) {
-      return "";
+
+    var addresses = "";
+    item.data_obj.addresses.forEach (function(el, index) {
+      addresses = addresses + el.address_type.name + ": [ " + el.province_name + ", " + el.city_name + ", " + el.street_name + " " + el.address_house + " " + el.address_number + " ]<br>";
+    }); 
+    addresses = markMatch(addresses, query.term);
+
+    var identifiers = "";
+    item.data_obj.feature_identifiers.forEach (function(el, index) {
+      identifiers = identifiers + el.feature_type.name + ": " + el.feature_value;
+      if (index + 1 < item.data_obj.feature_identifiers.length) {
+        identifiers = identifiers + ", ";
+      }
+    }); 
+    identifiers = markMatch(identifiers, query.term);
+
+
+    if (item.id) {
+      var organizationFullname = markMatch(item.data_obj.fullname, query.term);
+      var organizationNip  = markMatch(item.data_obj.nip, query.term);
+      // var organizationIdentifiers = markMatch(item.data_obj.jointly_identifiers.replaceAll('</strong>:<br>',': ').replaceAll('<strong>',' ').replaceAll('<br>',', '), query.term );
+
+      return  organizationFullname          +  "<br>" + 
+              "NIP: " + organizationNip     +  "<div class='pull-right'>&nbsp[ " + identifiers + " ]</div><br>" +
+              addresses + "</div>";
+
     } else {
-      var identifiers = item.data_obj.jointly_identifiers.replaceAll('</strong>:<br>',': ').replaceAll('</strong>','').replaceAll('<strong>','').replaceAll('<br>',' ') 
-      return markMatch(item.data_obj.name, query.term) + '&nbsp&nbsp<span class="pull-right">[ NIP:&nbsp' + markMatch(item.data_obj.nip, query.term) + '&nbsp][&nbsp' + markMatch(identifiers, query.term) + '&nbsp]</span>';
+      return "";
     }
   };
 
   function organizationFormatSelection(item) {
-    if (isEmpty(item.id)) {
-      return '';
+    if (item.id) {
+      return  item.data_obj.fullname + '&nbsp&nbsp<span class="pull-right">[ NIP:&nbsp' + item.data_obj.nip + '&nbsp]</span>';
     } else {
-      return  item.data_obj.name + '&nbsp&nbsp<span class="pull-right">[ NIP:&nbsp' + item.data_obj.nip + '&nbsp]</span>';
+      return '';
     }
   };
 
 
   $('.select2organization').select2({
-    minimumInputLength: 1,
+    // minimumInputLength: 1,
     allowClear: false,
     ajax: {
       url: function() {

@@ -6,10 +6,24 @@
 
       <div class="row">
         <div class="form-group col-sm-4">
+          <p><strong><%= Proposal.human_attribute_name(:jst_date_of_adopting_the_resolution_date) %></strong></p>
+          <%= formated_date(proposal.jst_date_of_adopting_the_resolution_date) %>
+        </div>
+
+        <div class="form-group col-sm-4">
+          <p><strong><%= Proposal.human_attribute_name(:jst_resolution_number) %></strong></p>
+          <%= proposal.jst_resolution_number %>
+        </div>
+      </div>
+
+      <hr class="hr-without-margins">
+
+      <div class="row">
+        <div class="form-group col-sm-4">
           <p><strong><%= Proposal.human_attribute_name(:jst_providing_networks) %></strong></p>
         </div>
         <div class="form-group col-sm-4">
-          <%= t @proposal.jst_providing_networks %>
+          <%= t proposal.jst_providing_networks %>
         </div>
       </div> <!--/row -->
 
@@ -18,7 +32,7 @@
           <p><strong><%= Proposal.human_attribute_name(:jst_provision_telecom_services) %></strong></p>
         </div>
         <div class="form-group col-sm-4">
-          <%= t @proposal.jst_provision_telecom_services %>
+          <%= t proposal.jst_provision_telecom_services %>
         </div>
       </div> <!--/row -->
 
@@ -27,7 +41,7 @@
           <p><strong><%= Proposal.human_attribute_name(:jst_provision_related_services) %></strong></p>
         </div>
         <div class="form-group col-sm-4">
-          <%= t @proposal.jst_provision_related_services %>
+          <%= t proposal.jst_provision_related_services %>
         </div>
       </div> <!--/row -->
 
@@ -36,7 +50,7 @@
           <p><strong><%= Proposal.human_attribute_name(:jst_other_telecom_activities) %></strong></p>
         </div>
         <div class="form-group col-sm-4">
-          <%= t @proposal.jst_other_telecom_activities  %>
+          <%= t proposal.jst_other_telecom_activities  %>
         </div>
       </div> <!--/row -->
 

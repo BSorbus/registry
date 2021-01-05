@@ -2,7 +2,7 @@ class ProposalService < ApplicationRecord
  
   # relations
   belongs_to :proposal
-  belongs_to :service_type, class_name: "FeatureType", inverse_of: :proposal_service_type_service
+  belongs_to :service_type, class_name: "FeatureType", inverse_of: :proposal_service_type_services
 
   has_paper_trail versions: {
     class_name: 'ProposalServiceVersion'

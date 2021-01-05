@@ -38,7 +38,9 @@ module ProposalsHelper
     unless ['j', 'p', 't'].include?(service_type)
        raise "Ruby injection register type"
     end
-    unless ['index_in_role', 'index', 'show', 'new', 'create', 'edit', 'update', 'destroy', 'print', 'work'].include?(action)
+    unless ['index_in_role', 'index', 'show', 'new', 'create', 'edit', 'update', 'destroy', 'print', 'work',
+            'edit_to_approved', 'edit_to_rejected', 'edit_to_annuled', 
+            'update_to_approved', 'update_to_rejected', 'update_to_annuled'].include?(action)
        raise "Ruby injection action type"
     end
     return policy(proposal).send("#{action}_#{service_type}?")

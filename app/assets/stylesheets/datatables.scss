@@ -151,10 +151,6 @@ table.dataTable tfoot th {
   background-color: #FF8C8C !important; 
 }
 
-.datatable-cell-proposal-status-closed {
-  background-color: #FFC04D !important; /*#FFFFE0*/
-}
-
 .datatable-cell-proposal-status-annuled {
   background-color: #FFC04D !important; /*#FFFFE0*/
 }
@@ -169,7 +165,7 @@ table.dataTable tfoot th {
 }
 
 .datatable-cell-register-status-pending_deletion {
-  background-color: #FFFACD !important; /*#FFFFE0*/
+  background-color: #eabbbd !important;
 }
 
 .datatable-cell-register-status-old_entry {

@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-sm-12">
+
+    <fieldset class="my-fieldset">
+      <legend class="my-fieldset"><%= t('.fieldset_title') %></legend>
+
+      <div class="row">
+        <div class="form-group col-sm-8">
+
+          <div class="row">
+            <div class="form-group required col-sm-4">
+              <%= f.label :insertion_date, class: 'control-label' %>
+              <%= f.text_field :insertion_date, class: 'form-control input-sm datepicker', 
+                                disabled: false %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group required col-sm-12">         
+    <!--      <%#= f.label :proposal_type_id, class: 'control-label' %><br>  -->
+              <%= f.collection_radio_buttons :proposal_type_id, ProposalType.all, :id, :name, { checked: f.object.proposal_type_id } do |b| %>
+                <%= b.radio_button %>
+                <%= b.label %>
+                <br>
+              <% end %>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-group col-sm-4">
+          <div class="row">
+            <div class="col-sm-12">
+              <blockquote>
+                <p>Wybierz właściwy rodzaj wniosku.</p>
+                <p>Pamiętaj, że niektóre rodzaje wniosków wymagają istniejącego wpisu we właściwym rejestrze.</p>
+              </blockquote>
+            </div> <!-- /.col-sm-5 -->
+          </div> <!--/row -->
+        </div>
+
+      </div> <!--/row -->
+    </fieldset>
+
+  </div> <!--/col-sm-12 -->
+</div> <!--/row -->

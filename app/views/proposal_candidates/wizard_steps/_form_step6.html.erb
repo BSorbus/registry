@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-sm-12">
+
+    <%= render "/proposals/data_1_basic", proposal: @proposal_candidate %>
+    <%= render "/proposals/data_2_#{@proposal_candidate.service_type}", proposal: @proposal_candidate %>
+    <%= render "/proposals/data_3_areas", proposal: @proposal_candidate if ['j','t'].include?(@proposal_candidate.service_type) %>
+    <%= render "/proposals/data_4_attachments", proposal: @proposal_candidate %>
+    <!-- input forms: -->
+    <%= render "/proposals/form_5_schedules", 
+        f: f, 
+        proposal: @proposal_candidate, 
+        start_date_read_only: [ProposalType::PROPOSAL_TYPE_DELETION, ProposalType::PROPOSAL_TYPE_CERTIFICATE].include?(@proposal_candidate.proposal_type_id),
+        end_date_read_only: [ProposalType::PROPOSAL_TYPE_CERTIFICATE].include?(@proposal_candidate.proposal_type_id) %>
+
+    <%= render "/proposals/form_6_note", f: f, proposal: @proposal_candidate  %>
+
+
+    <div class="row">
+      <div class="form-group col-sm-12">
+        <div class="pull-right">
+        <%#= f.check_box :confirm_that_the_data_is_correct, onclick: "status_all_is_ok(this.checked)" %>&nbsp;&nbsp;
+        <%#= f.label :confirm_that_the_data_is_correct, class: 'control-label' %>
+        </div>
+      </div>
+    </div> <!--/row -->
+    <hr>
+
+  </div> <!--/col-sm-12 -->
+</div> <!--/row -->

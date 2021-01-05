@@ -1,4 +1,4 @@
-<div class="col-sm-2">
+<div class="col-sm-1">
   <%= link_to(formated_date(proposal.insertion_date), proposal_path(proposal.service_type, proposal)) %>
 </div>
 
@@ -6,10 +6,22 @@
   <%= proposal.proposal_type.name %>
 </div>
 
-<div class="col-sm-2">
+<div class="col-sm-1">
   <%= proposal.proposal_status.name %>
 </div>
 
-<div class="col-sm-6">
+<div class="col-sm-1">
+  <%= formated_date(proposal.approved_date) %>
+</div>
+
+<div class="col-sm-1">
+  <%= formated_date(proposal.rejected_date) %>
+</div>
+
+<div class="col-sm-1">
+  <%= formated_date(proposal.annuled_date) %>
+</div>
+
+<div class="col-sm-5">
   <%= last_updated_legend(proposal) %>
 </div>

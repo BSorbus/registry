@@ -56,11 +56,23 @@ Rails.application.routes.draw do
     end    
 
     scope ':service_type', constraints: { service_type: /[jpt]/ } do
+
+      resources :proposal_candidates do
+        resources :wizard, only: [:show, :update], controller: 'proposal_candidates/wizard_steps'
+      end    
+
       resources :proposals do
         post 'datatables_index', on: :collection
+        get 'edit_to_approved', on: :member
+        patch 'update_to_approved', on: :member
+        get 'edit_to_rejected', on: :member
+        patch 'update_to_rejected', on: :member
+        get 'edit_to_annuled', on: :member
+        patch 'update_to_annuled', on: :member
       end    
 
       resources :registers do
+        get 'select2_index', on: :collection
         post 'datatables_index', on: :collection
         get 'ajax_load_proposals', on: :member
       end    

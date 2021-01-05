@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-sm-6">
+
+    <div class="row">
+      <div class="form-group col-sm-12">
+        <% if proposal.status_comment.html_safe.size > 0 %>
+<!--           <p><strong><%#= Proposal.human_attribute_name(:status_comment) %></strong></p>  -->
+          <blockquote>
+            <%= proposal.status_comment.html_safe %>
+          </blockquote>
+        <% end %>
+      </div>
+    </div>  <!-- /row -->
+
+  </div>  <!-- /col-sm-6 -->
+
+</div>  <!-- /row -->

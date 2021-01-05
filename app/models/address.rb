@@ -22,7 +22,7 @@ class Address < ApplicationRecord
   validates :city_name, presence: true,
                     length: { in: 1..90 }
   validates :address_house, presence: true,
-                    length: { in: 1..10 }, if: -> { country_code == 'PL' }
+                    length: { in: 1..10 }
   validates :address_postal_code, presence: true,
                     length: { in: 1..15 }
 

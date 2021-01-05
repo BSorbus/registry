@@ -2,7 +2,7 @@ class ProposalNetwork < ApplicationRecord
  
   # relations
   belongs_to :proposal
-  belongs_to :network_type, class_name: "FeatureType", inverse_of: :proposal_network_type_network
+  belongs_to :network_type, class_name: "FeatureType", inverse_of: :proposal_network_type_networks
 
   has_paper_trail versions: {
     class_name: 'ProposalNetworkVersion'

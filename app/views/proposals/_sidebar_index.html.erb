@@ -9,9 +9,17 @@
 
       <ul class="nav nav-pills brand-pills nav-stacked" role="tablist">
 
+<!-- 
+        <%# if proposal_policy_check(:proposal, 'new', params[:service_type]) %>
+          <li role="presentation" class="brand-nav"><%#= link_to new_proposal_path(params[:service_type]), title: t('.new'), rel: 'tooltip' do %>
+              <span class="fa fa-plus"></span>
+            <%# end %>
+          </li>
+        <%# end %>
+
+ -->
         <% if proposal_policy_check(:proposal, 'new', params[:service_type]) %>
-        <%# if policy(:proposal).new? %>
-          <li role="presentation" class="brand-nav"><%= link_to new_proposal_path(params[:service_type]), title: t('.new'), rel: 'tooltip' do %>
+          <li role="presentation" class="brand-nav"><%= link_to proposal_candidates_path, method: :create, service_type: params[:service_type], title: t('.new'), rel: 'tooltip' do %>
               <span class="fa fa-plus"></span>
             <% end %>
           </li>
@@ -32,12 +40,21 @@
     <div class="col-sm-12">
 
       <ul class="nav nav-pills brand-pills nav-stacked">
-   
-        <% if proposal_policy_check(:proposal, 'new', params[:service_type]) %>
+<!--    
+        <%# if proposal_policy_check(:proposal, 'new', params[:service_type]) %>
         <%# if policy(:proposal).new? %>
-          <li role="presentation" class="brand-nav"><%= link_to new_proposal_path(params[:service_type]), title: t('.new'), rel: 'tooltip' do %>
+          <li role="presentation" class="brand-nav"><%#= link_to new_proposal_path(params[:service_type]), title: t('.new'), rel: 'tooltip' do %>
             <span class="fa fa-plus"></span>
-            <%= t('helpers.links.new') %>
+            <%#= t('helpers.links.new') %>
+            <%# end %>
+          </li>
+        <%# end %>
+ -->
+
+        <% if proposal_policy_check(:proposal, 'new', params[:service_type]) %>
+          <li role="presentation" class="brand-nav"><%= link_to proposal_candidates_path, method: :create, service_type: params[:service_type], title: t('.new'), rel: 'tooltip' do %>
+              <span class="fa fa-plus"></span>
+              <%= t('helpers.links.new') %>
             <% end %>
           </li>
         <% end %>

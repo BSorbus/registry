@@ -29,15 +29,6 @@ class CreateRoleService
       role.save!
     end
   end
-  def user_writer(creator_id=nil)
-    role = Role.find_or_create_by!(name: "Kreator Użytkowników") do |role|
-      role.activities += %w(user:index user:show user:create)
-      role.note = "<div>Rola służy do tworzenia kont Użytkowników, którym udostępnione mają być Składnice.<br>(Przypisz tylko zaawansowanym użytkownikom systemu, którzy mają tworzyć konta użytkowników z dostępem do Składnic)</div>"
-      role.author_id = creator_id
-      role.save!
-    end
-  end
-
   def user_observer(creator_id=nil)
     role = Role.find_or_create_by!(name: "Obserwator Użytkowników") do |role|
       role.activities += %w(user:index user:show)
@@ -50,7 +41,7 @@ class CreateRoleService
   # organizations
   def organization_admin(creator_id=nil)
     role = Role.find_or_create_by!(name: "Administrator Organizacji") do |role|
-      role.activities += %w(organization:index organization:show organization:create organization:update organization:delete organization:work organization:add_remove_organization_user)
+      role.activities += %w(organization:index organization:show organization:create organization:update organization:delete organization:work)
       role.note = "<div>Rola służy do zarządzania wszystkimi Organizacjami.<br>(Przypisz tylko zaawansowanym Administratorom systemu)</div>"
       role.author_id = creator_id
       role.save!
@@ -68,7 +59,7 @@ class CreateRoleService
   # proposals
   def proposal_j_admin(creator_id=nil)
     role = Role.find_or_create_by!(name: "Administrator Wniosków JST") do |role|
-      role.activities += %w(proposal_j:index proposal_j:show proposal_j:create proposal_j:update proposal_j:delete proposal_j:work)
+      role.activities += %w(proposal_j:index proposal_j:show proposal_j:create proposal_j:update proposal_j:delete proposal_j:work proposal_j:approve proposal_j:reject proposal_j:annul)
       role.note = "<div>Rola służy do zarządzania wszystkimi Wnioskami JST.<br>(Przypisz tylko zaawansowanym Administratorom systemu)</div>"
       role.author_id = creator_id
       role.save!
@@ -82,10 +73,18 @@ class CreateRoleService
       role.save!
     end
   end
+  def proposal_j_referent(creator_id=nil)
+    role = Role.find_or_create_by!(name: "Referent Wniosków JST") do |role|
+      role.activities += %w(proposal_j:index proposal_j:show proposal_j:create proposal_j:work proposal_j:approve proposal_j:reject)
+      role.note = "<div>Rola służy do rejestrowania i akceptowania Wniosków JST.</div>"
+      role.author_id = creator_id
+      role.save!
+    end
+  end 
 
   def proposal_p_admin(creator_id=nil)
     role = Role.find_or_create_by!(name: "Administrator Wniosków PP") do |role|
-      role.activities += %w(proposal_p:index proposal_p:show proposal_p:create proposal_p:update proposal_p:delete proposal_p:work)
+      role.activities += %w(proposal_p:index proposal_p:show proposal_p:create proposal_p:update proposal_p:delete proposal_p:work proposal_p:approve proposal_p:reject proposal_p:annul)
       role.note = "<div>Rola służy do zarządzania wszystkimi Wnioskami PP.<br>(Przypisz tylko zaawansowanym Administratorom systemu)</div>"
       role.author_id = creator_id
       role.save!
@@ -99,10 +98,19 @@ class CreateRoleService
       role.save!
     end
   end
+  def proposal_p_referent(creator_id=nil)
+    role = Role.find_or_create_by!(name: "Referent Wniosków PP") do |role|
+      role.activities += %w(proposal_p:index proposal_p:show proposal_p:create proposal_p:work proposal_p:approve proposal_p:reject)
+      role.note = "<div>Rola służy do rejestrowania i akceptowania Wniosków PP.</div>"
+      role.author_id = creator_id
+      role.save!
+    end
+  end 
+
 
   def proposal_t_admin(creator_id=nil)
     role = Role.find_or_create_by!(name: "Administrator Wniosków PT") do |role|
-      role.activities += %w(proposal_t:index proposal_t:show proposal_t:create proposal_t:update proposal_t:delete proposal_t:work)
+      role.activities += %w(proposal_t:index proposal_t:show proposal_t:create proposal_t:update proposal_t:delete proposal_t:work  proposal_t:approve proposal_t:reject proposal_t:annul)
       role.note = "<div>Rola służy do zarządzania wszystkimi Wnioskami PT.<br>(Przypisz tylko zaawansowanym Administratorom systemu)</div>"
       role.author_id = creator_id
       role.save!
@@ -116,6 +124,14 @@ class CreateRoleService
       role.save!
     end
   end
+  def proposal_t_referent(creator_id=nil)
+    role = Role.find_or_create_by!(name: "Referent Wniosków PT") do |role|
+      role.activities += %w(proposal_t:index proposal_t:show proposal_t:create proposal_t:work  proposal_t:approve proposal_t:reject)
+      role.note = "<div>Rola służy do rejestrowania i akceptowania Wniosków PT.</div>"
+      role.author_id = creator_id
+      role.save!
+    end
+  end 
 
 
   # registers

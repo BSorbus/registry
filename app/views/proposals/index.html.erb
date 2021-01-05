@@ -26,10 +26,10 @@
                 <th><%= Proposal.human_attribute_name(:proposal_status) %></th>
                 <th><%= Proposal.human_attribute_name(:register) %></th>
                 <th><%= Proposal.human_attribute_name(:organization) %></th>
-                <th><%= Register.human_attribute_name(:organization_nip) %></th>
+                <th><%= Proposal.human_attribute_name(:organization_nip) %></th>
                 <th><%= Proposal.human_attribute_name(:organization_jointly_identifiers) %></th>
                 <th><%= Proposal.human_attribute_name(:organization_jointly_addresses) %></th>
-                <th><%= Proposal.human_attribute_name(:note) %></th>
+                <th><%= Proposal.human_attribute_name(:approved_date) %></th>
 <!--            <th><%#= Proposal.human_attribute_name(:author) %></th> -->
               </tr>
             </thead>
@@ -74,7 +74,7 @@
                   <%= text_field_tag :col8filter, params[:col8filter], id: 'col8filter', 'data-column' => "8", 
                         class: 'column_filter form-control input-sm', style: "width: 85%;" %>
                 </th>
-                <th> <!-- note 9 -->
+                <th> <!-- approved_date 9 -->
                   <%= text_field_tag :col9filter, params[:col9filter], id: 'col9filter', 'data-column' => "9", 
                         class: 'column_filter form-control input-sm', style: "width: 85%;" %>
                 </th>

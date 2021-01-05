@@ -50,6 +50,21 @@ class Register < ApplicationRecord
   #   self.proposals.order(:insertion_date).flat_map {|row| "<div class='col-sm-4'>#{row.insertion_date.strftime("%Y-%m-%d")}</div>  <div class='col-sm-4'>#{row.proposal_type.name}</div> <div class='col-sm-4'>#{row.proposal_status.name}</div>" }.join('').html_safe
   # end
 
+  scope :finder_register, ->(q) { where( create_sql_string("#{q}") ) }
+
+  def self.create_sql_string(query_str)
+    query_str.split.map { |par| one_param_sql(par) }.join(" AND ")
+  end
+
+  def self.one_param_sql(one_query_word)
+    escaped_query_str = Loofah.fragment("'%#{one_query_word}%'").text
+    "(" + ["to_char(registers.register_no,'99999')", "to_char(proposals.approved_date::timestamptz,'YYYY-MM-DD TZ')", "organizations.name", "organizations.nip"].map { |column| "#{column} ilike #{escaped_query_str}" }.join(" OR ") + ")"
+  end
+
+
+
+
+
   def update_status_when_proposal_type_change(proposal)
     # always PROPOSAL_TYPE_CHANGE = 2
 
@@ -60,9 +75,6 @@ class Register < ApplicationRecord
       self.register_status_id = RegisterStatus::REGISTER_STATUS_CURRENT
       self.proposal_current_approved_id = proposal.id
     when ProposalStatus::PROPOSAL_STATUS_REJECTED
-      self.register_status_id = RegisterStatus::REGISTER_STATUS_CURRENT
-      # przywroc poprzedni self.proposal_current_approved_id
-    when ProposalStatus::PROPOSAL_STATUS_CLOSED
       self.register_status_id = RegisterStatus::REGISTER_STATUS_CURRENT
       # przywroc poprzedni self.proposal_current_approved_id
     when ProposalStatus::PROPOSAL_STATUS_ANNULLED
@@ -82,9 +94,6 @@ class Register < ApplicationRecord
       self.register_status_id = RegisterStatus::REGISTER_STATUS_OLD_ENTRY
       self.proposal_deletion_approved_id = proposal.id
     when ProposalStatus::PROPOSAL_STATUS_REJECTED
-      self.register_status_id = RegisterStatus::REGISTER_STATUS_CURRENT
-      self.proposal_deletion_approved_id = nil
-    when ProposalStatus::PROPOSAL_STATUS_CLOSED
       self.register_status_id = RegisterStatus::REGISTER_STATUS_CURRENT
       self.proposal_deletion_approved_id = nil
     when ProposalStatus::PROPOSAL_STATUS_ANNULLED

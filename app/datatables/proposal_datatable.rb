@@ -19,7 +19,7 @@ class ProposalDatatable < AjaxDatatablesRails::ActiveRecord
       nip:                  { source: "Organization.nip", cond: :like, searchable: true, orderable: true },
       jointly_identifiers:  { source: "Organization.jointly_identifiers", cond: :like, searchable: true, orderable: true },
       jointly_addresses:    { source: "Organization.jointly_addresses", cond: :like, searchable: true, orderable: true },
-      note:                 { source: "Proposal.note", cond: :like, searchable: true, orderable: true },
+      approved_date:        { source: "Proposal.approved_date", cond: :like, searchable: true, orderable: true }
       # author:             { source: "User.user_name",  cond: :like, searchable: true, orderable: true }
     }
   end
@@ -36,7 +36,7 @@ class ProposalDatatable < AjaxDatatablesRails::ActiveRecord
         nip:                  record.organization.nip, 
         jointly_identifiers:  record.organization.jointly_identifiers.html_safe, 
         jointly_addresses:    record.organization.jointly_addresses.html_safe, 
-        note:                 record.note_truncate,
+        approved_date:        record.approved_date.present? ? record.approved_date.strftime("%Y-%m-%d") : ''
         # author:         link_to( record.author.fullname, user_path(record.author_id) )
       }
     end

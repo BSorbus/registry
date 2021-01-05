@@ -5,118 +5,15 @@
 
       <div class="col-sm-12">
 
-        <%= form_errors_for @proposal %>
+        <%= form_errors_for proposal %>
 
-        <div class="row">
-          <div class="col-sm-7">
-
-            <div class="row">
-              <div class="form-group col-sm-3">
-                <p><strong><%= Proposal.human_attribute_name(:insertion_date) %></strong></p>
-                <%= formated_date(@proposal.insertion_date) %>
-              </div>
-
-              <div class="form-group col-sm-3">
-                <p><strong><%= Proposal.human_attribute_name(:proposal_type) %></strong></p>
-                <%= @proposal.proposal_type.name %>
-              </div>
-
-              <%if @proposal.register.present?  %>
-                <div class="form-group col-sm-3">
-                  <p><strong><%= Proposal.human_attribute_name(:register) %></strong></p>
-                  <%= link_to(@proposal.register.fullname, register_path(@proposal.service_type, @proposal.register)) %>
-                </div>
-              <% end %>
-
-              <div class="form-group col-sm-3">
-                <p><strong><%= Proposal.human_attribute_name(:proposal_status) %></strong></p>
-                <%= @proposal.proposal_status.name %>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="form-group col-sm-12">
-                <p><strong><%= Proposal.human_attribute_name(:organization) %></strong></p>
-                <%= link_to(@proposal.organization.fullname_with_nip, organization_path(@proposal.organization)) %>
-              </div>
-            </div>
-            
-          </div>  <!-- /col-sm-7 -->
-
-
-          <div class="col-sm-5">
-
-            <div class="row">
-              <div class="form-group col-sm-12">
-                <% if @proposal.note.html_safe.size > 0 %>
-                  <blockquote>
-                    <%= @proposal.note.html_safe %>
-                  </blockquote>
-                <% end %>
-              </div>
-            </div>  <!-- /row -->
-            
-          </div>  <!-- /col-sm-5 -->
-
-        </div>  <!-- /row -->
-
-
-        <%= render partial: "data_#{@proposal.service_type}" %>
-
-        <%= render partial: "data_areas" if ['j','t'].include?(@proposal.service_type) %>
-
-
-        <div class="row">
-
-          <div class="form-group col-sm-4">
-            <fieldset class="my-fieldset-short">
-              <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_scheduled_title') %></legend>
-
-              <div class="row">
-
-                <div class="form-group col-sm-6">
-                  <p><strong><%= Proposal.human_attribute_name(:scheduled_start_date) %></strong></p>
-                  <%= formated_date(@proposal.scheduled_start_date) %>
-                </div>
-
-                <div class="form-group col-sm-6">
-                  <p><strong><%= Proposal.human_attribute_name(:scheduled_end_date) %></strong></p>
-                  <%= formated_date(@proposal.scheduled_end_date) %>
-                </div>
-
-              </div> <!--/row -->
-
-            </fieldset>
-          </div>
-
-
-          <div class="form-group col-sm-8">
-            <fieldset class="my-fieldset-short">
-              <legend class="my-fieldset"><%= t('proposals.fieldset.proposal_attachments_title') %></legend>
-
-              <div class="row">
-                <div class="form-group col-sm-12">
-
-                  <!-- header for partial -->
-                  <div class="row" >
-                    <div class="form-group required col-sm-5">
-                      <strong><%= ProposalAttachment.human_attribute_name(:attachment_type) %></strong>
-                    </div>
-                    <div class="form-group required col-sm-6">
-                      <strong><%= ProposalAttachment.human_attribute_name(:attached_pdf_file) %></strong>
-                    </div>
-                  </div>
-
-                  <%= render partial: "proposal_attachments/proposal_attachment", collection: @proposal.proposal_attachments, as: :proposal_attachment %>
-                  <%#= render @proposal.proposal_attachments %>
-
-                </div>
-              </div> <!--/row -->
-
-            </fieldset>
-          </div>
-        </div>  <!-- /row -->
-
+        <%= render "data_1_basic", proposal: proposal %>
+        <%= render "data_2_#{proposal.service_type}", proposal: proposal %>
+        <%= render "data_3_areas", proposal: proposal if ['j','t'].include?(proposal.service_type) %>
+        <%= render "data_4_attachments", proposal: proposal %>
+        <%= render "data_5_schedules", proposal: proposal %>
+        <%= render "data_6_note", proposal: proposal %>
+        <%= render "data_7_status_comment", proposal: proposal %>
 
 
         <hr class="hr-with-minimum-margins">
@@ -125,24 +22,47 @@
           <div class="col-sm-12">
 
 
-            <% if proposal_policy_check(@proposal, 'destroy', @proposal.service_type) %>
-              <%= link_to proposal_path(@proposal.service_type, @proposal),
+            <% if proposal_policy_check(proposal, 'destroy', proposal.service_type) %>
+              <%= link_to proposal_path(proposal.service_type, proposal),
                                   method: :delete,
-                                  data: { confirm: t('helpers.links.confirm_destroy', data: @proposal.fullname) }, 
+                                  data: { confirm: t('helpers.links.confirm_destroy', data: proposal.fullname) }, 
                                   class: "btn btn-danger" do %>
                 <span class="fa fa-trash"></span>
                 <%= t("helpers.links.destroy") %>
               <% end %>
             <% end %>
 
-            <% if proposal_policy_check(@proposal, 'edit', @proposal.service_type) %>
-              <%= link_to edit_proposal_path(@proposal.service_type, @proposal), class: "btn btn-primary" do %>
+            <% if proposal_policy_check(proposal, 'edit', proposal.service_type) %>
+              <%= link_to edit_proposal_path(proposal.service_type, proposal), class: "btn btn-primary" do %>
                 <span class="fa fa-edit"></span>
                 <%= t("helpers.links.edit") %>
               <% end %>
             <% end %>
 
-            <h6 class="pull-right"><%= last_updated_legend(@proposal) %></h6>
+
+            <% if proposal_policy_check(proposal, 'edit_to_approved', proposal.service_type) %>
+              <%= link_to edit_to_approved_proposal_path(proposal.service_type, proposal), class: "btn btn-primary" do %>
+                <span class="fa fa-check-square"></span>
+                <%= t("helpers.links.proposal_to_approved") %>
+              <% end %>
+            <% end %>
+
+            <% if proposal_policy_check(proposal, 'edit_to_rejected', proposal.service_type) %>
+              <%= link_to edit_to_rejected_proposal_path(proposal.service_type, proposal), class: "btn btn-primary" do %>
+                <span class="fa fa-ban"></span>
+                <%= t("helpers.links.proposal_to_rejected") %>
+              <% end %>
+            <% end %>
+
+            <% if proposal_policy_check(proposal, 'edit_to_annuled', proposal.service_type) %>
+              <%= link_to edit_to_annuled_proposal_path(proposal.service_type, proposal), class: "btn btn-primary" do %>
+                <span class="fa fa-ban"></span>
+                <%= t("helpers.links.proposal_to_annuled") %>
+              <% end %>
+            <% end %>
+
+
+            <h6 class="pull-right"><%= last_updated_legend(proposal) %></h6>
 
           </div> <!--/col-sm-12 -->
         </div> <!-- /row -->
