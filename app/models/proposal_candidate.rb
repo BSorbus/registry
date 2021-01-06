@@ -88,6 +88,11 @@ class ProposalCandidate < ApplicationRecord
   validates :scheduled_end_date, presence: true, 
     if: -> { required_for_step?(:step6) && (proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION) }
 
+  validates :scheduled_end_date, presence: {
+    message: ->(object, data) do
+      I18n.t("activerecord.errors.messages.proposal_end_date_presence_if_organization_not_pl", organization: "#{object.organization.fullname_with_nip}" )
+    end }, if: -> { required_for_step?(:step6) && (service_type == 't') && (organization.addresses.reject{ |x| not FeatureType.only_address_type_office.ids.include?(x.address_type_id) }.reject{ |x| x.country_code == 'PL' }.any?) }
+
 
 
   def required_for_step?(step)
@@ -98,15 +103,16 @@ class ProposalCandidate < ApplicationRecord
   def candidate_can_as_registration
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_REGISTRATION 
     #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
+
     # if self.organization.proposals.where.not(id: self.proposal_id).where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).reject(self.proposal).any?
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).reject{ |x| self.proposal_id == x.id }.any?
-      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}" ) )
+      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}", organization: "#{self.organization.fullname_with_nip}" ) )
     else
       registers = self.organization.registers.where(service_type: self.service_type)
       unless registers.empty?
         register = registers.order(:created_at).last unless registers.empty?
         if register.register_status_id == RegisterStatus::REGISTER_STATUS_CURRENT
-          errors.add(:base, I18n.t("activerecord.errors.messages.register_current_exists"))
+          errors.add(:base, I18n.t("activerecord.errors.messages.register_current_exists", register_no: "#{register.fullname}" , organization: "#{register.organization.fullname_with_nip}"))
         end
       end
     end
@@ -115,8 +121,9 @@ class ProposalCandidate < ApplicationRecord
   def candidate_can_as_change
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_CHANGE 
     #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
-    if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
-      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}"))
+
+    if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).reject{ |x| self.proposal_id == x.id }.any?
+      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}", organization: "#{self.organization.fullname_with_nip}" ) )
     else
       if register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_DELETION, 
           proposal_status_id: [ProposalStatus::PROPOSAL_STATUS_CREATED, ProposalStatus::PROPOSAL_STATUS_APPROVED]).any?
@@ -133,8 +140,9 @@ class ProposalCandidate < ApplicationRecord
   def candidate_can_as_deletion
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION 
     #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
-    if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
-      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}" ) )
+
+    if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).reject{ |x| self.proposal_id == x.id }.any?
+      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}", organization: "#{self.organization.fullname_with_nip}" ) )
     else
       if register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_DELETION, 
           proposal_status_id: [ProposalStatus::PROPOSAL_STATUS_CREATED, ProposalStatus::PROPOSAL_STATUS_APPROVED]).any?
@@ -167,22 +175,24 @@ class ProposalCandidate < ApplicationRecord
     ActiveRecord::Base.transaction do
         self.assign_attributes(last_step_params)
         if self.valid?
-
-
           proposal_hash = self.serializable_hash_with_nested
-          proposal_hash = proposal_hash.deep_transform_keys{ |k| k.to_s == 'proposal_networks' ? 'proposal_networks_attributes' : k }
-          proposal_hash = proposal_hash.deep_transform_keys{ |k| k.to_s == 'proposal_services' ? 'proposal_services_attributes' : k }
-          proposal_hash = proposal_hash.deep_transform_keys{ |k| k.to_s == 'proposal_areas' ? 'proposal_areas_attributes' : k }
+          destination_proposal = Proposal.new( proposal_hash )
+          self.proposal = destination_proposal
+          add_errors(destination_proposal) unless destination_proposal.valid?
+          destination_proposal.save!
 
-      Rails.logger.error('================================================================================')
-      puts proposal_hash
-      Rails.logger.error('================================================================================')
-
-
-          proposal = Proposal.new( proposal_hash )
-          self.proposal = proposal
-          add_errors(proposal) unless proposal.valid?
-          proposal.save!
+          if destination_proposal.persisted?
+            self.proposal_attachments.each do |row|
+              destination_proposal.proposal_attachments.new( { attachment_type_id: row.attachment_type_id } ).tap do |destination_row|
+                destination_row.attached_pdf_file.attach(
+                  io: StringIO.new(row.attached_pdf_file.download),
+                  filename: row.attached_pdf_file.filename.to_s,
+                  content_type: row.attached_pdf_file.content_type
+                )
+                destination_row.save!
+              end
+            end
+          end
         end
         self.save!
         true
@@ -200,15 +210,13 @@ class ProposalCandidate < ApplicationRecord
   def serializable_hash_with_nested
     case self.service_type
     when 'j'
-      # serializable_hash(  except: [ :id, :updated_at ],
-      #                     include: {
-      #                       proposal_attachments: {}
-      #                     }
-      #                   )
-      serializable_hash(except: [ :id, :updated_at, :wizard_saved_step, :proposal_id ]
-                        )
+      areas_hash    = serializable_hash(only: [], include: {proposal_areas: { except: [:id, :proposal_candidate_id, :created_at, :updated_at] } })
+
+      candidate_hash = serializable_hash(except: [ :id, :created_at, :updated_at, :wizard_saved_step, :proposal_id ]) 
+      result_hash = candidate_hash.merge(areas_hash)
+      return result_hash.deep_transform_keys{ |k| k.to_s == 'proposal_areas' ? 'proposal_areas_attributes' : k }
     when 'p'
-      serializable_hash(  except: [ :id, :updated_at, :wizard_saved_step, :proposal_id ],
+      serializable_hash(  except: [  :id, :created_at, :updated_at, :wizard_saved_step, :proposal_id  ],
                           include: {
                             proposal_attachments: {}
                           }
@@ -219,21 +227,11 @@ class ProposalCandidate < ApplicationRecord
       areas_hash    = serializable_hash(only: [], include: {proposal_areas: { except: [:id, :proposal_candidate_id, :created_at, :updated_at] } })
 
       candidate_hash = serializable_hash(except: [ :id, :created_at, :updated_at, :wizard_saved_step, :proposal_id ]) 
-      # serializable_hash(  except: [ :id, :updated_at, :wizard_saved_step, :proposal_id,
-      #                               :jst_providing_networks, 
-      #                               :jst_provision_telecom_services,
-      #                               :jst_provision_related_services,
-      #                               :jst_other_telecom_activities,
-      #                               :jst_date_of_adopting_the_resolution_date,
-      #                               :jst_resolution_number ],
-      #                     include: {
-      #                       proposal_networks: { except: [:id, :proposal_candidate_id] }, 
-      #                       proposal_services: { except: [:id, :proposal_candidate_id] }, 
-      #                       proposal_areas: { except: [:id, :proposal_candidate_id] } #,                             proposal_attachments: { except: [:id] }
-      #                     }
-      #                   )
+      result_hash = candidate_hash.merge(networks_hash).merge(services_hash).merge(areas_hash)
 
-      candidate_hash.merge(networks_hash).merge(services_hash).merge(areas_hash)
+      result_hash = result_hash.deep_transform_keys{ |k| k.to_s == 'proposal_networks' ? 'proposal_networks_attributes' : k }
+      result_hash = result_hash.deep_transform_keys{ |k| k.to_s == 'proposal_services' ? 'proposal_services_attributes' : k }
+             return result_hash.deep_transform_keys{ |k| k.to_s == 'proposal_areas' ? 'proposal_areas_attributes' : k }
     end
   end
 

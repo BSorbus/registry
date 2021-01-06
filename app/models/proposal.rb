@@ -44,6 +44,10 @@ class Proposal < ApplicationRecord
 
   validates :scheduled_start_date, presence: true
   validates :scheduled_end_date, presence: true, if: -> { (proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION) }
+  validates :scheduled_end_date, presence: {
+    message: ->(object, data) do
+      I18n.t("activerecord.errors.messages.proposal_end_date_presence_if_organization_not_pl", organization: "#{object.organization.fullname_with_nip}" )
+    end }, if: -> { (service_type == 't') && (organization.addresses.reject{ |x| not FeatureType.only_address_type_office.ids.include?(x.address_type_id) }.reject{ |x| x.country_code == 'PL' }.any?) }
 
   validate :approved_date_after_insertion_date
   validates :approved_date, presence: true, if: -> { (proposal_status_id == ProposalStatus::PROPOSAL_STATUS_APPROVED) }
@@ -105,13 +109,13 @@ class Proposal < ApplicationRecord
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_REGISTRATION 
     #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
-      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}" ) )
+      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}", organization: "#{self.organization.fullname_with_nip}" ) )
     else
       registers = self.organization.registers.where(service_type: self.service_type)
       unless registers.empty?
         register = registers.order(:created_at).last unless registers.empty?
         if register.register_status_id == RegisterStatus::REGISTER_STATUS_CURRENT
-          errors.add(:base, I18n.t("activerecord.errors.messages.register_current_exists"))
+          errors.add(:base, I18n.t("activerecord.errors.messages.register_current_exists", register_no: "#{register.fullname}" , organization: "#{register.organization.fullname_with_nip}"))
         end
       end
     end
@@ -121,7 +125,7 @@ class Proposal < ApplicationRecord
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_CHANGE 
     #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
-      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}"))
+      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}", organization: "#{self.organization.fullname_with_nip}" ) )
     else
       if register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_DELETION, 
           proposal_status_id: [ProposalStatus::PROPOSAL_STATUS_CREATED, ProposalStatus::PROPOSAL_STATUS_APPROVED]).any?
@@ -139,7 +143,7 @@ class Proposal < ApplicationRecord
     # always if proposal_type_id == ProposalType::PROPOSAL_TYPE_DELETION 
     #        && proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
-      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}" ) )
+      errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}", organization: "#{self.organization.fullname_with_nip}" ) )
     else
       if register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_DELETION, 
           proposal_status_id: [ProposalStatus::PROPOSAL_STATUS_CREATED, ProposalStatus::PROPOSAL_STATUS_APPROVED]).any?

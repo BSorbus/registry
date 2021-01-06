@@ -504,12 +504,13 @@ pl:
         account_on: 'Wystąpił błąd w czasie włączania konta "%{data}".'
         required: 'nie może być puste'
         user_taken: '"%{user_name}" jest już przypisany.'
-        proposal_status_created_exists: 'Istnieje już wpis o statusie "%{status}".'
+        proposal_status_created_exists: 'Istnieje już Wniosek o statusie "%{status}" dla "%{organization}".'
         proposal_deletion_created_or_approved_exists: 'Istnieje wpis "wykreślenie z rejestru" o statusie "nowy" lub "zaakceptowany".'
         proposal_registration_approved_not_exists: 'Nie ma jeszcze "wpis do rejestru" o statusie "zaakceptowany".'
         proposal_status_taken: '"%{proposal_status_name}" dla "%{proposal_type_name}" - zostało już wprowadzone lub status innych wpisów to blokuje.'
+        proposal_end_date_presence_if_organization_not_pl: 'Musisz podać datę zakończenia działalności ponieważ "%{organization}" ma adres siedziby poza terytorium Polski'
         register_status_taken: '"%{register_status_name}" - zostało już zajęte lub status innych wpisów to blokuje.'
-        register_current_exists: 'Istnieje wpis do rejestru o statusie "aktualny"'
+        register_current_exists: 'Istnieje wpis do Rejestru (%{register_no}) o statusie "aktualny" dla "%{organization}".'
         feature_type_taken: '"%{feature_type_name}" jest już przypisany.'
     successfull:
       messages:
