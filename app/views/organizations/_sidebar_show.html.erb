@@ -32,6 +32,12 @@
           </li>
         <% end %>
 
+        <% if policy(@organization).version? %>
+          <li role="presentation" class="brand-nav" title="<%= t('versions.index.title') %>" rel='tooltip'>
+            <a href="#versions" aria-controls="works" role="tab" data-toggle="tab"><%= version_icon_legend %></a>
+          </li>
+        <% end %>
+
         <%# if policy(:organization).index? %>
           <hr>
           <li role="presentation" class="brand-nav"><%= link_to organizations_path, title: t('.index'), rel: 'tooltip' do %>
@@ -77,6 +83,12 @@
         <% if policy(@organization).work? %>
           <li role="presentation" class="brand-nav brand-nav-level-1" title="<%= t('works.index.title') %>" rel='tooltip'>
             <a href="#works" aria-controls="works" role="tab" data-toggle="tab"><%= work_index_legend %></a>
+          </li>
+        <% end %>  
+
+        <% if policy(@organization).version? %>
+          <li role="presentation" class="brand-nav brand-nav-level-1" title="<%= t('versions.index.title') %>" rel='tooltip'>
+            <a href="#versions" aria-controls="works" role="tab" data-toggle="tab"><%= version_index_legend %></a>
           </li>
         <% end %>  
 

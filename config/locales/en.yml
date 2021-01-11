@@ -27,7 +27,6 @@ en:
   data: 'Data'
   table_action: 'Action'
   table_role_granted: 'Granted?'
-  table_group_member: 'Is a member?'
   last_updated: 'Last updated'
   sidebar: 'Side menu'
   file_upload:
@@ -70,7 +69,6 @@ en:
       work: 'Operation log'
       user: 'User'
       role: 'Role'
-      group: 'Group'
       organization: 'Organization'
       organization_feature: 'Attributes'
       component: 'Attachment'
@@ -192,7 +190,6 @@ en:
         account_off: 'Wystąpił błąd w czasie wyłączania konta "%{data}".'
         account_on: 'Wystąpił błąd w czasie włączania konta "%{data}".'
         required: 'nie może być puste'
-        group_taken: 'The "%{group_name}" group with "%{archivization_type}" rights is alredy assigned.'
         user_taken: '"%{user_name}" is alredy assigned.'
         feature_type_taken: '"%{feature_type_name}" is alredy assigned.'
     successfull:

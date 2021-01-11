@@ -12,6 +12,11 @@ class Role < ApplicationRecord
   belongs_to :author, class_name: "User"
   has_many :works, as: :trackable
 
+  has_paper_trail versions: {
+    # class_name: 'RoleVersion'
+    # scope: -> { order("id desc") }
+  } #, meta: {author_id: :author_id}
+
   # validates
   validates :name, presence: true,
                     length: { in: 1..100 },

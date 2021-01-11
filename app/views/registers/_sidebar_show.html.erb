@@ -27,10 +27,15 @@
           </li>
         <%# end %>
 
-
         <% if register_policy_check(@register, 'work', params[:service_type]) %>
           <li role="presentation" class="brand-nav" title="<%= t('works.index.title') %>" rel='tooltip'>
             <a href="#works" aria-controls="works" role="tab" data-toggle="tab"><%= work_icon_legend %></a>
+          </li>
+        <% end %>
+
+        <% if register_policy_check(@register, 'version', params[:service_type]) %>
+          <li role="presentation" class="brand-nav" title="<%= t('versions.index.title') %>" rel='tooltip'>
+            <a href="#versions" aria-controls="versions" role="tab" data-toggle="tab"><%= version_icon_legend %></a>
           </li>
         <% end %>
 
@@ -78,6 +83,12 @@
         <% if register_policy_check(@register, 'work', params[:service_type]) %>
           <li role="presentation" class="brand-nav brand-nav-level-1" title="<%= t('works.index.title') %>" rel='tooltip'>
             <a href="#works" aria-controls="works" role="tab" data-toggle="tab"><%= work_index_legend %></a>
+          </li>
+        <% end %>  
+
+        <% if register_policy_check(@register, 'version', params[:service_type]) %>
+          <li role="presentation" class="brand-nav brand-nav-level-1" title="<%= t('versions.index.title') %>" rel='tooltip'>
+            <a href="#versions" aria-controls="versions" role="tab" data-toggle="tab"><%= version_index_legend %></a>
           </li>
         <% end %>  
 

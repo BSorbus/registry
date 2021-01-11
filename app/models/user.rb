@@ -18,8 +18,12 @@ class User < ApplicationRecord
   belongs_to :author, class_name: "User", optional: true
   has_many :works, as: :trackable
 
-  has_one :cbo_user
-  belongs_to :context_organization, class_name: "Organization", foreign_key: :context_organization_id, inverse_of: :context_users, optional: true
+
+  has_paper_trail
+  # has_paper_trail versions: {
+  #   # class_name: 'UserVersion'
+  #   # scope: -> { order("id desc") }
+  # } #, meta: {author_id: :author_id}
 
 
   # validates
@@ -36,6 +40,7 @@ class User < ApplicationRecord
   # callbacks
   before_validation :set_initial_data_corrected, on: :create
   after_commit :set_default_data, on: :create
+
 
   def set_default_data
     # if self.id != 1 # Jestśli to nie jest Administrator

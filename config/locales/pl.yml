@@ -240,6 +240,9 @@ pl:
       title: 'Nowy Użytkownik'
     edit:
       title: 'Edycja -> Użytkownik'
+  versions:
+    index:
+      title: 'Dziennik wersji'
   works:
     index:
       title: 'Dziennik operacji'
@@ -443,6 +446,14 @@ pl:
         last_sign_in_ip: 'Ostatnio zalogowany - IP'
         note: 'Adnotacje i uwagi'
         fullname: 'Nazwa'
+      version:
+        transaction_id: 'Tr.'
+        created_at: 'Data'
+        created_by: 'Autor'
+        event: 'Akcja'
+        trackable_type: 'Obiekt'
+        trackable_id: 'Identyfikator'
+        parameters: 'Dane'
       work:
         created_at: 'Data'
         created_by: 'Autor'

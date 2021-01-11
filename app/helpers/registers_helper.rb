@@ -38,7 +38,7 @@ module RegistersHelper
     unless ['j', 'p', 't'].include?(service_type)
        raise "Ruby injection register type"
     end
-    unless ['index_in_role', 'index', 'show', 'new', 'create', 'edit', 'update', 'destroy', 'print', 'work'].include?(action)
+    unless ['index_in_role', 'index', 'show', 'new', 'create', 'edit', 'update', 'destroy', 'print', 'work', 'version'].include?(action)
        raise "Ruby injection action type"
     end
     return policy(register).send("#{action}_#{service_type}?")

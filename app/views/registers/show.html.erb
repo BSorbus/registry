@@ -28,6 +28,10 @@
               <%= render 'works/works_tab', trackable_type: "Register", trackable_id: @register.id, subtitle: register_info_legend(@register) %>
             </div>
 
+            <div role="tabpanel" class="tab-pane" id="versions">
+              <%= render 'versions/versions_tab', trackable_type: "Register", trackable_id: @register.id, subtitle: register_info_legend(@register) %>
+            </div>
+
           </div>
         </div>
 

@@ -24,6 +24,10 @@
               <%= render 'works/works_tab', trackable_type: "Role", trackable_id: @role.id, subtitle: role_info_legend(@role) %>
             </div>
 
+            <div role="tabpanel" class="tab-pane" id="versions">
+              <%= render 'versions/versions_tab', trackable_type: "Role", trackable_id: @role.id, subtitle: role_info_legend(@role) %>
+            </div>
+
           </div>
         </div>
 

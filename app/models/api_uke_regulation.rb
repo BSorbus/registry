@@ -1,6 +1,6 @@
 require 'net/http'
 
-class UkeRegulation
+class ApiUkeRegulation
 	include ActiveModel::Model
 
   HTTP_ERRORS = [
@@ -40,18 +40,18 @@ class UkeRegulation
     end
 
   rescue *HTTP_ERRORS => e
-    Rails.logger.error('======== API ERROR "models/uke_regulation .check_acceptance"(1) =============')
+    Rails.logger.error('======== API ERROR "models/api_uke_regulation .check_acceptance"(1) =========')
     Rails.logger.error("#{e}")
     Rails.logger.error('=============================================================================')
-    errors.add(:base, "API ERROR 'models/uke_regulation .check_acceptance(1) #{Time.zone.now}")
+    errors.add(:base, "API ERROR 'models/api_uke_regulation .check_acceptance(1) #{Time.zone.now}")
     errors.add(:base, "#{e}")
     false    # non-success response
     #"#{e}"
   rescue StandardError => e
-    Rails.logger.error('======== API ERROR "models/uke_regulation .check_acceptance"(2) =============')
+    Rails.logger.error('======== API ERROR "models/api_uke_regulation .check_acceptance"(2) =========')
     Rails.logger.error("#{e}")
     Rails.logger.error('=============================================================================')
-    errors.add(:base, "API ERROR 'models/uke_regulation .check_acceptance(2) #{Time.zone.now}")
+    errors.add(:base, "API ERROR 'models/api_uke_regulation .check_acceptance(2) #{Time.zone.now}")
     errors.add(:base, "#{e}")
     false    # non-success response
     #"#{e}"
@@ -61,10 +61,10 @@ class UkeRegulation
       true   # success response
       #response
     when Net::HTTPClientError, Net::HTTPInternalServerError
-      Rails.logger.error('======== API ERROR "models/uke_regulation .check_acceptance"(3) ============')
+      Rails.logger.error('======== API ERROR "models/api_uke_regulation .check_acceptance"(3) =========')
       Rails.logger.error("code: #{response.code}, message: #{response.message}, body: #{response.body}")
       Rails.logger.error('=============================================================================')
-      errors.add(:base, "API ERROR 'models/uke_regulation .check_acceptance(3) #{Time.zone.now}")
+      errors.add(:base, "API ERROR 'models/api_uke_regulation .check_acceptance(3) #{Time.zone.now}")
       errors.add(:base, "code: #{response.code}, message: #{response.message}, body: #{response.body}")
       false  # non-success response
       #response

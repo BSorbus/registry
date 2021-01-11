@@ -62,6 +62,10 @@ class ProposalPolicy < ApplicationPolicy
     user_activities.include?('proposal_j:work') || user_activities.include?('all:work')
   end
 
+  def version_j?
+    user_activities.include?('proposal_j:work') || user_activities.include?('all:work')
+  end
+
   #########################################################
 
   def index_p?
@@ -120,6 +124,10 @@ class ProposalPolicy < ApplicationPolicy
     user_activities.include?('proposal_p:work') || user_activities.include?('all:work')
   end
 
+  def version_p?
+    user_activities.include?('proposal_p:work') || user_activities.include?('all:work')
+  end
+
   #########################################################
 
   def index_t?
@@ -175,6 +183,10 @@ class ProposalPolicy < ApplicationPolicy
   end
  
   def work_t?
+    user_activities.include?('proposal_t:work') || user_activities.include?('all:work')
+  end
+
+  def version_t?
     user_activities.include?('proposal_t:work') || user_activities.include?('all:work')
   end
 

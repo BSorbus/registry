@@ -6,7 +6,7 @@ class Feature < ApplicationRecord
 
 
   has_paper_trail versions: {
-    class_name: 'FeatureVersion'
+    # class_name: 'FeatureVersion'
     # scope: -> { order("id desc") }
   }
 
@@ -36,7 +36,6 @@ class Feature < ApplicationRecord
   #                                       end }
 
   # callbacks
-
   def self.feature_only_identifier_type
     # eager_load(:feature_type).where( feature_types: {destiny: "identifier_type"} )  
     eager_load(:feature_type).merge(FeatureType.only_identifier_type)

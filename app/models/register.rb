@@ -13,9 +13,9 @@ class Register < ApplicationRecord
 
 
   has_paper_trail versions: {
-    class_name: 'RegisterVersion'
+    # class_name: 'RegisterVersion'
     # scope: -> { order("id desc") }
-  }
+  } #, meta: {author_id: :author_id}
 
   # validates
   validates :service_type, presence: true, inclusion: { in: ['j', 'p', 't'] }

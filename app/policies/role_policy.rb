@@ -38,6 +38,10 @@ class RolePolicy < ApplicationPolicy
     user_activities.include?('role:work') || user_activities.include?('all:work')
   end
 
+  def version?
+    user_activities.include?('role:work') || user_activities.include?('all:work')
+  end
+
   def add_remove_role_user?
     user_activities.include?('role:add_remove_role_user')
   end

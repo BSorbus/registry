@@ -22,9 +22,9 @@ class Proposal < ApplicationRecord
 
 
   has_paper_trail versions: {
-    class_name: 'ProposalVersion'
+    # class_name: 'ProposalVersion'
     # scope: -> { order("id desc") }
-  }
+  } #, meta: {author_id: :author_id}
 
   # validates
   validates :service_type, presence: true, inclusion: { in: ['j', 'p', 't'] }
@@ -127,11 +127,11 @@ class Proposal < ApplicationRecord
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
       errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}", organization: "#{self.organization.fullname_with_nip}" ) )
     else
-      if register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_DELETION, 
+      if self.register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_DELETION, 
           proposal_status_id: [ProposalStatus::PROPOSAL_STATUS_CREATED, ProposalStatus::PROPOSAL_STATUS_APPROVED]).any?
         errors.add(:base, I18n.t("activerecord.errors.messages.proposal_deletion_created_or_approved_exists"))
       else
-        unless register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_REGISTRATION, 
+        unless self.register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_REGISTRATION, 
             proposal_status_id: ProposalStatus::PROPOSAL_STATUS_APPROVED).any?
           errors.add(:base, I18n.t("activerecord.errors.messages.proposal_registration_approved_not_exists"))
         end
@@ -145,11 +145,11 @@ class Proposal < ApplicationRecord
     if self.organization.proposals.where(service_type: self.service_type, proposal_status_id: ProposalStatus::PROPOSAL_STATUS_CREATED).any?
       errors.add(:base, I18n.t("activerecord.errors.messages.proposal_status_created_exists", status: "#{self.proposal_status.name}", organization: "#{self.organization.fullname_with_nip}" ) )
     else
-      if register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_DELETION, 
+      if self.register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_DELETION, 
           proposal_status_id: [ProposalStatus::PROPOSAL_STATUS_CREATED, ProposalStatus::PROPOSAL_STATUS_APPROVED]).any?
         errors.add(:base, I18n.t("activerecord.errors.messages.proposal_deletion_created_or_approved_exists"))
       else
-        unless register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_REGISTRATION, 
+        unless self.register.proposals.where(proposal_type_id: ProposalType::PROPOSAL_TYPE_REGISTRATION, 
             proposal_status_id: ProposalStatus::PROPOSAL_STATUS_APPROVED).any?
           errors.add(:base, I18n.t("activerecord.errors.messages.proposal_registration_approved_not_exists"))
         end
@@ -212,6 +212,10 @@ class Proposal < ApplicationRecord
     true
   end
 
+  def can_delete?
+    true
+  end
+
   def can_approve?
     proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
   end
@@ -223,10 +227,6 @@ class Proposal < ApplicationRecord
   def can_annul?
     [ProposalStatus::PROPOSAL_STATUS_APPROVED, ProposalStatus::PROPOSAL_STATUS_REJECTED].include?(proposal_status_id)
     # proposal_status_id == ProposalStatus::PROPOSAL_STATUS_CREATED
-  end
-
-  def can_delete?
-    true
   end
 
   # def can_create_proposal_type_registration?

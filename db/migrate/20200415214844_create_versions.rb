@@ -5,7 +5,8 @@ class CreateVersions < ActiveRecord::Migration[5.2]
       t.string   :item_type, null: false
       t.uuid     :item_id,   null: false
       t.string   :event,     null: false
-      t.string   :whodunnit
+      # t.string   :whodunnit
+      t.uuid   :whodunnit
       t.jsonb    :object
 
       # This migration adds the optional `object_changes` column, in which PaperTrail
@@ -16,8 +17,8 @@ class CreateVersions < ActiveRecord::Migration[5.2]
 
 
       # add extra info in meta: {}
-      t.uuid     :author_id
-      t.string   :url
+      # t.uuid     :author_id
+      # t.string   :url
 
       # This migration and CreateVersionAssociations provide the necessary
       # schema for tracking associations.

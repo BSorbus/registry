@@ -12,7 +12,7 @@ class Representative < ApplicationRecord
 
 
   has_paper_trail versions: {
-    class_name: 'RepresentativeVersion'
+    # class_name: 'RepresentativeVersion'
     # scope: -> { order("id desc") }
   }
 

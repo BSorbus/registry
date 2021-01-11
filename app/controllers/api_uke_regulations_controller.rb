@@ -1,13 +1,13 @@
-class UkeRegulationsController < ApplicationController
+class ApiUkeRegulationsController < ApplicationController
 
   before_action :authenticate_user!
 
   # GET /uke_regulations
   # GET /uke_regulations.json
   def index
-    # unless Rails.env.development?
-    if false
-      uke_regulation_obj = UkeRegulation.new(user_name: current_user.email)
+    unless Rails.env.development?
+    # if false
+      uke_regulation_obj = ApiUkeRegulation.new(user_name: current_user.email)
       if uke_regulation_obj.check_acceptance
         if JSON.parse(uke_regulation_obj.response.body)['accepted']
           redirect_to root_path
@@ -24,7 +24,7 @@ class UkeRegulationsController < ApplicationController
         redirect_to root_path
       end
     else
-      flash[:warning] = "development mode, UkeRegulations is OFF"
+      flash[:warning] = "development mode, ApiUkeRegulations is OFF"
       # flash[:warning] = "Odblokuj UkeRegulations"
       redirect_to root_path      
     end

@@ -38,14 +38,10 @@ class OrganizationPolicy < ApplicationPolicy
     user_activities.include?('organization:work') || user_activities.include?('all:work')
   end
 
-  def add_remove_organization_group?
-    user_activities.include?('organization:add_remove_organization_group')
+  def version?
+    user_activities.include?('organization:work') || user_activities.include?('all:work')
   end
 
-  def add_remove_organization_user?
-    user_activities.include?('organization:add_remove_organization_user')
-  end
-  
   
   class Scope < Struct.new(:user, :scope)
     def resolve

@@ -93,42 +93,6 @@ ActiveRecord::Schema.define(version: 2020_10_04_150525) do
     t.index ["user_id"], name: "index_approvals_on_user_id"
   end
 
-  create_table "cbo_organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name"
-    t.string "tax_no"
-    t.uuid "cbo_organizationid"
-    t.uuid "organization_id"
-    t.string "identifier"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cbo_organizationid"], name: "index_cbo_organizations_on_cbo_organizationid"
-    t.index ["identifier"], name: "index_cbo_organizations_on_identifier"
-    t.index ["name"], name: "index_cbo_organizations_on_name"
-    t.index ["organization_id"], name: "index_cbo_organizations_on_organization_id"
-    t.index ["tax_no"], name: "index_cbo_organizations_on_tax_no"
-  end
-
-  create_table "cbo_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "wso2is_userid"
-    t.uuid "cbo_userid"
-    t.uuid "user_id"
-    t.string "email", null: false
-    t.string "first_name"
-    t.string "last_name"
-    t.string "user_name"
-    t.boolean "csu_confirmed"
-    t.datetime "csu_confirmed_at"
-    t.string "csu_confirmed_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cbo_userid"], name: "index_cbo_users_on_cbo_userid"
-    t.index ["email"], name: "index_cbo_users_on_email", unique: true
-    t.index ["first_name"], name: "index_cbo_users_on_first_name"
-    t.index ["last_name"], name: "index_cbo_users_on_last_name"
-    t.index ["user_id"], name: "index_cbo_users_on_user_id"
-    t.index ["wso2is_userid"], name: "index_cbo_users_on_wso2is_userid"
-  end
-
   create_table "feature_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "destiny"
@@ -450,12 +414,10 @@ ActiveRecord::Schema.define(version: 2020_10_04_150525) do
     t.string "item_type", null: false
     t.uuid "item_id", null: false
     t.string "event", null: false
-    t.string "whodunnit"
+    t.uuid "whodunnit"
     t.jsonb "object"
     t.jsonb "object_changes"
     t.string "item_subtype"
-    t.uuid "author_id"
-    t.string "url"
     t.bigint "transaction_id"
     t.datetime "created_at"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"

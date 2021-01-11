@@ -31,13 +31,11 @@ class Organization < ApplicationRecord
 
   has_many :works, as: :trackable
 
-  has_one :cbo_organization
-
 
   has_paper_trail versions: {
-    class_name: 'OrganizationVersion'
+    # class_name: 'OrganizationVersion'
     # scope: -> { order("id desc") }
-  }
+  } #, meta: {author_id: :author_id}
   
   # validates
   validates :name, presence: true,

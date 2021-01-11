@@ -38,6 +38,10 @@ class RegisterPolicy < ApplicationPolicy
     user_activities.include?('register_j:work') || user_activities.include?('all:work')
   end
 
+  def version_j?
+    user_activities.include?('register_j:work') || user_activities.include?('all:work')
+  end
+
   #########################################################
 
   def index_p?
@@ -72,6 +76,10 @@ class RegisterPolicy < ApplicationPolicy
     user_activities.include?('register_p:work') || user_activities.include?('all:work')
   end
 
+  def version_p?
+    user_activities.include?('register_p:work') || user_activities.include?('all:work')
+  end
+
   #########################################################
 
   def index_t?
@@ -103,6 +111,10 @@ class RegisterPolicy < ApplicationPolicy
   end
  
   def work_t?
+    user_activities.include?('register_t:work') || user_activities.include?('all:work')
+  end
+
+  def version_t?
     user_activities.include?('register_t:work') || user_activities.include?('all:work')
   end
 

@@ -17,7 +17,11 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="works">
-              <%= render 'works/works_tab', trackable_type: "Register", trackable_id: @proposal.id, subtitle: proposal_info_legend(@proposal) %>
+              <%= render 'works/works_tab', trackable_type: "Proposal", trackable_id: @proposal.id, subtitle: proposal_info_legend(@proposal) %>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="versions">
+              <%= render 'versions/versions_tab', trackable_type: "Proposal", trackable_id: @proposal.id, subtitle: proposal_info_legend(@proposal) %>
             </div>
 
           </div>

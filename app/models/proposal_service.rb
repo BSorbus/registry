@@ -5,7 +5,7 @@ class ProposalService < ApplicationRecord
   belongs_to :service_type, class_name: "FeatureType", inverse_of: :proposal_service_type_services
 
   has_paper_trail versions: {
-    class_name: 'ProposalServiceVersion'
+    # class_name: 'ProposalServiceVersion'
     # scope: -> { order("id desc") }
   }
 

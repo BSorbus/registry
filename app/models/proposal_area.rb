@@ -5,7 +5,7 @@ class ProposalArea < ApplicationRecord
 
 
   has_paper_trail versions: {
-    class_name: 'ProposalAreaVersion'
+    # class_name: 'ProposalAreaVersion'
     # scope: -> { order("id desc") }
   }
 

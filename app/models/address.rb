@@ -6,7 +6,7 @@ class Address < ApplicationRecord
 
 
   has_paper_trail versions: {
-    class_name: 'AddressVersion'
+    # class_name: 'AddressVersion'
     # scope: -> { order("id desc") }
   }
 

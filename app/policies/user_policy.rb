@@ -38,6 +38,10 @@ class UserPolicy < ApplicationPolicy
     user_activities.include?('user:work') || user_activities.include?('all:work')
   end
  
+  def version?
+    user_activities.include?('user:work') || user_activities.include?('all:work')
+  end
+
   class Scope < Struct.new(:user, :scope)
     def resolve
       scope
