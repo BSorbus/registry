@@ -89,17 +89,39 @@ Rails.application.routes.draw do
   #               constraints: { path: /(?!(#{I18n.available_locales.join("|")})\/).*/ },
   #               format: false
 
+      # resources :apidocs, only: [:index]
+      resources :swagger, only: [:index]
 
   namespace :api, defaults: { format: :json } do
     require 'api_constraints'
     namespace :v1, constraints: ApiConstraints.new(version: 1, default: true) do
-      get :token, controller: 'base_api'
 
+      resources :apidocs, only: [:index]
+      # resources :swagger, only: [:index]
+      
+      get :token, controller: 'base_api'
       resources :organizations, only: [] do
         post 'cbo_new_data_service', on: :collection
       end
 
-      resources :proposals, only: [:index, :show]
+      namespace :dictionary do
+        resources :address_ext_types, only: [:index, :show]
+        resources :address_types, only: [:index, :show]
+        resources :attachment_types, only: [:index, :show]
+        resources :identifier_types, only: [:index, :show]
+        resources :jst_legal_form_types, only: [:index, :show]
+        resources :legal_form_types, only: [:index, :show]
+        resources :network_types, only: [:index, :show]
+        resources :proposal_statuses, only: [:index, :show]
+        resources :proposal_types, only: [:index, :show]
+        resources :register_statuses, only: [:index, :show]
+        resources :representative_types, only: [:index, :show]
+        resources :service_types, only: [:index, :show]
+      end
+
+      scope ':service_type', constraints: { service_type: /[jpt]/ } do
+        resources :registers, param: :id_or_number, only: [:index, :show]
+      end
 
     end
 

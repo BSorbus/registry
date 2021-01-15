@@ -107,4 +107,8 @@ module ApplicationHelper
       class: 'btn btn-sm btn-info pull-right', title: t('tooltip.add_fields_nested'), rel: 'tooltip')
   end
 
+  def is_uuid_format?(value)
+    (value =~ /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/i).nil? ? false : true
+  end
+
 end

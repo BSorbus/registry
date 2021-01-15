@@ -2,6 +2,7 @@ module Api
   module V1
     class BaseApiController < ApplicationController
 
+      include ApplicationHelper #only for called method "is_uuid_format?()""
       include Authenticable
 
       before_action :restricted_area

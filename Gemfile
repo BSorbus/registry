@@ -102,3 +102,5 @@ gem 'paper_trail'
 gem 'paper_trail-association_tracking'
 
 gem 'wicked'
+gem 'active_model_serializers', '~> 0.10'
+gem 'swagger-blocks', '~> 3.0'

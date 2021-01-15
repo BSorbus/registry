@@ -292,8 +292,8 @@ class Proposal < ApplicationRecord
       nil #self.register is nil
     when ProposalStatus::PROPOSAL_STATUS_APPROVED
       new_register = self.build_register(self.attributes.slice(*Register.attribute_names)
-                        .merge(register_status_id: RegisterStatus::REGISTER_STATUS_CURRENT, id: nil, proposal_registration_approved_id: self.id, proposal_current_approved_id: nil) )
-                        # .merge(register_status_id: RegisterStatus::REGISTER_STATUS_CURRENT, id: nil, proposal_registration_approved_id: self.id, proposal_current_approved_id: self.id) )
+                        .merge(register_status_id: RegisterStatus::REGISTER_STATUS_CURRENT, id: nil, proposal_registration_approved_id: self.id, proposal_current_approved_id: self.id) )
+                        # .merge(register_status_id: RegisterStatus::REGISTER_STATUS_CURRENT, id: nil, proposal_registration_approved_id: self.id, proposal_current_approved_id: nil) )
       add_errors(new_register) if new_register.invalid?
       new_register.save!
       self.register = new_register
