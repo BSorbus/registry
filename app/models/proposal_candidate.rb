@@ -179,7 +179,7 @@ class ProposalCandidate < ApplicationRecord
           destination_proposal = Proposal.new( proposal_hash )
           self.proposal = destination_proposal
           add_errors(destination_proposal) unless destination_proposal.valid?
-          destination_proposal.save!
+          destination_proposal.save_and_change_register_status
 
           if destination_proposal.persisted?
             self.proposal_attachments.each do |row|
