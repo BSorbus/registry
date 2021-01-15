@@ -16,11 +16,13 @@ class Api::V1::ApidocsController < ActionController::Base
       end
     end
 
-    key :host, 'localhost:3000'
+    # key :host, 'localhost:3000'
+    key :host, 'registry-test.uke.gov.pl'
     key :basePath, '/api/v1'
     key :consumes, ['application/json']
     key :produces, ['application/json']
-    key :schemes,  ['http']
+    # key :schemes,  ['http']
+    key :schemes,  ['https']
   end
 
   # A list of all classes that have swagger_* declarations.

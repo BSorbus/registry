@@ -5,7 +5,7 @@ class Api::V1::Swagger::Controllers::RegistersController
 
   swagger_path '/t/registers/{id}' do
     operation :get do
-      key :summary, 'Find Register by ID'
+      key :summary, 'Find Register by NO or ID'
       key :description, 'Returns a single register'
       key :operationId, 'findTRegisterById'
       key :tags, [
@@ -16,8 +16,9 @@ class Api::V1::Swagger::Controllers::RegistersController
         key :in, :path
         key :description, 'ID'
         key :required, true
-        key :type, :integer
-        key :format, :int64
+        # key :type, :integer
+        # key :format, :int64
+        key :type, :string
       end
       response 200 do
         key :description, 'register response'
