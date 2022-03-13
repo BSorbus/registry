@@ -1,16 +1,16 @@
-class RegisterSerializer < ActiveModel::Serializer
+class Api::V1::RegisterSerializer < ActiveModel::Serializer
   # type "register"
   attributes :id, :service_type, :register_no
 
 
-  # belongs_to :organization, serializer: OrganizationSerializer
-  # belongs_to :register_status, serializer: RegisterStatusSerializer
+  belongs_to :organization, serializer: Api::V1::OrganizationSerializer
+  belongs_to :register_status, serializer: Api::V1::RegisterStatusSerializer
   # or
-  belongs_to :organization
-  belongs_to :register_status
+  # belongs_to :organization
+  # belongs_to :register_status
 
   # belongs_to :proposal_registration_approved
-  belongs_to :proposal_current_approved
+  belongs_to :proposal_current_approved, serializer: Api::V1::ProposalSerializer
 
 end
 

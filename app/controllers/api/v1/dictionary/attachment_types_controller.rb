@@ -10,7 +10,7 @@ class Api::V1::Dictionary::AttachmentTypesController < Api::V1::BaseApiControlle
 
     # render json: attachment_types, each_serializer: RegisterSerializer, include: "**", meta: {total_count: attachment_types.count}, status: :ok
     # render json: attachment_types, meta: {total_count: attachment_types.count}, status: :ok
-    render json: attachment_types, each_serializer: SimpleFeatureTypeSerializer, root: 'attachment_types', meta: {total_count: attachment_types.count}, status: :ok
+    render json: attachment_types, each_serializer: Api::V1::SimpleFeatureTypeSerializer, root: 'attachment_types', meta: {total_count: attachment_types.count}, status: :ok
   end
 
   def show
@@ -18,7 +18,7 @@ class Api::V1::Dictionary::AttachmentTypesController < Api::V1::BaseApiControlle
 
     if attachment_type.present?
       # render json: attachment_type
-      render json: attachment_type, serializer: SimpleFeatureTypeSerializer, root: 'attachment_type' #, meta: {total_count: 1}
+      render json: attachment_type, serializer: Api::V1::SimpleFeatureTypeSerializer, root: 'attachment_type' #, meta: {total_count: 1}
       # render json: attachment_type, serializer: RegisterSerializer, include: "**"
     else
       # render json: { errors: "Not found attachment_type where id: #{params[:id]}" }, status: :not_found

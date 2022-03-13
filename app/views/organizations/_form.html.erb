@@ -28,7 +28,8 @@
           </div>  <!-- /row -->
 
           <div class="row">
-            <div class="form-group required col-sm-8"  data-toggle="popover_info" title="<%= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top">
+            <div class="form-group required col-sm-8">
+<!--        <div class="form-group required col-sm-8"  data-toggle="popover_info" title="<%#= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%#= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top"> -->
               <%= f.label :jst_legal_form_type_id, class: 'control-label' %>
               <%= f.select :jst_legal_form_type_id, 
                     FeatureType.only_jst_legal_form_type.order(:name).collect {|v| [ "#{v[:name]}", v[:id] ] },

@@ -1,6 +1,6 @@
 class StaticPagesController < ApplicationController
 
-  caches_page :home, :gzip => :best_speed
+  caches_page :home, :home_alert, :gzip => :best_speed
 
   def home
   end

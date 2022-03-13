@@ -1,3 +1,3 @@
-class AuthorSerializer < ActiveModel::Serializer
+class Api::V1::AuthorSerializer < ActiveModel::Serializer
   attributes :id, :email, :first_name, :last_name, :user_name, :wso2is_userid
 end

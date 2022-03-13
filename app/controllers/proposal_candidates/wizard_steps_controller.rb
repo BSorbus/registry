@@ -115,6 +115,8 @@ class ProposalCandidates::WizardStepsController < ApplicationController
 
     def set_jst_networks_and_services(source_proposal)
       if source_proposal.present?
+        @proposal_candidate.jst_resolution_date            = source_proposal.jst_resolution_date
+        @proposal_candidate.jst_resolution_number          = source_proposal.jst_resolution_number
         @proposal_candidate.jst_providing_networks         = source_proposal.jst_providing_networks
         @proposal_candidate.jst_provision_telecom_services = source_proposal.jst_provision_telecom_services 
         @proposal_candidate.jst_provision_related_services = source_proposal.jst_provision_related_services
@@ -188,7 +190,7 @@ class ProposalCandidates::WizardStepsController < ApplicationController
         when "step2"
           [ :wizard_saved_step, :organization_id, :register_id ]
         when "step3"
-          [ :wizard_saved_step, :jst_date_of_adopting_the_resolution_date, :jst_resolution_number,
+          [ :wizard_saved_step, :jst_resolution_date, :jst_resolution_number,
             :jst_providing_networks, :jst_provision_telecom_services, :jst_provision_related_services, :jst_other_telecom_activities, 
               proposal_networks_attributes: [ :id, :network_type_id, :description, :_destroy ],
               proposal_services_attributes: [ :id, :service_type_id, :description, :only_wholesale, :only_resale, :_destroy ]

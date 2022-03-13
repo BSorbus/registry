@@ -1,0 +1,2 @@
+class MartaWniosekTable < ApplicationRecord
+end

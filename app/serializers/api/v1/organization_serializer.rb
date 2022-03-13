@@ -1,4 +1,4 @@
-class OrganizationSerializer < ActiveModel::Serializer
+class Api::V1::OrganizationSerializer < ActiveModel::Serializer
   # type "organization"
   attributes :id, :short_name, :name, :nip
 end

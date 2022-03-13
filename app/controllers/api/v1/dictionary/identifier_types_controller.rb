@@ -10,7 +10,7 @@ class Api::V1::Dictionary::IdentifierTypesController < Api::V1::BaseApiControlle
 
     # render json: identifier_types, each_serializer: RegisterSerializer, include: "**", meta: {total_count: identifier_types.count}, status: :ok
     # render json: identifier_types, meta: {total_count: identifier_types.count}, status: :ok
-    render json: identifier_types, each_serializer: FeatureTypeSerializer, root: 'identifier_types', meta: {total_count: identifier_types.count}, status: :ok
+    render json: identifier_types, each_serializer: Api::V1::FeatureTypeSerializer, root: 'identifier_types', meta: {total_count: identifier_types.count}, status: :ok
   end
 
   def show
@@ -18,7 +18,7 @@ class Api::V1::Dictionary::IdentifierTypesController < Api::V1::BaseApiControlle
 
     if identifier_type.present?
       # render json: identifier_type
-      render json: identifier_type, serializer: FeatureTypeSerializer, root: 'identifier_type' #, meta: {total_count: 1}
+      render json: identifier_type, serializer: Api::V1::FeatureTypeSerializer, root: 'identifier_type' #, meta: {total_count: 1}
       # render json: identifier_type, serializer: RegisterSerializer, include: "**"
     else
       # render json: { errors: "Not found identifier_type where id: #{params[:id]}" }, status: :not_found

@@ -1,4 +1,4 @@
-class AddressSerializer < ActiveModel::Serializer
+class Api::V1::AddressSerializer < ActiveModel::Serializer
 
   # t.references :addressable, polymorphic: true, index: true, type: :uuid
   attributes :id, :address_type, :country_code, :address_combine_id, 

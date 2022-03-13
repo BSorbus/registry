@@ -8,8 +8,8 @@ class Api::V1::RegistersController < Api::V1::BaseApiController
   def index
     registers = Register.where(service_type: params[:service_type]).order(:register_no)
 
-    # render json: registers, each_serializer: RegisterSerializer, include: "**", meta: {total_count: registers.count}, status: :ok
-    render json: registers, meta: {total_count: registers.count, service_type: params[:service_type]}, status: :ok
+    render json: registers, each_serializer: Api::V1::RegisterSerializer, include: "**", meta: {total_count: registers.count, service_type: params[:service_type]}, status: :ok
+    # render json: registers, meta: {total_count: registers.count, service_type: params[:service_type]}, status: :ok
   end
 
   def show

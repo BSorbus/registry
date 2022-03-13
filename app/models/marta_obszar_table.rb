@@ -1,0 +1,2 @@
+class MartaObszarTable < ApplicationRecord
+end

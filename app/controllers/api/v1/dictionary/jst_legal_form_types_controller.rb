@@ -10,7 +10,7 @@ class Api::V1::Dictionary::JstLegalFormTypesController < Api::V1::BaseApiControl
 
     # render json: jst_legal_form_types, each_serializer: RegisterSerializer, include: "**", meta: {total_count: jst_legal_form_types.count}, status: :ok
     # render json: jst_legal_form_types, meta: {total_count: jst_legal_form_types.count}, status: :ok
-    render json: jst_legal_form_types, each_serializer: SimpleFeatureTypeSerializer, root: 'jst_legal_form_types', meta: {total_count: jst_legal_form_types.count}, status: :ok
+    render json: jst_legal_form_types, each_serializer: Api::V1::SimpleFeatureTypeSerializer, root: 'jst_legal_form_types', meta: {total_count: jst_legal_form_types.count}, status: :ok
   end
 
   def show
@@ -18,7 +18,7 @@ class Api::V1::Dictionary::JstLegalFormTypesController < Api::V1::BaseApiControl
 
     if jst_legal_form_type.present?
       # render json: jst_legal_form_type
-      render json: jst_legal_form_type, serializer: SimpleFeatureTypeSerializer, root: 'jst_legal_form_type' #, meta: {total_count: 1}
+      render json: jst_legal_form_type, serializer: Api::V1::SimpleFeatureTypeSerializer, root: 'jst_legal_form_type' #, meta: {total_count: 1}
       # render json: jst_legal_form_type, serializer: RegisterSerializer, include: "**"
     else
       # render json: { errors: "Not found jst_legal_form_type where id: #{params[:id]}" }, status: :not_found

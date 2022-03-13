@@ -1,4 +1,4 @@
-class ProposalSerializer < ActiveModel::Serializer
+class Api::V1::ProposalSerializer < ActiveModel::Serializer
   attribute :id
   attribute :service_type
   attribute :insertion_date
@@ -11,15 +11,15 @@ class ProposalSerializer < ActiveModel::Serializer
   attribute :jst_provision_telecom_services, if: -> { object.service_type == 'j' }
   attribute :jst_provision_related_services, if: -> { object.service_type == 'j' }
   attribute :jst_other_telecom_activities, if: -> { object.service_type == 'j' }
-  attribute :jst_date_of_adopting_the_resolution_date, if: -> { object.service_type == 'j' }
+  attribute :jst_resolution_date, if: -> { object.service_type == 'j' }
   attribute :jst_resolution_number, if: -> { object.service_type == 'j' }
 
-  belongs_to :proposal_type
-  belongs_to :proposal_status
+  belongs_to :proposal_type, serializer: Api::V1::ProposalTypeSerializer
+  belongs_to :proposal_status, serializer: Api::V1::ProposalStatusSerializer
 
-  has_many :proposal_networks, dependent: :destroy, if: -> { object.service_type == 't' }
-  has_many :proposal_services, dependent: :destroy, if: -> { object.service_type == 't' }
-  has_many :proposal_areas, dependent: :destroy, unless: -> { object.activity_area_whole_poland == true }
+  has_many :proposal_networks, serializer: Api::V1::ProposalNetworkSerializer, dependent: :destroy, if: -> { object.service_type == 't' }
+  has_many :proposal_services, serializer: Api::V1::ProposalServiceSerializer, dependent: :destroy, if: -> { object.service_type == 't' }
+  has_many :proposal_areas, serializer: Api::V1::ProposalAreaSerializer, dependent: :destroy, unless: -> { object.activity_area_whole_poland == true }
   # has_many :proposal_attachments, dependent: :destroy
 
 end
@@ -36,7 +36,7 @@ end
       # t.boolean :jst_provision_telecom_services, default: false
       # t.boolean :jst_provision_related_services, default: false
       # t.boolean :jst_other_telecom_activities, default: false
-      # t.date :jst_date_of_adopting_the_resolution_date
+      # t.date :jst_resolution_date
       # t.string :jst_resolution_number, default: ""
 
       # t.text :status_comment, default: ""

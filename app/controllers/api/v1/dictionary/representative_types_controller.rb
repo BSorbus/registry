@@ -10,7 +10,7 @@ class Api::V1::Dictionary::RepresentativeTypesController < Api::V1::BaseApiContr
 
     # render json: representative_types, each_serializer: RegisterSerializer, include: "**", meta: {total_count: representative_types.count}, status: :ok
     # render json: representative_types, meta: {total_count: representative_types.count}, status: :ok
-    render json: representative_types, each_serializer: FeatureTypeSerializer, root: 'representative_types', meta: {total_count: representative_types.count}, status: :ok
+    render json: representative_types, each_serializer: Api::V1::FeatureTypeSerializer, root: 'representative_types', meta: {total_count: representative_types.count}, status: :ok
   end
 
   def show
@@ -18,7 +18,7 @@ class Api::V1::Dictionary::RepresentativeTypesController < Api::V1::BaseApiContr
 
     if representative_type.present?
       # render json: representative_type
-      render json: representative_type, serializer: FeatureTypeSerializer, root: 'representative_type' #, meta: {total_count: 1}
+      render json: representative_type, serializer: Api::V1::FeatureTypeSerializer, root: 'representative_type' #, meta: {total_count: 1}
       # render json: representative_type, serializer: RegisterSerializer, include: "**"
     else
       # render json: { errors: "Not found representative_type where id: #{params[:id]}" }, status: :not_found

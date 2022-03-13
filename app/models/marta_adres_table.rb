@@ -1,0 +1,2 @@
+class MartaAdresTable < ApplicationRecord
+end

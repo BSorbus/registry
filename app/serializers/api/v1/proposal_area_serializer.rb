@@ -1,4 +1,4 @@
-class ProposalAreaSerializer < ActiveModel::Serializer
+class Api::V1::ProposalAreaSerializer < ActiveModel::Serializer
   attributes :id, :province_code, :province_name, :district_code, :district_name, :commune_code, :commune_name
 end
 

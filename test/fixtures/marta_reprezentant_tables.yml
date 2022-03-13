@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  oryginal_id: 
+  przedsiebiorca_id: 
+  typ_reprezentacji: MyString
+  imie: MyString
+  nazwisko: MyString
+  rola: MyString
+  telefon: MyString
+  fax: MyString
+  email: MyString
+  informacja_dodatkowa: MyString
+  adres_id: 
+
+two:
+  oryginal_id: 
+  przedsiebiorca_id: 
+  typ_reprezentacji: MyString
+  imie: MyString
+  nazwisko: MyString
+  rola: MyString
+  telefon: MyString
+  fax: MyString
+  email: MyString
+  informacja_dodatkowa: MyString
+  adres_id: 

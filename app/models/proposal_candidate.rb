@@ -52,7 +52,7 @@ class ProposalCandidate < ApplicationRecord
   validate :insertion_date_after_resolution,
     if: -> { required_for_step?(:step3) && (service_type == 'j') }
 
-  validates :jst_date_of_adopting_the_resolution_date, presence: true, 
+  validates :jst_resolution_date, presence: true, 
     if: -> { required_for_step?(:step3) && (service_type == 'j') }
 
   validates :jst_resolution_number, presence: true, length: { in: 1..200 }, 
@@ -238,9 +238,9 @@ class ProposalCandidate < ApplicationRecord
 
   private
     def insertion_date_after_resolution
-      return if insertion_date.blank? || jst_date_of_adopting_the_resolution_date.blank?     
-      if insertion_date < jst_date_of_adopting_the_resolution_date
-        errors.add(:jst_date_of_adopting_the_resolution_date, I18n.t('errors.messages.less_than_or_equal_to', count: insertion_date.strftime('%Y-%m-%d')  ) ) 
+      return if insertion_date.blank? || jst_resolution_date.blank?     
+      if insertion_date < jst_resolution_date
+        errors.add(:jst_resolution_date, I18n.t('errors.messages.less_than_or_equal_to', count: insertion_date.strftime('%Y-%m-%d')  ) ) 
       end 
     end
 

@@ -1,7 +1,7 @@
-class ProposalServiceSerializer < ActiveModel::Serializer
+class Api::V1::ProposalServiceSerializer < ActiveModel::Serializer
   attributes :id, :description, :only_wholesale, :only_resale
 
-  belongs_to :service_type, class_name: "FeatureType", serializer: SimpleFeatureTypeSerializer
+  belongs_to :service_type, class_name: "FeatureType", serializer: Api::V1::SimpleFeatureTypeSerializer
 end
 
       # t.references :proposal, foreign_key: { to_table: :proposals }, index: true, type: :uuid

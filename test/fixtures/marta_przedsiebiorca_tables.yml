@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  oryginal_id: 
+  nazwa: MyString
+  osoba_fizyczna: false
+  imie: MyString
+  nazwisko: MyString
+  nip: MyString
+  pesel: MyString
+  regon: MyString
+  customerkrs: MyString
+
+two:
+  oryginal_id: 
+  nazwa: MyString
+  osoba_fizyczna: false
+  imie: MyString
+  nazwisko: MyString
+  nip: MyString
+  pesel: MyString
+  regon: MyString
+  customerkrs: MyString

@@ -8,6 +8,8 @@ class ProposalsController < ApplicationController
   def datatables_index
     respond_to do |format|
       format.json { render json: ProposalDatatable.new(params, view_context: view_context ) }
+      # without [active_model_serializers]:
+      # format.json { render json: ProposalDatatable.new(params, view_context: view_context ).to_json }
     end
   end
 
@@ -220,6 +222,7 @@ class ProposalsController < ApplicationController
     def proposal_params
       defaults = { author_id: "#{current_user.id}", service_type: params[:service_type] }
       params.require(:proposal).permit(:proposal_type_id, :proposal_status_id, :organization_id, :insertion_date, 
+        :jst_resolution_date, :jst_resolution_number,
         :jst_providing_networks, :jst_provision_telecom_services, :jst_provision_related_services, :jst_other_telecom_activities, 
         :activity_area_whole_poland, :scheduled_start_date, :scheduled_end_date, :status_comment, :note, :author_id, 
           proposal_networks_attributes: [:id, :network_type_id, :description, :_destroy],

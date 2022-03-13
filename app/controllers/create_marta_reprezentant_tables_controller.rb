@@ -1,0 +1,2 @@
+class CreateMartaReprezentantTablesController < ApplicationController
+end

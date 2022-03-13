@@ -1,7 +1,7 @@
-class ProposalNetworkSerializer < ActiveModel::Serializer
+class Api::V1::ProposalNetworkSerializer < ActiveModel::Serializer
   attributes :id, :description
 
-  belongs_to :network_type, class_name: "FeatureType", serializer: SimpleFeatureTypeSerializer
+  belongs_to :network_type, class_name: "FeatureType", serializer: Api::V1::SimpleFeatureTypeSerializer
 
 end
 

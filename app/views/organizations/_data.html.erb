@@ -26,7 +26,8 @@
             </div>
 
             <div class="row">
-              <div class="form-group col-sm-8" data-toggle="popover_info" title="<%= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top">
+              <div class="form-group col-sm-8">
+<!--          <div class="form-group col-sm-8" data-toggle="popover_info" title="<%#= Organization.human_attribute_name(:jst_legal_form_type) %>" data-content="<%#= Organization.human_attribute_name(:jst_legal_form_type_popover_info) %>" data-placement= "top"> -->
                 <p><strong><%= Organization.human_attribute_name(:jst_legal_form_type) %></strong></p>
                 <%= @organization.jst_legal_form_type.name if @organization.jst_legal_form_type.present? %>
               </div>

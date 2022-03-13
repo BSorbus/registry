@@ -22,7 +22,9 @@ class OrganizationsController < ApplicationController
 
   def datatables_index
     respond_to do |format|
-      format.json { render json: OrganizationDatatable.new(params, view_context: view_context ) }
+      format.json { render json: OrganizationDatatable.new(params, view_context: view_context ), serializer: nil }
+      # without [active_model_serializers]:
+      # format.json { render json: OrganizationDatatable.new(params, view_context: view_context ).to_json } 
     end
   end
 

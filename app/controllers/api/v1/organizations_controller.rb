@@ -6,8 +6,9 @@ class Api::V1::OrganizationsController < Api::V1::BaseApiController
   respond_to :json
 
   def cbo_new_data_service
-    render json: { message: "cbo_new_data_service: OK for id:#{params[:id]}), typ:#{params[:typ]}, source:#{params[:source]}" }, status: :ok
-  end
+    # render json: { message: "succesfull recived for cbo_new_data_service: id:#{params[:id]}), typ:#{params[:typ]}, source:#{params[:source]}" }, status: :ok
+    render json: { code: 200, message: "succesfull recived for cbo_new_data_service: id:#{params[:id]}), typ:#{params[:typ]}, source:#{params[:source]}" }, status: :ok
+ end
 
   private
     # Never trust parameters from the scary internet, only allow the white list through.

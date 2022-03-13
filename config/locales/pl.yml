@@ -1,7 +1,7 @@
 pl:
   "true": "Tak"
   "false": "Nie"
-  to_all: 'wszystkich'
+  to_all: 'wszystkich' 
   logo_file: "logo_uke_pl_do_lewej.png"
   logo_link: "http://www.uke.gov.pl"
   title: "UKE Rejestr"
@@ -359,7 +359,7 @@ pl:
         jst_provision_telecom_services: 'Świadczenie publicznie dostępnych usług telekomunikacyjnych'
         jst_provision_related_services: 'Świadczenie usług powiązanych'
         jst_other_telecom_activities: 'Pozostała działalność w zakresie telekomunikacji'
-        jst_date_of_adopting_the_resolution_date: 'Data uchwały'
+        jst_resolution_date: 'Data uchwały'
         jst_resolution_number: 'Numer uchwały'
         _destroy: 'Usuń [x]'
       proposal_candidate: *proposal_content
@@ -486,6 +486,7 @@ pl:
               network_type_and_network_service_blank: "[Opis działalności telekomunikacyjnej, której dotyczy wniosek] - musisz określić przynajmniej jeden rodzaj sieci lub usługi"
               proposal_areas_proposal_codes_nested_taken: "[Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji] - ten sam obszar nie może być wielokrotnie wprowadzany"
               proposal_proposal_areas_blank: "[Obszar, na którym będzie wykonywana działalność w zakresie telekomunikacji (D)][Inne obszary] - musisz określić przynajmniej jeden obszar"
+              organization_not_exist: "[Organizacja] - Nie możne zostać określona / znaleziona"
         proposal_candidate:
           attributes:
             base:

@@ -10,7 +10,7 @@ class Api::V1::Dictionary::AddressExtTypesController < Api::V1::BaseApiControlle
 
     # render json: address_ext_types, each_serializer: RegisterSerializer, include: "**", meta: {total_count: address_ext_types.count}, status: :ok
     # render json: address_ext_types, meta: {total_count: address_ext_types.count}, status: :ok
-    render json: address_ext_types, each_serializer: FeatureTypeSerializer, root: 'address_ext_types', meta: {total_count: address_ext_types.count}, status: :ok
+    render json: address_ext_types, each_serializer: Api::V1::FeatureTypeSerializer, root: 'address_ext_types', meta: {total_count: address_ext_types.count}, status: :ok
   end
 
   def show
@@ -18,7 +18,7 @@ class Api::V1::Dictionary::AddressExtTypesController < Api::V1::BaseApiControlle
 
     if address_ext_type.present?
       # render json: address_ext_type
-      render json: address_ext_type, serializer: FeatureTypeSerializer, root: 'address_ext_type' #, meta: {total_count: 1}
+      render json: address_ext_type, serializer: Api::V1::FeatureTypeSerializer, root: 'address_ext_type' #, meta: {total_count: 1}
       # render json: address_ext_type, serializer: RegisterSerializer, include: "**"
     else
       # render json: { errors: "Not found address_ext_type where id: #{params[:id]}" }, status: :not_found

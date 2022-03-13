@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_04_150525) do
+ActiveRecord::Schema.define(version: 2021_02_15_112018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -117,6 +117,89 @@ ActiveRecord::Schema.define(version: 2020_10_04_150525) do
     t.index ["feature_value"], name: "index_features_on_feature_value"
   end
 
+  create_table "marta_adres_tables", force: :cascade do |t|
+    t.bigint "oryginal_id"
+    t.bigint "przedsiebiorca_id"
+    t.string "kraj"
+    t.string "wojewodztwo"
+    t.string "powiat"
+    t.string "gmina"
+    t.string "miejscowosc"
+    t.string "ulica"
+    t.string "numer_domu"
+    t.string "numer_lokalu"
+    t.string "poczta"
+    t.string "kod_pocztowy"
+    t.string "skrytka_pocztowa"
+    t.string "informacje_dodatkowe"
+    t.string "adres_typ"
+  end
+
+  create_table "marta_dzialalnosc_tables", force: :cascade do |t|
+    t.bigint "wniosek_id"
+    t.integer "obszar_numer"
+    t.string "nazwa_skr_uslugi_sieci"
+    t.string "opis"
+    t.string "kod"
+  end
+
+  create_table "marta_obszar_tables", force: :cascade do |t|
+    t.bigint "wniosek_id"
+    t.integer "obszar_numer"
+    t.string "obszar"
+    t.string "jednostka_nadrzedna"
+    t.string "opis"
+  end
+
+  create_table "marta_przedsiebiorca_tables", force: :cascade do |t|
+    t.bigint "oryginal_id"
+    t.string "nazwa"
+    t.boolean "osoba_fizyczna"
+    t.string "imie"
+    t.string "nazwisko"
+    t.string "nip"
+    t.string "pesel"
+    t.string "regon"
+    t.string "customerkrs"
+  end
+
+  create_table "marta_rejestr_tables", force: :cascade do |t|
+    t.bigint "oryginal_id"
+    t.integer "numer_rejestru"
+    t.bigint "przedsiebiorca_id"
+    t.date "data_wykreslenia"
+    t.string "powod_wykreslenia"
+    t.string "wykreslenie_komentarz"
+  end
+
+  create_table "marta_reprezentant_tables", force: :cascade do |t|
+    t.bigint "oryginal_id"
+    t.bigint "przedsiebiorca_id"
+    t.string "typ_reprezentacji"
+    t.string "imie"
+    t.string "nazwisko"
+    t.string "rola"
+    t.string "telefon"
+    t.string "fax"
+    t.string "email"
+    t.string "informacja_dodatkowa"
+    t.bigint "adres_id"
+  end
+
+  create_table "marta_wniosek_tables", force: :cascade do |t|
+    t.bigint "oryginal_id"
+    t.integer "typ_kod"
+    t.bigint "rejestr_id"
+    t.bigint "przedsiebiorca_id"
+    t.boolean "zaakceptowany"
+    t.date "data_wplywu_wniosku"
+    t.date "data_wpisu_do_rejestru"
+    t.string "sygnatura_sprawy"
+    t.date "data_sporz_zaswiad"
+    t.string "adnotacje"
+    t.string "komentarz"
+  end
+
   create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "author_id"
     t.string "short_name", default: ""
@@ -211,7 +294,7 @@ ActiveRecord::Schema.define(version: 2020_10_04_150525) do
     t.boolean "jst_provision_telecom_services", default: false
     t.boolean "jst_provision_related_services", default: false
     t.boolean "jst_other_telecom_activities", default: false
-    t.date "jst_date_of_adopting_the_resolution_date"
+    t.date "jst_resolution_date"
     t.string "jst_resolution_number", default: ""
     t.text "status_comment", default: ""
     t.text "note", default: ""
@@ -310,7 +393,7 @@ ActiveRecord::Schema.define(version: 2020_10_04_150525) do
     t.boolean "jst_provision_telecom_services", default: false
     t.boolean "jst_provision_related_services", default: false
     t.boolean "jst_other_telecom_activities", default: false
-    t.date "jst_date_of_adopting_the_resolution_date"
+    t.date "jst_resolution_date"
     t.string "jst_resolution_number", default: ""
     t.text "status_comment", default: ""
     t.text "note", default: ""

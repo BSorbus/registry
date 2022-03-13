@@ -89,8 +89,9 @@ Rails.application.routes.draw do
   #               constraints: { path: /(?!(#{I18n.available_locales.join("|")})\/).*/ },
   #               format: false
 
-      # resources :apidocs, only: [:index]
-      resources :swagger, only: [:index]
+
+  # resources :apidocs, only: [:index]
+  resources :swagger, only: [:index]
 
   namespace :api, defaults: { format: :json } do
     require 'api_constraints'
@@ -121,6 +122,7 @@ Rails.application.routes.draw do
 
       scope ':service_type', constraints: { service_type: /[jpt]/ } do
         resources :registers, param: :id_or_number, only: [:index, :show]
+        resources :proposals, only: [:create]
       end
 
     end

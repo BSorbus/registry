@@ -1,0 +1,2 @@
+class MartaPrzedsiebiorcaTable < ApplicationRecord
+end
